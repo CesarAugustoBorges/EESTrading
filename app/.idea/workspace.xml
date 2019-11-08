@@ -2,9 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6cea760d-98a7-40f4-8940-23372021ce03" name="Default Changelist" comment="">
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/app/Classe/Acoes.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/app/Classe/Acoes.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/app/Classe/AtivoFinanceiro.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/app/Classe/AtivoFinanceiro.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/app/Classe/CFD.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/app/Classe/CFD.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/app/Classe/ConsoleView.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/app/Classe/ConsoleView.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/app/Classe/EESTrading.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/app/Classe/EESTrading.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/app/Classe/Indices.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/app/Classe/Indices.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/app/Classe/Moeda.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/app/Classe/Moeda.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/app/Classe/Ouro.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/app/Classe/Ouro.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/app/Classe/Petroleo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/app/Classe/Petroleo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/app/Classe/Scrapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/app/Classe/Scrapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/app/Classe/Utilizador.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/app/Classe/Utilizador.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/app/Classe/View.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/app/Classe/View.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/app/Classe2/TradingDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/app/Classe2/TradingDAO.class" afterDir="false" />
+>>>>>>> bd47a389e5987a78c252de6f278d511a59c82f6a
     </list>
-    <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,6 +32,7 @@
     <option name="testRunner" value="GRADLE" />
     <option name="delegatedBuild" value="true" />
   </component>
+<<<<<<< HEAD
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
@@ -165,9 +183,20 @@
       </pane>
     </panes>
   </component>
+=======
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1Sc1U0T7L0hsiZjI0wFqVkHX5ks" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+>>>>>>> bd47a389e5987a78c252de6f278d511a59c82f6a
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RunDashboard">
@@ -195,6 +224,7 @@
     </task>
     <servers />
   </component>
+<<<<<<< HEAD
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
     <layout>
@@ -347,5 +377,19 @@
         </settings>
       </state>
     </states>
+=======
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+>>>>>>> bd47a389e5987a78c252de6f278d511a59c82f6a
   </component>
 </project>
