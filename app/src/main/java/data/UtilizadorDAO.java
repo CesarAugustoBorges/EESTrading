@@ -1,49 +1,59 @@
 package data;
 
 import business.CFD;
+import business.Utilizador;
 
 import java.util.List;
 
-public interface UtilizadorDAO extends DAO<Integer, UtilizadorDAO> {
+public interface UtilizadorDAO extends DAO<Integer, Utilizador> {
 
-	UtilizadorDAO utilizadorDAO = new UtilizadorDAOConcrete();
-	static UtilizadorDAO GetUtilizadorDAO(){return utilizadorDAO;}
-
-	/**
-	 * 
-	 * @param user
-	 * @param cfd
-	 */
-	double buyCFD(int user, int cfd);
+	UtilizadorDAO UTILIZADOR_DAO = new UtilizadorDAOConcrete();
+	static UtilizadorDAO GetUtilizadorDAO(){
+		return UTILIZADOR_DAO;
+	};
 
 	/**
 	 * 
 	 * @param user
 	 * @param cfd
 	 */
-	double sellCFD(int user, int cfd);
+	double addCFD(Utilizador user, CFD cfd);
 
 	/**
 	 * 
 	 * @param user
 	 * @param cfd
 	 */
-	void putPortfolio(int user, int cfd);
+	double removeCFD(Utilizador user, CFD cfd);
 
 	/**
 	 * 
 	 * @param user
 	 * @param cfd
 	 */
-	void registCFDBougth(int user, int cfd);
+	void putPortfolio(Utilizador user, CFD cfd);
 
 	/**
 	 * 
 	 * @param user
 	 * @param maxSize
 	 */
-	List<CFD> getLastCFDBought(int user, int maxSize);
+	List<CFD> getLastCFDBought(Utilizador user, int maxSize);
 
+	/**
+	 * 
+	 * @param user
+	 * @param value
+	 */
+	void addMoney(Utilizador user, double value);
 
+	/**
+	 * 
+	 * @param user
+	 * @param value
+	 */
+	boolean removeMoney(Utilizador user, double value);
+
+	boolean login(String username, String password);
 
 }

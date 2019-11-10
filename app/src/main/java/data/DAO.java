@@ -1,12 +1,12 @@
 package data;
 
-public interface DAO<T,K> {
+public interface DAO<K,T> {
 
 	/**
 	 * 
 	 * @param obj
 	 */
-	void put(T obj);
+	K put(T obj);
 
 	/**
 	 * 

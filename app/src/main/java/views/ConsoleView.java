@@ -59,6 +59,9 @@ public class ConsoleView extends View {
         throw new UnsupportedOperationException();
     }
 
+    public void menuAtivosDisponiveis(){
+        menuAtivosDisponiveis(getUtilizador(), trading.getAtivos());
+    }
     /**
      *
      * @param utilizador
@@ -72,29 +75,49 @@ public class ConsoleView extends View {
             //Adicionar o tipo do ativo?
             System.out.println((i+1) + ". " + ativo.getCompany() + "- " + ativo.getValue() + " $" );
         }
+
+        Integer ativoSelected = scanner.nextInt();
+        if(ativoSelected > 0)
+            menuDeCompraCFD(utilizador, ativos.get(ativoSelected-1));
     }
 
     /**
      *
      * @param utilizador
-     * @param cfd
+     * @param ativo
      */
-    public void menuDeCompraCFD(Utilizador utilizador, CFD cfd) {
-        layout(utilizador.getUsername() + " CFD: " + cfd.getName() +  " " + cfd.getValue() + " $");
+    public void menuDeCompraCFD(Utilizador utilizador, AtivoFinanceiro ativo) {
+        CFD cfd = new CFD();
+        cfd.setUtilizador(utilizador);
+        cfd.setAtivoFinanceiro(ativo);
+
+        layout(utilizador.getUsername() + " CFD: " + ativo.getCompany() +  " " + ativo.getValue() + " $");
         System.out.print("Valor de compra: ");
-        String valor = scanner.next();
+        double valor = scanner.nextDouble();
+        cfd.setBoughtValue(valor);
+        cfd.setUnits(valor / ativo.getValue());
         System.out.print("Deseja definir um Top Profit? [Y/N] ");
         String answer = scanner.next();
         if(answer.equals("Y")){
             System.out.print("Introduza o valor: ");
-            String value = scanner.next();
+            double topProfit = scanner.nextDouble();
+            cfd.setTakeProfit(topProfit);
         }
         System.out.print("Deseja definir um Stop Profit= [Y/N] ");
         answer = scanner.next();
         if(answer.equals("Y")){
             System.out.print("Introduza o valor: ");
-            String value = scanner.next();
+            double stoploss = scanner.nextDouble();
+            cfd.setStopLoss(stoploss);
         }
+
+        if(trading.buy(utilizador, cfd)){
+            System.out.println("CFD bought sucessfully");
+        } else {
+            System.out.println("CFD not bought");
+        }
+
+        menuAtivosDisponiveis();
     }
 
     /**

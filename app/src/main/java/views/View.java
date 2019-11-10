@@ -9,9 +9,13 @@ import java.util.*;
 
 public abstract class View {
 
-	private EESTrading trading;
-	private String username;
+	protected EESTrading trading;
+	protected Utilizador utilizador;
 	private int currentMenu;
+
+	public Utilizador getUtilizador() {
+		return utilizador;
+	}
 
 	public abstract void menuInicial();
 
@@ -49,9 +53,9 @@ public abstract class View {
 	/**
 	 *
 	 * @param utilizador
-	 * @param cfd
+	 * @param ativoFinanceiro
 	 */
-	public abstract void menuDeCompraCFD(Utilizador utilizador, CFD cfd);
+	public abstract void menuDeCompraCFD(Utilizador utilizador, AtivoFinanceiro ativoFinanceiro);
 
 	/**
 	 *

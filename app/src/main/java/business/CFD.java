@@ -7,7 +7,16 @@ public class CFD {
 	private double takeProfit;
 	private double stopLoss;
 	private int id;
+	private Utilizador utilizador;
 	private AtivoFinanceiro ativoFinanceiro;
+
+	public Utilizador getUtilizador() {
+		return utilizador;
+	}
+
+	public void setUtilizador(Utilizador utilizador) {
+		this.utilizador = utilizador;
+	}
 
 	public double getBoughtValue() {
 		return boughtValue;

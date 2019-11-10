@@ -1,53 +1,60 @@
 package data;
 
 import business.CFD;
+import business.Utilizador;
 
 import java.util.List;
 
 public class UtilizadorDAOConcrete implements UtilizadorDAO {
 
+
     @Override
-    public double buyCFD(int user, int cfd) {
+    public double addCFD(Utilizador user, CFD cfd) {
         return 0;
     }
 
     @Override
-    public double sellCFD(int user, int cfd) {
+    public double removeCFD(Utilizador user, CFD cfd) {
         return 0;
     }
 
     @Override
-    public void putPortfolio(int user, int cfd) {
+    public void putPortfolio(Utilizador user, CFD cfd) {
 
     }
 
     @Override
-    public void registCFDBougth(int user, int cfd) {
-
-    }
-
-    @Override
-    public List<CFD> getLastCFDBought(int user, int maxSize) {
+    public List<CFD> getLastCFDBought(Utilizador user, int maxSize) {
         return null;
     }
 
     @Override
-    public void put(Integer obj) {
+    public void addMoney(Utilizador user, double value) {
 
     }
 
     @Override
-    public Integer get(UtilizadorDAO id) {
+    public boolean removeMoney(Utilizador user, double value) {
+        return false;
+    }
+
+    @Override
+    public Object put(Object obj) {
         return null;
     }
 
     @Override
-    public void delete(UtilizadorDAO id) {
+    public Object get(Object id) {
+        return null;
+    }
+
+    @Override
+    public void delete(Object id) {
 
     }
 
     @Override
-    public void replace(UtilizadorDAO id, Integer obj) {
+    public void replace(Object id, Object obj) {
 
     }
 }

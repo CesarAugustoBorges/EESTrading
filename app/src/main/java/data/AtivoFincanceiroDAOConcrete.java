@@ -9,8 +9,9 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
     }
 
     @Override
-    public void put(AtivoFinanceiro obj) {
+    public String put(AtivoFinanceiro obj) {
 
+        return null;
     }
 
     @Override

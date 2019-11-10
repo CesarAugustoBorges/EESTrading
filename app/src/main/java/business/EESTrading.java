@@ -1,102 +1,104 @@
 package business;
 
+import data.AtivoFinanceiroDAO;
+import data.CFDDAO;
+import data.UtilizadorDAO;
+import scrapper.AtivoFinanceiroScrapper;
+
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class EESTrading {
-
-	private Map<Integer, CFD> cfds;
-	private Map<String, Utilizador> users;
-	private List<AtivoFinanceiro> ativos;
 	private double fee;
+	private List<AtivoFinanceiroScrapper> scrappers;
 
-	public List<CFD> getCFDs() {
-		// TODO - implement EESTrading.getCFDs
-		throw new UnsupportedOperationException();
+	private CFDDAO cfdDAO = CFDDAO.getCFDDAO();
+	private AtivoFinanceiroDAO ativoFinanceiroDAO = AtivoFinanceiroDAO.GetAtivoFinanceiroDAO();
+	private UtilizadorDAO utilizadorDAO = UtilizadorDAO.GetUtilizadorDAO();
+
+
+	public List<AtivoFinanceiro> getAtivos() {
+		List<AtivoFinanceiro> res = new LinkedList<>();
+		for(AtivoFinanceiroScrapper scrapper : scrappers){
+			res.addAll(scrapper.getAtivosFinanceiros());
+		}
+		return res;
 	}
 
-	/**
-	 * 
-	 * @param company
-	 */
-	public List<CFD> getCFDsOfCompany(String company) {
-		// TODO - implement EESTrading.getCFDsOfCompany
-		throw new UnsupportedOperationException();
+	public void putAtivosFinanceiros(List<AtivoFinanceiro> ativoFinanceiros){
+		ativoFinanceiros.forEach(ativo -> ativoFinanceiroDAO.replace(ativo.getCompany(), ativo));
 	}
 
+
 	/**
-	 * 
+	 *
 	 * @param user
 	 */
-	public List<CFD> getCFDsOfUser(String user) {
-		// TODO - implement EESTrading.getCFDsOfUser
-		throw new UnsupportedOperationException();
+	public List<CFD> getCFDsOfUser(Utilizador user) {
+		return cfdDAO.get(user);
 	}
 
 	/**
-	 * 
+	 *
 	 * @param user
 	 * @param pass
 	 */
 	public boolean login(String user, String pass) {
-		// TODO - implement EESTrading.login
-		throw new UnsupportedOperationException();
+		return utilizadorDAO.login(user, pass);
 	}
 
 	/**
-	 * 
-	 * @param username
-	 * @param cfd
-	 * @param value
-	 */
-	public void buy(String username, int cfd, double value) {
-		// TODO - implement EESTrading.buy
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * 
-	 * @param username
+	 *
+	 * @param utilizador
 	 * @param cfd
 	 */
-	public double sell(String username, int cfd) {
-		// TODO - implement EESTrading.sell
-		throw new UnsupportedOperationException();
+	public boolean buy(Utilizador utilizador, CFD cfd) {
+		int idCFD = cfdDAO.put(cfd);
+		if(idCFD > 0){
+			double value = utilizadorDAO.addCFD(utilizador, cfd);
+			return withdraw(utilizador, value);
+		}
+		return false;
 	}
 
 	/**
-	 * 
+	 *
+	 * @param utilizador
+	 * @param cfd
+	 */
+	public double sell(Utilizador utilizador, CFD cfd) {
+		return 0;
+	}
+
+	/**
+	 *
 	 * @param username
 	 * @param pass
 	 */
 	public boolean regist(String username, String pass) {
-		// TODO - implement EESTrading.regist
-		throw new UnsupportedOperationException();
+		Utilizador novo = new Utilizador(username, pass);
+		Integer id =  utilizadorDAO.put(novo);
+		return id == -1;
 	}
 
 	/**
-	 * 
-	 * @param username
+	 *
+	 * @param utilizador
 	 * @param value
 	 */
-	public void deposit(String username, double value) {
-		// TODO - implement EESTrading.deposit
-		throw new UnsupportedOperationException();
+	public void deposit(Utilizador utilizador, double value) {
+		utilizadorDAO.addMoney(utilizador, value);
 	}
 
 	/**
-	 * 
-	 * @param username
+	 *
+	 * @param utilizador
 	 * @param value
 	 */
-	public void withdraw(String username, double value) {
-		// TODO - implement EESTrading.withdraw
-		throw new UnsupportedOperationException();
-	}
-
-	public List<AtivoFinanceiro> getAtivos() {
-		// TODO - implement EESTrading.getAtivos
-		throw new UnsupportedOperationException();
+	public boolean withdraw(Utilizador utilizador, double value) {
+		if(utilizador.getMoney() < value) return false;
+		return utilizadorDAO.removeMoney(utilizador, value);
 	}
 
 }

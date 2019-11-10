@@ -1,16 +1,15 @@
 package data;
 
 import business.CFD;
+import business.Utilizador;
+
+import java.util.List;
 
 public class CFDDAOConcrete implements CFDDAO {
-    @Override
-    public void put(Integer obj) {
-
-    }
 
     @Override
-    public void replace(CFD id, Integer obj) {
-
+    public double sell(int id) {
+        return 0;
     }
 
     @Override
@@ -19,17 +18,27 @@ public class CFDDAOConcrete implements CFDDAO {
     }
 
     @Override
-    public double sell(int id) {
-        return 0;
-    }
-
-    @Override
-    public Integer get(CFD id) {
+    public List<CFD> get(Utilizador user) {
         return null;
     }
 
     @Override
-    public void delete(CFD id) {
+    public Integer put(CFD obj) {
+        return null;
+    }
+
+    @Override
+    public CFD get(Integer id) {
+        return null;
+    }
+
+    @Override
+    public void delete(Integer id) {
+
+    }
+
+    @Override
+    public void replace(Integer id, CFD obj) {
 
     }
 }
