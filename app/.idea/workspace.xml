@@ -2,18 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5e299312-4bd6-42a6-acae-7f45c8649c8e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/business/CFD.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/business/CFD.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/business/EESTrading.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/business/EESTrading.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/business/Utilizador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/business/Utilizador.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/AtivoFinanceiroDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/AtivoFinanceiroDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/AtivoFincanceiroDAOConcrete.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/AtivoFincanceiroDAOConcrete.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/CFDDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/CFDDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/CFDDAOConcrete.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/CFDDAOConcrete.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/DAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/DAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/UtilizadorDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/UtilizadorDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/data/UtilizadorDAOConcrete.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/UtilizadorDAOConcrete.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/views/ConsoleView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/views/ConsoleView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/views/View.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/views/View.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -31,26 +21,30 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/views/ConsoleView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
+            <state relative-caret-position="1870">
               <caret line="110" column="38" selection-start-line="110" selection-start-column="38" selection-end-line="110" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1662#1663#0" expanded="true" />
-                <element signature="e#1701#1702#0" expanded="true" />
+                <element signature="e#1737#1738#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/business/EESTrading.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="68">
               <caret line="11" column="25" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="25" />
               <folding>
+                <element signature="e#994#995#0" expanded="true" />
                 <element signature="e#1024#1025#0" expanded="true" />
+                <element signature="e#1121#1122#0" expanded="true" />
                 <element signature="e#1166#1167#0" expanded="true" />
+                <element signature="e#1545#1546#0" expanded="true" />
                 <element signature="e#1560#1561#0" expanded="true" />
+                <element signature="e#1895#1896#0" expanded="true" />
                 <element signature="e#1943#1944#0" expanded="true" />
               </folding>
             </state>
@@ -83,7 +77,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/scrapper/JSONCryptoScrapper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="201">
+            <state relative-caret-position="1105">
               <caret line="83" column="31" selection-start-line="83" selection-start-column="31" selection-end-line="83" selection-end-column="31" />
             </state>
           </provider>
@@ -104,20 +98,14 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/data/CFDDAOConcrete.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="314">
+            <state relative-caret-position="357">
               <caret line="23" selection-start-line="23" selection-end-line="23" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#159#160#0" expanded="true" />
                 <element signature="e#183#184#0" expanded="true" />
-                <element signature="e#235#236#0" expanded="true" />
+                <element signature="e#207#208#0" expanded="true" />
                 <element signature="e#259#260#0" expanded="true" />
-                <element signature="e#318#319#0" expanded="true" />
-                <element signature="e#345#346#0" expanded="true" />
-                <element signature="e#394#395#0" expanded="true" />
-                <element signature="e#421#422#0" expanded="true" />
-                <element signature="e#469#470#0" expanded="true" />
-                <element signature="e#496#497#0" expanded="true" />
+                <element signature="e#283#284#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -126,22 +114,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/data/UtilizadorDAO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="501">
+            <state relative-caret-position="253">
               <caret line="56" column="52" selection-start-line="56" selection-start-column="52" selection-end-line="56" selection-end-column="52" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#262#263#0" expanded="true" />
-                <element signature="e#293#294#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/data/UtilizadorDAOConcrete.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" selection-start-line="14" selection-end-line="14" />
+            <state relative-caret-position="-70">
+              <caret line="44" column="4" selection-start-line="44" selection-start-column="4" selection-end-line="44" selection-end-column="4" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#218#219#0" expanded="true" />
@@ -152,10 +138,12 @@
                 <element signature="e#528#529#0" expanded="true" />
                 <element signature="e#687#688#0" expanded="true" />
                 <element signature="e#715#716#0" expanded="true" />
-                <element signature="e#766#767#0" expanded="true" />
-                <element signature="e#793#794#0" expanded="true" />
-                <element signature="e#843#844#0" expanded="true" />
-                <element signature="e#870#871#0" expanded="true" />
+                <element signature="e#791#792#0" expanded="true" />
+                <element signature="e#819#820#0" expanded="true" />
+                <element signature="e#1159#1160#0" expanded="true" />
+                <element signature="e#1186#1187#0" expanded="true" />
+                <element signature="e#1241#1242#0" expanded="true" />
+                <element signature="e#1268#1269#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -196,12 +184,12 @@
         <option value="$PROJECT_DIR$/src/main/java/data/AtivoFincanceiroDAOConcrete.java" />
         <option value="$PROJECT_DIR$/src/main/java/views/View.java" />
         <option value="$PROJECT_DIR$/src/main/java/views/ConsoleView.java" />
-        <option value="$PROJECT_DIR$/src/main/java/data/UtilizadorDAOConcrete.java" />
         <option value="$PROJECT_DIR$/src/main/java/business/Utilizador.java" />
         <option value="$PROJECT_DIR$/src/main/java/data/UtilizadorDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/data/CFDDAOConcrete.java" />
         <option value="$PROJECT_DIR$/src/main/java/data/CFDDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/business/EESTrading.java" />
+        <option value="$PROJECT_DIR$/src/main/java/data/UtilizadorDAOConcrete.java" />
       </list>
     </option>
   </component>
@@ -216,8 +204,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -284,6 +270,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -375,7 +363,7 @@
     <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25037822" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25416037" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -392,7 +380,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.32872504" />
+      <window_info anchor="bottom" id="Messages" order="10" visible="true" weight="0.32872504" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -485,14 +473,15 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Classe/EESTrading.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/views/ConsoleView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
+        <state relative-caret-position="1870">
           <caret line="110" column="38" selection-start-line="110" selection-start-column="38" selection-end-line="110" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1662#1663#0" expanded="true" />
-            <element signature="e#1701#1702#0" expanded="true" />
+            <element signature="e#1737#1738#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -500,39 +489,10 @@
     <entry file="file://$USER_HOME$/Classes/FSD/leader/src/main/java/fsd/VectorEcho.java">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Classe/EESTrading.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/data/AtivoFinanceiroDAO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="89" lean-forward="true" selection-start-line="6" selection-start-column="4" selection-end-line="89" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/scrapper/JSONCryptoScrapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="83" column="31" selection-start-line="83" selection-start-column="31" selection-end-line="83" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/data/UtilizadorDAOConcrete.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#218#219#0" expanded="true" />
-            <element signature="e#242#243#0" expanded="true" />
-            <element signature="e#313#314#0" expanded="true" />
-            <element signature="e#337#338#0" expanded="true" />
-            <element signature="e#501#502#0" expanded="true" />
-            <element signature="e#528#529#0" expanded="true" />
-            <element signature="e#687#688#0" expanded="true" />
-            <element signature="e#715#716#0" expanded="true" />
-            <element signature="e#766#767#0" expanded="true" />
-            <element signature="e#793#794#0" expanded="true" />
-            <element signature="e#843#844#0" expanded="true" />
-            <element signature="e#870#871#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="68">
+          <caret line="5" column="70" selection-start-line="5" selection-start-column="70" selection-end-line="5" selection-end-column="70" />
         </state>
       </provider>
     </entry>
@@ -543,42 +503,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/data/AtivoFinanceiroDAO.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/scrapper/JSONCryptoScrapper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="5" column="70" selection-start-line="5" selection-start-column="70" selection-end-line="5" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/data/UtilizadorDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="501">
-          <caret line="56" column="52" selection-start-line="56" selection-start-column="52" selection-end-line="56" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#262#263#0" expanded="true" />
-            <element signature="e#293#294#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/data/CFDDAOConcrete.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="23" selection-start-line="23" selection-end-line="23" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#159#160#0" expanded="true" />
-            <element signature="e#183#184#0" expanded="true" />
-            <element signature="e#235#236#0" expanded="true" />
-            <element signature="e#259#260#0" expanded="true" />
-            <element signature="e#318#319#0" expanded="true" />
-            <element signature="e#345#346#0" expanded="true" />
-            <element signature="e#394#395#0" expanded="true" />
-            <element signature="e#421#422#0" expanded="true" />
-            <element signature="e#469#470#0" expanded="true" />
-            <element signature="e#496#497#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="1105">
+          <caret line="83" column="31" selection-start-line="83" selection-start-column="31" selection-end-line="83" selection-end-column="31" />
         </state>
       </provider>
     </entry>
@@ -592,15 +520,67 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/data/CFDDAOConcrete.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="23" selection-start-line="23" selection-end-line="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#183#184#0" expanded="true" />
+            <element signature="e#207#208#0" expanded="true" />
+            <element signature="e#259#260#0" expanded="true" />
+            <element signature="e#283#284#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/business/EESTrading.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="11" column="25" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="25" />
           <folding>
+            <element signature="e#994#995#0" expanded="true" />
             <element signature="e#1024#1025#0" expanded="true" />
+            <element signature="e#1121#1122#0" expanded="true" />
             <element signature="e#1166#1167#0" expanded="true" />
+            <element signature="e#1545#1546#0" expanded="true" />
             <element signature="e#1560#1561#0" expanded="true" />
+            <element signature="e#1895#1896#0" expanded="true" />
             <element signature="e#1943#1944#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/data/UtilizadorDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="56" column="52" selection-start-line="56" selection-start-column="52" selection-end-line="56" selection-end-column="52" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/data/UtilizadorDAOConcrete.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-70">
+          <caret line="44" column="4" selection-start-line="44" selection-start-column="4" selection-end-line="44" selection-end-column="4" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#218#219#0" expanded="true" />
+            <element signature="e#242#243#0" expanded="true" />
+            <element signature="e#313#314#0" expanded="true" />
+            <element signature="e#337#338#0" expanded="true" />
+            <element signature="e#501#502#0" expanded="true" />
+            <element signature="e#528#529#0" expanded="true" />
+            <element signature="e#687#688#0" expanded="true" />
+            <element signature="e#715#716#0" expanded="true" />
+            <element signature="e#791#792#0" expanded="true" />
+            <element signature="e#819#820#0" expanded="true" />
+            <element signature="e#1159#1160#0" expanded="true" />
+            <element signature="e#1186#1187#0" expanded="true" />
+            <element signature="e#1241#1242#0" expanded="true" />
+            <element signature="e#1268#1269#0" expanded="true" />
           </folding>
         </state>
       </provider>
