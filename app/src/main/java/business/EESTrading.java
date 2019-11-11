@@ -44,8 +44,11 @@ public class EESTrading {
 	 * @param user
 	 * @param pass
 	 */
-	public boolean login(String user, String pass) {
-		return utilizadorDAO.login(user, pass);
+	public Utilizador login(String user, String pass) {
+		if(utilizadorDAO.login(user, pass)){
+			return utilizadorDAO.get(user);
+		}
+		return null;
 	}
 
 	/**
@@ -76,10 +79,13 @@ public class EESTrading {
 	 * @param username
 	 * @param pass
 	 */
-	public boolean regist(String username, String pass) {
+	public Utilizador regist(String username, String pass) {
 		Utilizador novo = new Utilizador(username, pass);
-		Integer id =  utilizadorDAO.put(novo);
-		return id == -1;
+		String id =  utilizadorDAO.put(novo);
+		System.out.println("DEBUG: Trying to regist user:" + novo.getUsername() + " " + novo.getPassword());
+		if(id != null) novo = utilizadorDAO.get(username);
+		else novo = null;
+		return novo;
 	}
 
 	/**

@@ -7,7 +7,7 @@ import business.Utilizador;
 import java.util.*;
 
 public class ConsoleView extends View {
-    Scanner scanner = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
 
     public void layout(String title){
         int width = 50;
@@ -34,11 +34,30 @@ public class ConsoleView extends View {
         System.out.println(res.toString());
     }
 
+
+    @Override
+    public void menuDepositar(Utilizador utilizador) {
+
+    }
+
+    @Override
+    public void menuWithdraw(Utilizador utilizador) {
+
+    }
+
     public void menuInicial() {
         layout("Menu Inicial");
         System.out.println("1.Login");
         System.out.println("2.Registar");
         System.out.println("3.Sair");
+
+        int option = getSelectedOption();
+        switch (option){
+            case 1: menuLogin(); break;
+            case 2: menuRegistar(); break;
+            case 3: System.exit(0); break;
+            default: System.out.println("Não é uma opção válida");
+        }
     }
 
     public void menuRegistar() {
@@ -47,6 +66,30 @@ public class ConsoleView extends View {
         String username = scanner.next();
         System.out.print("Password");
         String password = scanner.next();
+        utilizador = trading.regist(username, password);
+        if(utilizador != null){
+            menuUtilizador(utilizador);
+        }
+        else{
+            System.out.println("Não foi possivel registar o utilizador");
+            menuInicial();
+        }
+    }
+
+    public void menuLogin(){
+        layout("Login");
+        System.out.print("Username:");
+        String username = scanner.next();
+        System.out.print("Password");
+        String password = scanner.next();
+        utilizador = trading.login(username, password);
+        if(utilizador != null){
+            menuUtilizador(utilizador);
+        }
+        else{
+            System.out.println("Não foi possivel registar o utilizador");
+            menuInicial();
+        }
     }
 
     /**
@@ -60,7 +103,7 @@ public class ConsoleView extends View {
     }
 
     public void menuAtivosDisponiveis(){
-        menuAtivosDisponiveis(getUtilizador(), trading.getAtivos());
+        menuAtivosDisponiveis(utilizador, trading.getAtivos());
     }
     /**
      *
@@ -76,9 +119,12 @@ public class ConsoleView extends View {
             System.out.println((i+1) + ". " + ativo.getCompany() + "- " + ativo.getValue() + " $" );
         }
 
-        Integer ativoSelected = scanner.nextInt();
-        if(ativoSelected > 0)
+        int ativoSelected = getSelectedOption();
+        if(ativoSelected > 0 && ativoSelected <= ativos.size())
             menuDeCompraCFD(utilizador, ativos.get(ativoSelected-1));
+        else {
+            System.out.println("ERROR: Escolha um ativo entre 1 - " + ativos.size());
+        }
     }
 
     /**
@@ -120,6 +166,11 @@ public class ConsoleView extends View {
         menuAtivosDisponiveis();
     }
 
+
+    public void menuMeusCFDs(){
+        List<CFD> cfds = trading.getCFDsOfUser(utilizador);
+        menuMeusCFDs(utilizador, cfds);
+    }
     /**
      *
      * @param utilizador
@@ -138,14 +189,41 @@ public class ConsoleView extends View {
         layout("Olá " + utilizador.getUsername());
         System.out.println("1.Comprar CFD");
         System.out.println("2.Ver portfolio");
-        System.out.println("3.Ver CFDs em posse");
+        System.out.println("3.Ver transições antigas");
         System.out.println("4.Depositar dinheiro");
         System.out.println("5.Levantar dinheiro");
         System.out.println("6.Sair");
+
+        int option = getSelectedOption();
+        switch (option){
+            case 1: menuAtivosDisponiveis(); break;
+            case 2: menuMeusCFDs(); break;
+            case 3: break; //fazer
+            case 4: break;
+            default: System.out.println("ERROR: Não é uma opção válida");
+        }
     }
 
     public static void main(String[] args) {
         View view = new ConsoleView();
         view.menuInicial();
+    }
+
+    private int getSelectedOption(){
+        try {
+            return scanner.nextInt();
+        } catch (Exception e){
+            System.out.println("ERROR: Insira apenas um número na consola");
+            return getSelectedOption();
+        }
+    }
+
+    private double getDouble(){
+        try{
+            return scanner.nextDouble();
+        } catch (Exception e){
+            System.out.println("ERROR: Insira um número válido na comsola");
+            return getDouble();
+        }
     }
 }

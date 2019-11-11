@@ -45,22 +45,22 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
 
 
     @Override
-    public Integer put(Utilizador obj) {
+    public String put(Utilizador obj) {
         return null;
     }
 
     @Override
-    public Utilizador get(Integer id) {
+    public Utilizador get(String id) {
         return null;
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(String id) {
 
     }
 
     @Override
-    public void replace(Integer id, Utilizador obj) {
+    public void replace(String id, Utilizador obj) {
 
     }
 }

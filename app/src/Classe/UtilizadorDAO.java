@@ -1,16 +1,8 @@
-package data;
+package Classe;
 
-import business.CFD;
-import business.Utilizador;
+public interface UtilizadorDAO extends DAO {
 
-import java.util.List;
-
-public interface UtilizadorDAO extends DAO<String, Utilizador> {
-
-	UtilizadorDAO UTILIZADOR_DAO = new UtilizadorDAOConcrete();
-	static UtilizadorDAO GetUtilizadorDAO(){
-		return UTILIZADOR_DAO;
-	};
+	static AtivoFinanceiroDAO GetAtivoFinanceitoDAO();
 
 	/**
 	 * 
@@ -54,6 +46,11 @@ public interface UtilizadorDAO extends DAO<String, Utilizador> {
 	 */
 	boolean removeMoney(Utilizador user, double value);
 
-	boolean login(String username, String password);
+	/**
+	 * 
+	 * @param username
+	 * @param password
+	 */
+	boolean login(String username, int password);
 
 }
