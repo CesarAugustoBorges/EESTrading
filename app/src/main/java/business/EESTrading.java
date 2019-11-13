@@ -71,7 +71,11 @@ public class EESTrading {
 	 * @param cfd
 	 */
 	public double sell(Utilizador utilizador, CFD cfd) {
-		return 0;
+		CFD sould = cfdDAO.get(cfd.getId());
+		utilizadorDAO.addMoney(utilizador, cfd.getValue());
+		cfdDAO.delete(cfd.getId());
+		utilizador = utilizadorDAO.get(utilizador.getUsername());
+		return cfd.getValue();
 	}
 
 	/**
@@ -107,4 +111,21 @@ public class EESTrading {
 		return utilizadorDAO.removeMoney(utilizador, value);
 	}
 
+	public boolean setCFDTopProfit(CFD cfd, double topProfit) {
+		if (topProfit > cfd.getValue()) {
+			cfd.setTopProfit(topProfit);
+			cfdDAO.replace(cfd.getId(), cfd);
+			return true;
+		}
+		return false;
+	}
+
+	public boolean setCFDStopLoss(CFD cfd, double stopLoss) {
+		if (stopLoss < cfd.getValue()) {
+			cfd.setTopProfit(stopLoss);
+			cfdDAO.replace(cfd.getId(), cfd);
+			return true;
+		}
+		return false;
+	}
 }

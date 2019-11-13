@@ -2,14 +2,10 @@ package Classe;
 
 public class ConsoleView extends View {
 
-	/**
-	 * 
-	 * @param username
-	 * @param password
-	 */
-	public Utilizador menuLogin(String username, String password) {
-		// TODO - implement ConsoleView.menuLogin
-		throw new UnsupportedOperationException();
+	private Scanner scanner;
+
+	public void menuLogin() {
+
 	}
 
 	/**
@@ -84,15 +80,6 @@ public class ConsoleView extends View {
 	 * 
 	 * @param utilizador
 	 */
-	public void menuUtilizador2(Utilizador utilizador) {
-		// TODO - implement ConsoleView.menuUtilizador2
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * 
-	 * @param utilizador
-	 */
 	public void menuWithdraw(Utilizador utilizador) {
 		// TODO - implement ConsoleView.menuWithdraw
 		throw new UnsupportedOperationException();
@@ -102,9 +89,8 @@ public class ConsoleView extends View {
 	 * 
 	 * @param utilizador
 	 */
-	public void menuDepositar(utilizador utilizador) {
-		// TODO - implement ConsoleView.menuDepositar
-		throw new UnsupportedOperationException();
+	public void menuDepositar(Utilizador utilizador) {
+
 	}
 
 }

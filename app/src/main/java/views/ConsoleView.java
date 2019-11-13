@@ -9,6 +9,10 @@ import java.util.*;
 public class ConsoleView extends View {
     private Scanner scanner = new Scanner(System.in);
 
+    public ConsoleView(){
+        super();
+    }
+
     public void layout(String title){
         int width = 50;
         StringBuilder res = new StringBuilder();
@@ -56,7 +60,7 @@ public class ConsoleView extends View {
             case 1: menuLogin(); break;
             case 2: menuRegistar(); break;
             case 3: System.exit(0); break;
-            default: System.out.println("Não é uma opção válida");
+            default: System.out.println("Não é uma opção válida: " + option);
         }
     }
 
@@ -64,7 +68,7 @@ public class ConsoleView extends View {
         layout("Menu Inicial");
         System.out.print("Username:");
         String username = scanner.next();
-        System.out.print("Password");
+        System.out.print("Password: ");
         String password = scanner.next();
         utilizador = trading.regist(username, password);
         if(utilizador != null){
@@ -78,16 +82,16 @@ public class ConsoleView extends View {
 
     public void menuLogin(){
         layout("Login");
-        System.out.print("Username:");
+        System.out.print("Username: ");
         String username = scanner.next();
-        System.out.print("Password");
+        System.out.print("Password: ");
         String password = scanner.next();
         utilizador = trading.login(username, password);
         if(utilizador != null){
             menuUtilizador(utilizador);
         }
         else{
-            System.out.println("Não foi possivel registar o utilizador");
+            System.out.println("Credenciais incorretas");
             menuInicial();
         }
     }
@@ -98,8 +102,44 @@ public class ConsoleView extends View {
      * @param cfd
      */
     public void menuCFDPossuido(Utilizador utilizador, CFD cfd) {
-        // TODO - implement ConsoleView.menuCFDPossuido
-        throw new UnsupportedOperationException();
+        layout(cfd.getName() + " - " + cfd.getValue() + "$");
+        System.out.print("Top Profit: " + (cfd.getTopProfit() == null ? "--" : cfd.getTopProfit()));
+        System.out.println("Stop Loss: " + (cfd.getStopLoss() == null ? "--" : cfd.getStopLoss()));
+        System.out.println("1.Vender");
+        System.out.println("2.Definir Top Profit");
+        System.out.println("3.Definir Stop Loss");
+        System.out.println("4.Retroceder");
+
+        int option = getSelectedOption();
+        switch (option){
+            case 1:
+                double sould = trading.sell(utilizador, cfd);
+                System.out.println("Vendido " + cfd.getName() + " - " + sould + "$");
+                menuMeusCFDs();
+                break;
+            case 2:
+                System.out.print("Introduza o Stop Loss: ");
+                double valor = getDouble();
+                if(trading.setCFDStopLoss(cfd, valor)){
+                    menuCFDPossuido(utilizador, cfd);
+                    break;
+                }else{
+                    System.out.println("O stop loss tem de ser menor que o valor do CFD");
+                    break;
+                }
+            case 3:
+                System.out.print("Introduza o Top Profit: ");
+                double topProfit = getDouble();
+                if(trading.setCFDTopProfit(cfd, topProfit)){
+                    menuCFDPossuido(utilizador, cfd);
+                    break;
+                }else{
+                    System.out.println("O top profit tem de ser maior que o valor do CFD");
+                    break;
+                }
+            case 4: menuMeusCFDs(); break;
+            default: System.out.println("Não é uma opção válida: " + option);
+        }
     }
 
     public void menuAtivosDisponiveis(){
@@ -147,7 +187,7 @@ public class ConsoleView extends View {
         if(answer.equals("Y")){
             System.out.print("Introduza o valor: ");
             double topProfit = scanner.nextDouble();
-            cfd.setTakeProfit(topProfit);
+            cfd.setTopProfit(topProfit);
         }
         System.out.print("Deseja definir um Stop Profit= [Y/N] ");
         answer = scanner.next();
@@ -204,15 +244,11 @@ public class ConsoleView extends View {
         }
     }
 
-    public static void main(String[] args) {
-        View view = new ConsoleView();
-        view.menuInicial();
-    }
-
     private int getSelectedOption(){
         try {
             return scanner.nextInt();
         } catch (Exception e){
+            clearInput();
             System.out.println("ERROR: Insira apenas um número na consola");
             return getSelectedOption();
         }
@@ -222,8 +258,13 @@ public class ConsoleView extends View {
         try{
             return scanner.nextDouble();
         } catch (Exception e){
+            clearInput();
             System.out.println("ERROR: Insira um número válido na comsola");
             return getDouble();
         }
+    }
+
+    private void clearInput(){
+        scanner.next();
     }
 }

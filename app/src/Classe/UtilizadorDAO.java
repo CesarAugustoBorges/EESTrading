@@ -9,20 +9,6 @@ public interface UtilizadorDAO extends DAO {
 	 * @param user
 	 * @param cfd
 	 */
-	double addCFD(Utilizador user, CFD cfd);
-
-	/**
-	 * 
-	 * @param user
-	 * @param cfd
-	 */
-	double removeCFD(Utilizador user, CFD cfd);
-
-	/**
-	 * 
-	 * @param user
-	 * @param cfd
-	 */
 	void putPortfolio(Utilizador user, CFD cfd);
 
 	/**

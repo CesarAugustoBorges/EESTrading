@@ -13,6 +13,12 @@ public abstract class View {
 	protected Utilizador utilizador;
 	private int currentMenu;
 
+	public View(){
+		trading = new EESTrading();
+		utilizador = null;
+		currentMenu = 0;
+	}
+
 	public abstract void menuInicial();
 
 	public abstract void menuRegistar();

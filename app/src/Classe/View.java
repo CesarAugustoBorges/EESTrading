@@ -59,18 +59,13 @@ public abstract class View {
 	 */
 	public abstract void layout(String title);
 
-	/**
-	 * 
-	 * @param username
-	 * @param password
-	 */
-	public abstract Utilizador menuLogin(String username, String password);
+	public abstract void menuLogin();
 
 	/**
 	 * 
 	 * @param utilizador
 	 */
-	public abstract void menuDepositar(utilizador utilizador);
+	public abstract void menuDepositar(Utilizador utilizador);
 
 	/**
 	 * 

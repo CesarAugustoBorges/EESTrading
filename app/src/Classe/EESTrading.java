@@ -18,9 +18,8 @@ public class EESTrading extends Observable {
 	 * @param user
 	 * @param pass
 	 */
-	public boolean login(String user, String pass) {
-		// TODO - implement EESTrading.login
-		throw new UnsupportedOperationException();
+	public Utilizador login(String user, String pass) {
+
 	}
 
 	/**
@@ -98,6 +97,26 @@ public class EESTrading extends Observable {
 
 	public List<AtivoFinanceiro> getAtivosFinanceiros() {
 		// TODO - implement EESTrading.getAtivosFinanceiros
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * 
+	 * @param cfd
+	 * @param value
+	 */
+	public boolean setCFDTopProfit(CFD cfd, double value) {
+		// TODO - implement EESTrading.setCFDTopProfit
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * 
+	 * @param cfd
+	 * @param value
+	 */
+	public boolean setCFDStopLoss(CFD cfd, double value) {
+		// TODO - implement EESTrading.setCFDStopLoss
 		throw new UnsupportedOperationException();
 	}
 

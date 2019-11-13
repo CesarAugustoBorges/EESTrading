@@ -4,11 +4,21 @@ public class CFD {
 
 	private double boughtValue;
 	private double units;
-	private double takeProfit;
-	private double stopLoss;
+	private Double topProfit;
+	private Double stopLoss;
 	private int id;
 	private Utilizador utilizador;
 	private AtivoFinanceiro ativoFinanceiro;
+
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 
 	public Utilizador getUtilizador() {
 		return utilizador;
@@ -34,15 +44,15 @@ public class CFD {
 		this.units = units;
 	}
 
-	public double getTakeProfit() {
-		return takeProfit;
+	public Double getTopProfit() {
+		return topProfit;
 	}
 
-	public void setTakeProfit(double takeProfit) {
-		this.takeProfit = takeProfit;
+	public void setTopProfit(double takeProfit) {
+		this.topProfit = takeProfit;
 	}
 
-	public double getStopLoss() {
+	public Double getStopLoss() {
 		return stopLoss;
 	}
 
