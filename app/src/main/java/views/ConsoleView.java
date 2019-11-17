@@ -138,7 +138,9 @@ public class ConsoleView extends View {
                     break;
                 }
             case 4: menuMeusCFDs(); break;
-            default: System.out.println("Não é uma opção válida: " + option);
+            default:
+                System.out.println("Não é uma opção válida: " + option);
+                menuCFDPossuido(utilizador, cfd);
         }
     }
 
@@ -164,6 +166,7 @@ public class ConsoleView extends View {
             menuDeCompraCFD(utilizador, ativos.get(ativoSelected-1));
         else {
             System.out.println("ERROR: Escolha um ativo entre 1 - " + ativos.size());
+            menuAtivosDisponiveis(utilizador, ativos);
         }
     }
 
@@ -240,7 +243,13 @@ public class ConsoleView extends View {
             case 2: menuMeusCFDs(); break;
             case 3: break; //fazer
             case 4: break;
-            default: System.out.println("ERROR: Não é uma opção válida");
+            case 5: break;
+            case 6:
+                this.utilizador = null;
+                menuInicial();
+            default:
+                System.out.println("ERROR: Não é uma opção válida");
+                menuUtilizador(utilizador);
         }
     }
 

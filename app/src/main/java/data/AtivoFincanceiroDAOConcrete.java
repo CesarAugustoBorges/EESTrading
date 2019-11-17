@@ -2,6 +2,8 @@ package data;
 
 import business.AtivoFinanceiro;
 
+import java.util.List;
+
 public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
     @Override
     public AtivoFinanceiro get(String id) {
@@ -22,5 +24,10 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
     @Override
     public void replace(String id, AtivoFinanceiro obj) {
 
+    }
+
+    @Override
+    public List<AtivoFinanceiro> getAll() {
+        return null;
     }
 }
