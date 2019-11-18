@@ -8,26 +8,29 @@ import scrapper.AtivoFinanceiroScrapper;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
 
-public class EESTrading {
+public class EESTrading extends Observable {
 	private double fee;
-	private List<AtivoFinanceiroScrapper> scrappers;
 
 	private CFDDAO cfdDAO = CFDDAO.getCFDDAO();
 	private AtivoFinanceiroDAO ativoFinanceiroDAO = AtivoFinanceiroDAO.GetAtivoFinanceiroDAO();
 	private UtilizadorDAO utilizadorDAO = UtilizadorDAO.GetUtilizadorDAO();
 
 
-	public List<AtivoFinanceiro> getAtivos() {
-		List<AtivoFinanceiro> res = new LinkedList<>();
-		for(AtivoFinanceiroScrapper scrapper : scrappers){
-			res.addAll(scrapper.getAtivosFinanceiros());
-		}
-		return res;
+	public List<AtivoFinanceiro> getAtivos(){
+		return ativoFinanceiroDAO.getAll();
 	}
 
 	public void putAtivosFinanceiros(List<AtivoFinanceiro> ativoFinanceiros){
-		ativoFinanceiros.forEach(ativo -> ativoFinanceiroDAO.replace(ativo.getCompany(), ativo));
+		ativoFinanceiros.forEach(novo -> {
+			AtivoFinanceiro before = ativoFinanceiroDAO.get(novo.getCompany());
+			if(before.getValue() != novo.getValue()){
+				ativoFinanceiroDAO.replace(novo.getCompany(), novo);
+			}
+		});
+		setChanged();
+		notifyObservers();
 	}
 
 
