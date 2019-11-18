@@ -84,7 +84,7 @@ public class EESTrading {
 	 * @param pass
 	 */
 	public Utilizador regist(String username, String pass) {
-		Utilizador novo = new Utilizador(username, pass);
+		Utilizador novo = new Utilizador(username, pass,0);
 		String id =  utilizadorDAO.put(novo);
 		System.out.println("DEBUG: Trying to regist user:" + novo.getUsername() + " " + novo.getPassword());
 		if(id != null) novo = utilizadorDAO.get(username);

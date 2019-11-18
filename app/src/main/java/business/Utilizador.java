@@ -9,12 +9,14 @@ public class Utilizador {
 
 	private String username;
 	private String password;
+	private double money;
 	private List<CFD> portfolio;
 	private List<CFD> actives;
 
-	public Utilizador(String username, String password){
+	public Utilizador(String username, String password,double money){
 		this.username = username;
 		this.password = password;
+		this.money = money;
 		this.portfolio = new LinkedList<>();
 		this.actives = new LinkedList<>();
 	}
@@ -43,5 +45,5 @@ public class Utilizador {
 		this.money = money;
 	}
 
-	private double money;
+
 }

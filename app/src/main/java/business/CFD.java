@@ -10,6 +10,25 @@ public class CFD {
 	private Utilizador utilizador;
 	private AtivoFinanceiro ativoFinanceiro;
 
+	public CFD() {
+		this.boughtValue =0;
+		this.units=0;
+		this.stopLoss=0.0;
+		this.topProfit=0.0;
+		this.id=0;
+		this.utilizador=null;
+		this.ativoFinanceiro=null;
+	}
+
+	public CFD(double units, Double topProfit, Double stopLoss, int id, Utilizador utilizador, AtivoFinanceiro ativoFinanceiro) {
+		this.boughtValue=ativoFinanceiro.getValue()*units;
+		this.units = units;
+		this.topProfit = topProfit;
+		this.stopLoss = stopLoss;
+		this.id = id;
+		this.utilizador = utilizador;
+		this.ativoFinanceiro = ativoFinanceiro;
+	}
 
 	public int getId() {
 		return id;
@@ -18,7 +37,6 @@ public class CFD {
 	public void setId(int id) {
 		this.id = id;
 	}
-
 
 	public Utilizador getUtilizador() {
 		return utilizador;
