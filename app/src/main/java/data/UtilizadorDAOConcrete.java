@@ -69,7 +69,7 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
     }
 
     @Override
-    public boolean removeMoney(Utilizador user, double value) {
+    public void removeMoney(Utilizador user, double value) {
         DBConnection SQLConn = new SQLConnection();
         try {
             SQLConn.connect();
@@ -81,7 +81,6 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
             SQLConn.disconnect();
         }
         catch (SQLException e){e.printStackTrace();}
-        return false;
     }
 
 
