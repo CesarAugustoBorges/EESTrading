@@ -35,7 +35,9 @@ public class EESTrading extends Observable {
 	public void putAtivosFinanceiros(List<AtivoFinanceiro> ativoFinanceiros){
 		ativoFinanceiros.forEach(novo -> {
 			AtivoFinanceiro before = ativoFinanceiroDAO.get(novo.getCompany());
-			if(before.getValue() != novo.getValue()){
+			if(before == null)
+				ativoFinanceiroDAO.put(novo);
+			else if(before.getValue() != novo.getValue()){
 				ativoFinanceiroDAO.replace(novo.getCompany(), novo);
 			}
 		});
@@ -72,7 +74,7 @@ public class EESTrading extends Observable {
 	public boolean buy(Utilizador utilizador, CFD cfd) {
 		int idCFD = cfdDAO.put(cfd);
 		if(idCFD > 0){
-			double value = utilizadorDAO.addCFD(utilizador, cfd);
+			double value = cfd.getValue();
 			return withdraw(utilizador, value);
 		}
 		return false;
@@ -83,12 +85,11 @@ public class EESTrading extends Observable {
 	 * @param utilizador
 	 * @param cfd
 	 */
-	public double sell(Utilizador utilizador, CFD cfd) {
-		CFD sould = cfdDAO.get(cfd.getId());
-		utilizadorDAO.addMoney(utilizador, cfd.getValue());
+	public void sell(Utilizador utilizador, CFD cfd) {
 		cfdDAO.delete(cfd.getId());
-		utilizador = utilizadorDAO.get(utilizador.getUsername());
-		return cfd.getValue();
+		deposit(utilizador, cfd.getValue());
+		Utilizador utl = utilizadorDAO.get(utilizador.getUsername());
+		utilizador.setMoney(utl.getMoney());
 	}
 
 	/**

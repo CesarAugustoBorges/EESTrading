@@ -125,8 +125,7 @@ public class ConsoleView extends View {
         int option = getSelectedOption();
         switch (option){
             case 1:
-                double sould = trading.sell(utilizador, cfd);
-                System.out.println("Vendido " + cfd.getName() + " - " + sould + "$");
+                trading.sell(utilizador, cfd);
                 menuMeusCFDs();
                 break;
             case 2:
@@ -194,23 +193,23 @@ public class ConsoleView extends View {
 
         layout(utilizador.getUsername() + " CFD: " + ativo.getCompany() +  " " + ativo.getValue() + " $");
         System.out.print("Valor de compra: ");
-        double valor = scanner.nextDouble();
+        double valor = getDouble();
         cfd.setBoughtValue(valor);
         cfd.setUnits(valor / ativo.getValue());
         System.out.print("Deseja definir um Top Profit? [Y/N] ");
         String answer = scanner.next();
         if(answer.equals("Y")){
             System.out.print("Introduza o valor: ");
-            double topProfit = scanner.nextDouble();
+            double topProfit = getDouble();
             cfd.setTopProfit(topProfit);
-        }
+        } else cfd.setTopProfit(0);
         System.out.print("Deseja definir um Stop Profit= [Y/N] ");
         answer = scanner.next();
         if(answer.equals("Y")){
             System.out.print("Introduza o valor: ");
-            double stoploss = scanner.nextDouble();
+            double stoploss = getDouble();
             cfd.setStopLoss(stoploss);
-        }
+        } else cfd.setStopLoss(0);
 
         if(trading.buy(utilizador, cfd)){
             System.out.println("CFD bought sucessfully");
@@ -218,7 +217,7 @@ public class ConsoleView extends View {
             System.out.println("CFD not bought");
         }
 
-        menuAtivosDisponiveis();
+        menuUtilizador(utilizador);
     }
 
 
@@ -233,12 +232,16 @@ public class ConsoleView extends View {
      */
     public void menuMeusCFDs(Utilizador utilizador, List<CFD> cfds) {
         layout("Meus CFDs");
-        for(int i = 0; i < cfds.size(); i++){
+        int i;
+        for(i = 0; i < cfds.size(); i++){
             System.out.println((i+1)+ "."+ cfds.get(i).getName() + " - " + cfds.get(i).getValue() + " $");
         }
+        System.out.println((i+1)+ ".Retroceder");
         int option = getSelectedOption();
         if(option > 0 && option <= cfds.size()){
             menuCFDPossuido(utilizador, cfds.get(option-1));
+        }else if(option == i+1){
+            menuUtilizador(utilizador);
         }
         else {
             System.out.println("Não existe esse CFD");

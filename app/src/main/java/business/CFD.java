@@ -14,8 +14,7 @@ public class CFD {
 	private boolean inPortfolio;
 
 	public CFD() {
-		this(0,0.0,0.0,0,null,
-				null, LocalDateTime.now(),false);
+
 	}
 
 	public CFD(double units, Double topProfit, Double stopLoss, int id, Utilizador utilizador,
@@ -29,6 +28,12 @@ public class CFD {
 		this.ativoFinanceiro = ativoFinanceiro;
 		this.data = LocalDateTime.now();
 		this.inPortfolio = false;
+	}
+
+	public CFD(double units, Double topProfit, Double stopLoss, int id, Utilizador utilizador,
+			   AtivoFinanceiro ativoFinanceiro, boolean inPortfolio) {
+		this(units,topProfit,stopLoss,id,utilizador,
+				ativoFinanceiro, LocalDateTime.now(),inPortfolio);
 	}
 
 	public int getId() {
