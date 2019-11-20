@@ -41,16 +41,16 @@ public class ConsoleView extends View {
 
     @Override
     public void menuDepositar(Utilizador utilizador) {
-        layout("Depositar");
+        layout("Depositar - " + utilizador.getMoney() + "$");
         System.out.print("Inserir dinheiro: ");
         double valor = getDouble();
         trading.deposit(utilizador, valor);
-        menuInicial();
+        menuUtilizador(utilizador);
     }
 
     @Override
     public void menuWithdraw(Utilizador utilizador) {
-        layout("Withdraw");
+        layout("Withdraw - " + utilizador.getMoney() + "$");
         System.out.print("Inserir dinheiro: ");
         double valor = getDouble();
         if(trading.withdraw(utilizador, valor)){
@@ -58,7 +58,7 @@ public class ConsoleView extends View {
         } else {
             System.out.println("ERROR: Não possui essa quantidade");
         }
-        menuInicial();
+        menuUtilizador(utilizador);
     }
 
     public void menuInicial() {

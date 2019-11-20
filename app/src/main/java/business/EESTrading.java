@@ -111,6 +111,8 @@ public class EESTrading extends Observable {
 	 */
 	public void deposit(Utilizador utilizador, double value) {
 		utilizadorDAO.addMoney(utilizador, value);
+		Utilizador ult = utilizadorDAO.get(utilizador.getUsername());
+		utilizador.setMoney(ult.getMoney());
 	}
 
 	/**
@@ -120,7 +122,10 @@ public class EESTrading extends Observable {
 	 */
 	public boolean withdraw(Utilizador utilizador, double value) {
 		if(utilizador.getMoney() < value) return false;
-		return utilizadorDAO.removeMoney(utilizador, value);
+		utilizadorDAO.removeMoney(utilizador, value);
+		Utilizador utl = utilizadorDAO.get(utilizador.getUsername());
+		utilizador.setMoney(utl.getMoney());
+		return true;
 	}
 
 	public boolean setCFDTopProfit(CFD cfd, double topProfit) {

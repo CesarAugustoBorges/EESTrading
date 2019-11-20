@@ -13,7 +13,7 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
 
     @Override
     public AtivoFinanceiro get(String id) {
-        SQLConnection SQLConn = new SQLConnection();
+        DBConnection SQLConn = new SQLConnection();
         AtivoFinanceiro a = null;
         try{
             SQLConn.connect();
@@ -31,7 +31,7 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
 
     @Override
     public String put(AtivoFinanceiro obj) {
-        SQLConnection SQLConn = new SQLConnection();
+        DBConnection SQLConn = new SQLConnection();
         try{
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
@@ -49,7 +49,7 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
 
     @Override
     public void delete(String id) {
-        SQLConnection SQLConn = new SQLConnection();
+        DBConnection SQLConn = new SQLConnection();
         try {
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
@@ -64,14 +64,15 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
 
     @Override
     public void replace(String id, AtivoFinanceiro obj) {
-
+        obj.setCompany(id);
+        put(obj);
     }
 
     @Override
-    public List<AtivoFinanceiro> getAll() {
+    public List<AtivoFinanceiro> getAll(){
         return null;
     }
-
+    
     //teste
     public static void main(String[] args) {
         AtivoFincanceiroDAOConcrete a = new AtivoFincanceiroDAOConcrete();
@@ -82,4 +83,6 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
         //a.get("Petroleo");
         //a.delete("Petroleo");
     }
+
+
 }

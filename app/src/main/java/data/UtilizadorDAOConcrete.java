@@ -11,7 +11,7 @@ import java.util.List;
 
 public class UtilizadorDAOConcrete implements UtilizadorDAO {
 
-
+    //Não são necessárias
     @Override
     public double addCFD(Utilizador user, CFD cfd) {
         return 0;
@@ -22,11 +22,13 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
         return 0;
     }
 
+    //Feito no delete do CFD
     @Override
     public void putPortfolio(Utilizador user, CFD cfd) {
 
     }
 
+    //Adicionar tempo ao CFD
     @Override
     public List<CFD> getLastCFDBought(Utilizador user, int maxSize) {
         return null;
@@ -34,12 +36,26 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
 
     @Override
     public boolean login(String username, String password) {
-        return false;
+        boolean ret=false;
+        DBConnection SQLConn = new SQLConnection();
+        try{
+            SQLConn.connect();
+            Connection conn = SQLConn.getConn();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("select * from Utilizador where Nome='"+username+"' and Password='" + password + "'");
+            if(rs.next()){
+                ret=true;
+            }
+            SQLConn.disconnect();
+        }
+        catch (SQLException e){e.printStackTrace();}
+
+        return ret;
     }
 
     @Override
     public void addMoney(Utilizador user, double value) {
-        SQLConnection SQLConn = new SQLConnection();
+        DBConnection SQLConn = new SQLConnection();
         try {
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
@@ -54,7 +70,7 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
 
     @Override
     public boolean removeMoney(Utilizador user, double value) {
-        SQLConnection SQLConn = new SQLConnection();
+        DBConnection SQLConn = new SQLConnection();
         try {
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
@@ -71,7 +87,7 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
 
     @Override
     public String put(Utilizador obj) {
-        SQLConnection SQLConn = new SQLConnection();
+        DBConnection SQLConn = new SQLConnection();
         try{
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
@@ -89,7 +105,7 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
 
     @Override
     public Utilizador get(String id) {
-        SQLConnection SQLConn = new SQLConnection();
+        DBConnection SQLConn = new SQLConnection();
         Utilizador u = null;
         try{
             SQLConn.connect();
@@ -107,7 +123,7 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
 
     @Override
     public void delete(String id) {
-        SQLConnection SQLConn = new SQLConnection();
+        DBConnection SQLConn = new SQLConnection();
         try{
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
@@ -132,8 +148,9 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
 
         //uc.get("Fábio");
         //uc.delete("Fábio");
-        uc.put(u);
-        uc.addMoney(u,100);
-        uc.removeMoney(u,50);
+        //uc.put(u);
+        //uc.addMoney(u,100);
+        //uc.removeMoney(u,50);
+        //System.out.println(uc.login("Fábio","111"));
     }
 }
