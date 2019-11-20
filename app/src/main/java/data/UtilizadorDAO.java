@@ -48,7 +48,7 @@ public interface UtilizadorDAO extends DAO<String, Utilizador> {
 	 * @param user
 	 * @param value
 	 */
-	boolean removeMoney(Utilizador user, double value);
+	void removeMoney(Utilizador user, double value);
 
 	boolean login(String username, String password);
 
