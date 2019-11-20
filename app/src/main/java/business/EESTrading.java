@@ -2,21 +2,31 @@ package business;
 
 import data.AtivoFinanceiroDAO;
 import data.CFDDAO;
+import data.DAOFactory;
 import data.UtilizadorDAO;
-import scrapper.AtivoFinanceiroScrapper;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Observable;
 
 public class EESTrading extends Observable {
+	private static EESTrading trading = new EESTrading();
+	public static EESTrading getInstance(){
+		return trading;
+	}
+
 	private double fee;
+	private CFDDAO cfdDAO;
+	private AtivoFinanceiroDAO ativoFinanceiroDAO;
+	private UtilizadorDAO utilizadorDAO;
 
-	private CFDDAO cfdDAO = CFDDAO.getCFDDAO();
-	private AtivoFinanceiroDAO ativoFinanceiroDAO = AtivoFinanceiroDAO.GetAtivoFinanceiroDAO();
-	private UtilizadorDAO utilizadorDAO = UtilizadorDAO.GetUtilizadorDAO();
 
+	public EESTrading(){
+		this.fee = 0.02;
+		DAOFactory daoFactory = DAOFactory.getFactory();
+		cfdDAO = daoFactory.newCFDDAO();
+		ativoFinanceiroDAO = daoFactory.newAtivoFinanceiroDAO();
+		utilizadorDAO = daoFactory.newUtilizadorDAO();
+	}
 
 	public List<AtivoFinanceiro> getAtivos(){
 		return ativoFinanceiroDAO.getAll();
@@ -101,7 +111,10 @@ public class EESTrading extends Observable {
 	 * @param value
 	 */
 	public void deposit(Utilizador utilizador, double value) {
+		if(value < 0) return;
 		utilizadorDAO.addMoney(utilizador, value);
+		Utilizador ult = utilizadorDAO.get(utilizador.getUsername());
+		utilizador.setMoney(ult.getMoney());
 	}
 
 	/**
@@ -110,8 +123,11 @@ public class EESTrading extends Observable {
 	 * @param value
 	 */
 	public boolean withdraw(Utilizador utilizador, double value) {
-		if(utilizador.getMoney() < value) return false;
-		return utilizadorDAO.removeMoney(utilizador, value);
+		if(utilizador.getMoney() < value || value < 0) return false;
+		utilizadorDAO.removeMoney(utilizador, value);
+		Utilizador utl = utilizadorDAO.get(utilizador.getUsername());
+		utilizador.setMoney(utl.getMoney());
+		return true;
 	}
 
 	public boolean setCFDTopProfit(CFD cfd, double topProfit) {
@@ -131,4 +147,10 @@ public class EESTrading extends Observable {
 		}
 		return false;
 	}
+/*
+	public List<CFD> getTransacoesAntigas(Utilizador utilizador){
+		return cfdDAO.getTransacoesAntigas(utilizador);
+	}
+	*/
+
 }

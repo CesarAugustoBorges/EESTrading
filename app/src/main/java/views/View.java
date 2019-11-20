@@ -62,7 +62,7 @@ public abstract class View {
 	 * @param obj
 	 * @param arg1
 	 */
-	private void update(Object obj, Object arg1) {
+	public void update(Object obj, Object arg1) {
 		// TODO - implement View.update
 		throw new UnsupportedOperationException();
 	}

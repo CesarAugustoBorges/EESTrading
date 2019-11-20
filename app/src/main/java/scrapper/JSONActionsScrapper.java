@@ -3,6 +3,7 @@ package scrapper;
 import business.Acao;
 import business.AtivoFinanceiro;
 import business.CFD;
+import business.EESTrading;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -16,6 +17,7 @@ public class JSONActionsScrapper implements AtivoFinanceiroScrapper {
 	private Map<String, AtivoFinanceiro> ativosFinanceiros;
 	private boolean running;
 	private String url;
+	private EESTrading trading = EESTrading.getInstance();
 
 	private int numberOfStocks;
 	private int numberOfStocksChanges;

@@ -82,7 +82,7 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
             Statement stmt = conn.createStatement();
             ResultSet rs=stmt.executeQuery("select * from AtivoFinanceiro");
             while(rs.next()){
-                a = new AtivoFinanceiro(rs.getString("Nome"),rs.getDouble("ValorUnit"),rs.getString("Tipo")) {};
+                a = new AtivoFinanceiro(rs.getString("Nome"),rs.getDouble("ValorUnit"),rs.getString("Type")) {};
                 ativos.add(a);
             }
             SQLConn.disconnect();
@@ -90,13 +90,14 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
         catch (SQLException e ){e.printStackTrace();}
         return ativos;
     }
-
+    
     //teste
     public static void main(String[] args) {
         AtivoFincanceiroDAOConcrete a = new AtivoFincanceiroDAOConcrete();
 
         AtivoFinanceiro af = new Petroleo("Petroleo",11);
         List<AtivoFinanceiro> ativos = new ArrayList<>();
+
 
         //a.put(af);
         //a.get("Petroleo");

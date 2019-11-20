@@ -58,7 +58,7 @@ public class CFDDAOConcrete implements CFDDAO {
             while (rs.next()) {
                 u = uDAO.get(rs.getString("Utilizador_Nome"));
                 a = afDAO.get(rs.getString("AtivoFinanceiro_Nome"));
-                cfd = new CFD(rs.getDouble("Unidades"),rs.getDouble("TopProfit"),rs.getDouble("StopLoss"),rs.getInt("Id"),u,a);
+                cfd = new CFD(rs.getDouble("Unidades"),rs.getDouble("TopProfit"),rs.getDouble("StopLoss"),rs.getInt("Id"),u,a,rs.getBoolean("Portfolio"));
                 System.out.println("Adicionou CFD com Id:"+cfd.getId());
                 CFDs.add(cfd);
             }
@@ -108,7 +108,7 @@ public class CFDDAOConcrete implements CFDDAO {
             if (rs.next()) {
                 u = uDAO.get(rs.getString("Utilizador_Nome"));
                 a = afDAO.get(rs.getString("AtivoFinanceiro_Nome"));
-                cfd = new CFD(rs.getDouble("Unidades"),rs.getDouble("TopProfit"),rs.getDouble("StopLoss"),rs.getInt("Id"),u,a);
+                cfd = new CFD(rs.getDouble("Unidades"),rs.getDouble("TopProfit"),rs.getDouble("StopLoss"),rs.getInt("Id"),u,a,rs.getBoolean("Portfolio"));
             }
 
             SQLConn.disconnect();
@@ -132,7 +132,7 @@ public class CFDDAOConcrete implements CFDDAO {
             ResultSet rs = stmt.executeQuery("select * from CFD where Id='" + u.getUsername() + "' and Portfolio=" + portfolioNum);
             while (rs.next()) {
                 a = afDAO.get(rs.getString("AtivoFinanceiro_Nome"));
-                cfd = new CFD(rs.getDouble("Unidades"), rs.getDouble("TopProfit"), rs.getDouble("StopLoss"), rs.getInt("Id"), u, a);
+                cfd = new CFD(rs.getDouble("Unidades"), rs.getDouble("TopProfit"), rs.getDouble("StopLoss"), rs.getInt("Id"), u, a,rs.getBoolean("Portfolio"));
                 portfolioList.add(cfd);
             }
             SQLConn.disconnect();
@@ -167,8 +167,8 @@ public class CFDDAOConcrete implements CFDDAO {
         CFDDAOConcrete cfdDAO = new CFDDAOConcrete();
         Utilizador u = new Utilizador("Fábio","111",250.20);
         AtivoFinanceiro af = new AtivoFinanceiro("Petroleo",11,"Petroleo") {};
-        CFD cfd = new CFD(15,0.0,0.0,1,u,af) ;
-        CFD cfd2 = new CFD(50,0.0,0.0,2,u,af) ;
+        CFD cfd = new CFD(15,0.0,0.0,1,u,af,true) ;
+        CFD cfd2 = new CFD(50,0.0,0.0,2,u,af,true) ;
 
         //cfd = cfdDAO.get(1);
         //System.out.println(cfd.getBoughtValue());

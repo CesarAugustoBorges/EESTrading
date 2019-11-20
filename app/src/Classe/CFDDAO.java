@@ -22,4 +22,10 @@ public interface CFDDAO extends DAO {
 	 */
 	List<CFD> get(Utilizador user);
 
+	/**
+	 * 
+	 * @param cfd
+	 */
+	double sell(CFD cfd);
+
 }

@@ -8,9 +8,6 @@ import java.util.List;
 
 public interface CFDDAO extends DAO<Integer, CFD> {
 
-	CFDDAO cfdDAO = new CFDDAOConcrete();
-	static CFDDAO getCFDDAO(){return  cfdDAO;}
-
 	/**
 	 * 
 	 * @param id

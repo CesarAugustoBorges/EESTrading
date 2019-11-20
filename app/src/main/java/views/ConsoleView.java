@@ -41,12 +41,24 @@ public class ConsoleView extends View {
 
     @Override
     public void menuDepositar(Utilizador utilizador) {
-
+        layout("Depositar - " + utilizador.getMoney() + "$");
+        System.out.print("Inserir dinheiro: ");
+        double valor = getDouble();
+        trading.deposit(utilizador, valor);
+        menuUtilizador(utilizador);
     }
 
     @Override
     public void menuWithdraw(Utilizador utilizador) {
-
+        layout("Withdraw - " + utilizador.getMoney() + "$");
+        System.out.print("Inserir dinheiro: ");
+        double valor = getDouble();
+        if(trading.withdraw(utilizador, valor)){
+            System.out.println("Dinheiro levantado com sucesso");
+        } else {
+            System.out.println("ERROR: Não possui essa quantidade");
+        }
+        menuUtilizador(utilizador);
     }
 
     public void menuInicial() {
@@ -220,8 +232,39 @@ public class ConsoleView extends View {
      * @param cfds
      */
     public void menuMeusCFDs(Utilizador utilizador, List<CFD> cfds) {
-        // TODO - implement ConsoleView.menuMeusCFDs
-        throw new UnsupportedOperationException();
+        layout("Meus CFDs");
+        for(int i = 0; i < cfds.size(); i++){
+            System.out.println((i+1)+ "."+ cfds.get(i).getName() + " - " + cfds.get(i).getValue() + " $");
+        }
+        int option = getSelectedOption();
+        if(option > 0 && option <= cfds.size()){
+            menuCFDPossuido(utilizador, cfds.get(option-1));
+        }
+        else {
+            System.out.println("Não existe esse CFD");
+            menuMeusCFDs();
+        }
+    }
+
+    public void menuTransacoesAntigas(){
+        //List<CFD> cfds = trading
+        //menuTransacoesAntigas(utilizador, cfds);
+    }
+
+    public void menuTransacoesAntigas(Utilizador utilizador, List<CFD> cfds){
+        layout("Transações antigas");
+        for(int i = 0; i < cfds.size(); i++){
+            CFD cfd = cfds.get(i);
+            System.out.println((i+1)+".( "+ cfd.getData() + ") " + cfd.getName() + " - " + cfd.getValue());
+        }
+        int option = getSelectedOption();
+        if(option > 0 && option <= cfds.size()){
+            menuCFDPossuido(utilizador, cfds.get(option-1));
+        }
+        else {
+            System.out.println("Não existe esse CFD");
+            menuTransacoesAntigas();
+        }
     }
 
     /**
@@ -229,7 +272,7 @@ public class ConsoleView extends View {
      * @param utilizador
      */
     public void menuUtilizador(Utilizador utilizador) {
-        layout("Olá " + utilizador.getUsername());
+        layout("Olá " + utilizador.getUsername() + " - " + utilizador.getMoney() + "$");
         System.out.println("1.Comprar CFD");
         System.out.println("2.Ver portfolio");
         System.out.println("3.Ver transições antigas");
@@ -241,9 +284,9 @@ public class ConsoleView extends View {
         switch (option){
             case 1: menuAtivosDisponiveis(); break;
             case 2: menuMeusCFDs(); break;
-            case 3: break; //fazer
-            case 4: break;
-            case 5: break;
+            case 3: menuTransacoesAntigas(); break; //fazer
+            case 4: menuDepositar(utilizador); break;
+            case 5: menuWithdraw(utilizador); break;
             case 6:
                 this.utilizador = null;
                 menuInicial();

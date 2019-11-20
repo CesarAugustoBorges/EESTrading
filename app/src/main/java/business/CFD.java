@@ -1,7 +1,8 @@
 package business;
 
-public class CFD {
+import java.time.LocalDateTime;
 
+public class CFD {
 	private double boughtValue;
 	private double units;
 	private Double topProfit;
@@ -9,18 +10,16 @@ public class CFD {
 	private int id;
 	private Utilizador utilizador;
 	private AtivoFinanceiro ativoFinanceiro;
+	private LocalDateTime data;
+	private boolean inPortfolio;
 
 	public CFD() {
-		this.boughtValue =0;
-		this.units=0;
-		this.stopLoss=0.0;
-		this.topProfit=0.0;
-		this.id=0;
-		this.utilizador=null;
-		this.ativoFinanceiro=null;
+		this(0,0.0,0.0,0,null,
+				null, LocalDateTime.now(),false);
 	}
 
-	public CFD(double units, Double topProfit, Double stopLoss, int id, Utilizador utilizador, AtivoFinanceiro ativoFinanceiro) {
+	public CFD(double units, Double topProfit, Double stopLoss, int id, Utilizador utilizador,
+			   AtivoFinanceiro ativoFinanceiro, LocalDateTime data, boolean inPortfolio) {
 		this.boughtValue=ativoFinanceiro.getValue()*units;
 		this.units = units;
 		this.topProfit = topProfit;
@@ -28,6 +27,14 @@ public class CFD {
 		this.id = id;
 		this.utilizador = utilizador;
 		this.ativoFinanceiro = ativoFinanceiro;
+		this.data = LocalDateTime.now();
+		this.inPortfolio = false;
+	}
+
+	public CFD(double units, Double topProfit, Double stopLoss, int id, Utilizador utilizador,
+			   AtivoFinanceiro ativoFinanceiro, boolean inPortfolio) {
+		this(units,topProfit,stopLoss,id,utilizador,
+				ativoFinanceiro, LocalDateTime.now(),inPortfolio);
 	}
 
 	public int getId() {
@@ -92,6 +99,22 @@ public class CFD {
 
 	public String getName() {
 		return ativoFinanceiro.getCompany();
+	}
+
+	public LocalDateTime getData() {
+		return data;
+	}
+
+	public void setData(LocalDateTime data) {
+		this.data = data;
+	}
+
+	public boolean isInPortfolio() {
+		return inPortfolio;
+	}
+
+	public void setInPortfolio(boolean inPortfolio) {
+		this.inPortfolio = inPortfolio;
 	}
 
 }
