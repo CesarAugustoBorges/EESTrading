@@ -73,4 +73,18 @@ public abstract class View {
 	 */
 	public abstract void menuWithdraw(Utilizador utilizador);
 
+	/**
+	 * 
+	 * @param utilizador
+	 * @param cfds
+	 */
+	public abstract void menuMeusCFDs(Utilizador utilizador, List<CFD> cfds);
+
+	/**
+	 * 
+	 * @param utilizador
+	 * @param cfd
+	 */
+	public abstract void menuCFDPossuido(Utilizador utilizador, CFD cfd);
+
 }

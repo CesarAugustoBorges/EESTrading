@@ -1,5 +1,7 @@
 package business;
 
+import java.time.LocalDateTime;
+
 public class CFD {
 
 	private double boughtValue;

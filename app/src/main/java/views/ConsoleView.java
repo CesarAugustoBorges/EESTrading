@@ -41,12 +41,24 @@ public class ConsoleView extends View {
 
     @Override
     public void menuDepositar(Utilizador utilizador) {
-
+        layout("Depositar");
+        System.out.print("Inserir dinheiro: ");
+        double valor = getDouble();
+        trading.deposit(utilizador, valor);
+        menuInicial();
     }
 
     @Override
     public void menuWithdraw(Utilizador utilizador) {
-
+        layout("Withdraw");
+        System.out.print("Inserir dinheiro: ");
+        double valor = getDouble();
+        if(trading.withdraw(utilizador, valor)){
+            System.out.println("Dinheiro levantado com sucesso");
+        } else {
+            System.out.println("ERROR: Não possui essa quantidade");
+        }
+        menuInicial();
     }
 
     public void menuInicial() {
@@ -220,8 +232,18 @@ public class ConsoleView extends View {
      * @param cfds
      */
     public void menuMeusCFDs(Utilizador utilizador, List<CFD> cfds) {
-        // TODO - implement ConsoleView.menuMeusCFDs
-        throw new UnsupportedOperationException();
+        layout("Meus CFDs");
+        for(int i = 0; i < cfds.size(); i++){
+            System.out.println((i+1)+ "."+ cfds.get(i).getName() + " - " + cfds.get(i).getValue() + " $");
+        }
+        int option = getSelectedOption();
+        if(option > 0 && option <= cfds.size()){
+            menuCFDPossuido(utilizador, cfds.get(option-1));
+        }
+        else {
+            System.out.println("Não existe esse CFD");
+            menuMeusCFDs();
+        }
     }
 
     /**
@@ -242,8 +264,8 @@ public class ConsoleView extends View {
             case 1: menuAtivosDisponiveis(); break;
             case 2: menuMeusCFDs(); break;
             case 3: break; //fazer
-            case 4: break;
-            case 5: break;
+            case 4: menuDepositar(utilizador); break;
+            case 5: menuWithdraw(utilizador); break;
             case 6:
                 this.utilizador = null;
                 menuInicial();

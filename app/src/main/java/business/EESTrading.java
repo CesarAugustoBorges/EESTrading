@@ -2,21 +2,30 @@ package business;
 
 import data.AtivoFinanceiroDAO;
 import data.CFDDAO;
+import data.DAOFactory;
 import data.UtilizadorDAO;
-import scrapper.AtivoFinanceiroScrapper;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Observable;
 
 public class EESTrading extends Observable {
+	private static EESTrading trading = new EESTrading();
+	public static EESTrading getInstance(){
+		return trading;
+	}
+
 	private double fee;
+	private CFDDAO cfdDAO;
+	private AtivoFinanceiroDAO ativoFinanceiroDAO;
+	private UtilizadorDAO utilizadorDAO;
 
-	private CFDDAO cfdDAO = CFDDAO.getCFDDAO();
-	private AtivoFinanceiroDAO ativoFinanceiroDAO = AtivoFinanceiroDAO.GetAtivoFinanceiroDAO();
-	private UtilizadorDAO utilizadorDAO = UtilizadorDAO.GetUtilizadorDAO();
 
+	public EESTrading(){
+		DAOFactory daoFactory = DAOFactory.getFactory();
+		cfdDAO = daoFactory.newCFDDAO();
+		ativoFinanceiroDAO = daoFactory.newAtivoFinanceiroDAO();
+		utilizadorDAO = daoFactory.newUtilizadorDAO();
+	}
 
 	public List<AtivoFinanceiro> getAtivos(){
 		return ativoFinanceiroDAO.getAll();

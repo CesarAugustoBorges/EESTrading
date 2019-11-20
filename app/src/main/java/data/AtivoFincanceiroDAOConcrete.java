@@ -67,20 +67,19 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
 
     }
 
-<<<<<<< HEAD
+    @Override
+    public List<AtivoFinanceiro> getAll() {
+        return null;
+    }
+
     //teste
     public static void main(String[] args) {
         AtivoFincanceiroDAOConcrete a = new AtivoFincanceiroDAOConcrete();
 
-        AtivoFinanceiro af = new Petroleo("Petroleo",11);
+        AtivoFinanceiro af = new Petroleo("Petroleo", 11);
 
         a.put(af);
         //a.get("Petroleo");
         //a.delete("Petroleo");
-=======
-    @Override
-    public List<AtivoFinanceiro> getAll() {
-        return null;
->>>>>>> 3e372a6b1260ea3b03bf1168d560eb0d7f0596dc
     }
 }

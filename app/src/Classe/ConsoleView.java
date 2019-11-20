@@ -93,4 +93,24 @@ public class ConsoleView extends View {
 
 	}
 
+	/**
+	 * 
+	 * @param utilizador
+	 * @param cfd
+	 */
+	public void menuCFDPossuido(Utilizador utilizador, CFD cfd) {
+		// TODO - implement ConsoleView.menuCFDPossuido
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * 
+	 * @param utilizador
+	 * @param cfds
+	 */
+	public void menuMeusCFDs(Utilizador utilizador, List<CFD> cfds) {
+		// TODO - implement ConsoleView.menuMeusCFDs
+		throw new UnsupportedOperationException();
+	}
+
 }

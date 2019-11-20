@@ -7,10 +7,6 @@ import java.util.List;
 
 public interface UtilizadorDAO extends DAO<String, Utilizador> {
 
-	UtilizadorDAO UTILIZADOR_DAO = new UtilizadorDAOConcrete();
-	static UtilizadorDAO GetUtilizadorDAO(){
-		return UTILIZADOR_DAO;
-	};
 
 	/**
 	 * 
