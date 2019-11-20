@@ -6,6 +6,7 @@ import business.Petroleo;
 import java.sql.*;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
@@ -21,7 +22,7 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
             Statement stmt = conn.createStatement();
             ResultSet rs=stmt.executeQuery("select * from AtivoFinanceiro where Nome='" + id +"'");
             if(rs.next()){
-                a = new AtivoFinanceiro(rs.getString("Nome"),rs.getDouble("ValorUnit")) {};
+                a = new AtivoFinanceiro(rs.getString("Nome"),rs.getDouble("ValorUnit"),"") {};
             }
             SQLConn.disconnect();
         }
@@ -32,13 +33,15 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
     @Override
     public String put(AtivoFinanceiro obj) {
         DBConnection SQLConn = new SQLConnection();
+        String tipo = null;
         try{
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
             Statement stmt = conn.createStatement();
 
             stmt.executeUpdate("delete from AtivoFinanceiro where Nome='" + obj.getCompany()+"'");
-            String cmd = "insert into AtivoFinanceiro (Nome,ValorUnit) values('" + obj.getCompany() + "'," + obj.getValue() +")";
+
+            String cmd = "insert into AtivoFinanceiro (Nome,ValorUnit,Tipo) values('" + obj.getCompany() + "'," + obj.getValue() +",'" +obj.getType() +")";
             stmt.executeUpdate(cmd);
 
             SQLConn.disconnect();
@@ -70,7 +73,22 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
 
     @Override
     public List<AtivoFinanceiro> getAll(){
-        return null;
+        List<AtivoFinanceiro> ativos = new ArrayList<>();
+        DBConnection SQLConn = new SQLConnection();
+        AtivoFinanceiro a = null;
+        try{
+            SQLConn.connect();
+            Connection conn = SQLConn.getConn();
+            Statement stmt = conn.createStatement();
+            ResultSet rs=stmt.executeQuery("select * from AtivoFinanceiro");
+            while(rs.next()){
+                a = new AtivoFinanceiro(rs.getString("Nome"),rs.getDouble("ValorUnit"),rs.getString("Tipo")) {};
+                ativos.add(a);
+            }
+            SQLConn.disconnect();
+        }
+        catch (SQLException e ){e.printStackTrace();}
+        return ativos;
     }
 
     //teste
@@ -78,10 +96,12 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
         AtivoFincanceiroDAOConcrete a = new AtivoFincanceiroDAOConcrete();
 
         AtivoFinanceiro af = new Petroleo("Petroleo",11);
+        List<AtivoFinanceiro> ativos = new ArrayList<>();
 
-        a.put(af);
+        //a.put(af);
         //a.get("Petroleo");
         //a.delete("Petroleo");
+        a.getAll();
     }
 
 

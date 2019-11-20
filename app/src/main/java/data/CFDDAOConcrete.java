@@ -81,7 +81,7 @@ public class CFDDAOConcrete implements CFDDAO {
 
             stmt.executeUpdate("delete from CFD where Id=" + obj.getId());
             String cmd = "insert into CFD (Id,ValorCompra,Unidades,TopProfit,StopLoss,Utilizador_Nome,AtivoFinanceiro_Nome,Portfolio) values ("+
-                    obj.getId()+ "," +obj.getBoughtValue()+","+obj.getUnits()+","+obj.getTopProfit()+","+obj.getStopLoss()+",'"+obj.getUtilizador().getUsername()+"','"+ obj.getAtivoFinanceiro().getCompany() + "',0)";
+                    obj.getId()+ "," +obj.getBoughtValue()+","+obj.getUnits()+","+obj.getTopProfit()+","+obj.getStopLoss()+",'"+obj.getUtilizador().getUsername()+"','"+ obj.getAtivoFinanceiro().getCompany() + "',1)";
 
             i=stmt.executeUpdate(cmd);
 
@@ -118,6 +118,30 @@ public class CFDDAOConcrete implements CFDDAO {
         return cfd;
     }
 
+    public List<CFD> getPortfolio(Utilizador u,boolean portfolio) { //true- se quer portfolio 0-se nao quer portfolio
+        DBConnection SQLConn = new SQLConnection();
+        List<CFD> portfolioList = new ArrayList<>();
+        CFD cfd;
+        AtivoFincanceiroDAOConcrete afDAO = new AtivoFincanceiroDAOConcrete();
+        AtivoFinanceiro a;
+        try{
+            SQLConn.connect();
+            Connection conn = SQLConn.getConn();
+            Statement stmt = conn.createStatement();
+            int portfolioNum = portfolio ? 1 : 0;
+            ResultSet rs = stmt.executeQuery("select * from CFD where Id='" + u.getUsername() + "' and Portfolio=" + portfolioNum);
+            while (rs.next()) {
+                a = afDAO.get(rs.getString("AtivoFinanceiro_Nome"));
+                cfd = new CFD(rs.getDouble("Unidades"), rs.getDouble("TopProfit"), rs.getDouble("StopLoss"), rs.getInt("Id"), u, a);
+                portfolioList.add(cfd);
+            }
+            SQLConn.disconnect();
+        }
+        catch (SQLException e){e.printStackTrace();}
+
+        return portfolioList;
+    }
+
     @Override
     public void delete(Integer id) {
         DBConnection SQLConn = new SQLConnection();
@@ -126,7 +150,7 @@ public class CFDDAOConcrete implements CFDDAO {
             Connection conn = SQLConn.getConn();
             Statement stmt = conn.createStatement();
 
-            stmt.executeUpdate("Update CFD set Portfolio=1 where Id=" + id);
+            stmt.executeUpdate("Update CFD set Portfolio=0 where Id=" + id);
 
             SQLConn.disconnect();
         }
@@ -142,7 +166,7 @@ public class CFDDAOConcrete implements CFDDAO {
     public static void main(String[] args) {
         CFDDAOConcrete cfdDAO = new CFDDAOConcrete();
         Utilizador u = new Utilizador("Fábio","111",250.20);
-        AtivoFinanceiro af = new AtivoFinanceiro("Petroleo",11) {};
+        AtivoFinanceiro af = new AtivoFinanceiro("Petroleo",11,"Petroleo") {};
         CFD cfd = new CFD(15,0.0,0.0,1,u,af) ;
         CFD cfd2 = new CFD(50,0.0,0.0,2,u,af) ;
 

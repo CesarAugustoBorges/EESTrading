@@ -4,10 +4,12 @@ public abstract class AtivoFinanceiro {
 
 	private String company;
 	private double value;
+	private String type;
 
-	public AtivoFinanceiro(String company, double value) {
+	public AtivoFinanceiro(String company, double value,String type) {
 		this.company = company;
 		this.value = value;
+		this.type=type;
 	}
 
 	public AtivoFinanceiro(){
@@ -31,5 +33,8 @@ public abstract class AtivoFinanceiro {
 		this.value = value;
 	}
 
+	public String getType() {
+		return type;
+	}
 
 }
