@@ -14,18 +14,37 @@ public class CFDDAOConcrete implements CFDDAO {
 
     @Override
     public double sell(int id) {
-        return 0;
+        DBConnection SQLConn = new SQLConnection();
+        UtilizadorDAOConcrete uDAO = new UtilizadorDAOConcrete();
+        Utilizador u;
+        double value=0;
+        try{
+            SQLConn.connect();
+            Connection conn = SQLConn.getConn();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("select * from CFD where Id="+ id);
+            if(rs.next()){
+                u = uDAO.get(rs.getString("Utilizador_Nome"));
+                value = rs.getDouble("ValorCompra");
+                uDAO.addMoney(u,value);
+            }
+            delete(id);
+            SQLConn.disconnect();
+
+        }
+        catch (SQLException e){e.printStackTrace();}
+        return value;
     }
 
     @Override
     public double getValue(int id) {
         return 0;
-    }
+    } //decidimos não fazer pois ja está na classe
 
     @Override
     public List<CFD> get(Utilizador user) {
         List<CFD> CFDs= new ArrayList<>();
-        SQLConnection SQLConn = new SQLConnection();
+        DBConnection SQLConn = new SQLConnection();
         CFD cfd = null;
         UtilizadorDAOConcrete uDAO = new UtilizadorDAOConcrete();
         Utilizador u;
@@ -53,7 +72,7 @@ public class CFDDAOConcrete implements CFDDAO {
 
     @Override
     public Integer put(CFD obj) {
-        SQLConnection SQLConn = new SQLConnection();
+        DBConnection SQLConn = new SQLConnection();
         int i=0;
         try{
             SQLConn.connect();
@@ -75,7 +94,7 @@ public class CFDDAOConcrete implements CFDDAO {
 
     @Override
     public CFD get(Integer id) {
-        SQLConnection SQLConn = new SQLConnection();
+        DBConnection SQLConn = new SQLConnection();
         CFD cfd = null;
         UtilizadorDAOConcrete uDAO = new UtilizadorDAOConcrete();
         Utilizador u;
@@ -101,13 +120,13 @@ public class CFDDAOConcrete implements CFDDAO {
 
     @Override
     public void delete(Integer id) {
-        SQLConnection SQLConn = new SQLConnection();
+        DBConnection SQLConn = new SQLConnection();
         try{
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
             Statement stmt = conn.createStatement();
 
-            stmt.executeUpdate("delete from CFD where Id=" + id);
+            stmt.executeUpdate("Update CFD set Portfolio=1 where Id=" + id);
 
             SQLConn.disconnect();
         }
@@ -116,6 +135,8 @@ public class CFDDAOConcrete implements CFDDAO {
 
     @Override
     public void replace(Integer id, CFD obj) {
+        obj.setId(id);
+        put(obj);
     }
 
     public static void main(String[] args) {
@@ -129,7 +150,8 @@ public class CFDDAOConcrete implements CFDDAO {
         //System.out.println(cfd.getBoughtValue());
 
         //cfdDAO.put(cfd2);
-        cfdDAO.get(u);
+        //cfdDAO.get(u);
         //cfdDAO.delete(1);
+        cfdDAO.sell(1);
     }
 }
