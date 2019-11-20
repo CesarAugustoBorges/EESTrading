@@ -21,6 +21,7 @@ public class EESTrading extends Observable {
 
 
 	public EESTrading(){
+		this.fee = 0.02;
 		DAOFactory daoFactory = DAOFactory.getFactory();
 		cfdDAO = daoFactory.newCFDDAO();
 		ativoFinanceiroDAO = daoFactory.newAtivoFinanceiroDAO();
@@ -110,6 +111,7 @@ public class EESTrading extends Observable {
 	 * @param value
 	 */
 	public void deposit(Utilizador utilizador, double value) {
+		if(value < 0) return;
 		utilizadorDAO.addMoney(utilizador, value);
 		Utilizador ult = utilizadorDAO.get(utilizador.getUsername());
 		utilizador.setMoney(ult.getMoney());
@@ -121,7 +123,7 @@ public class EESTrading extends Observable {
 	 * @param value
 	 */
 	public boolean withdraw(Utilizador utilizador, double value) {
-		if(utilizador.getMoney() < value) return false;
+		if(utilizador.getMoney() < value || value < 0) return false;
 		utilizadorDAO.removeMoney(utilizador, value);
 		Utilizador utl = utilizadorDAO.get(utilizador.getUsername());
 		utilizador.setMoney(utl.getMoney());
@@ -145,4 +147,10 @@ public class EESTrading extends Observable {
 		}
 		return false;
 	}
+/*
+	public List<CFD> getTransacoesAntigas(Utilizador utilizador){
+		return cfdDAO.getTransacoesAntigas(utilizador);
+	}
+	*/
+
 }
