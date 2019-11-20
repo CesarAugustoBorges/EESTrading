@@ -15,17 +15,23 @@ import java.util.*;
 public class JSONActionsScrapper implements AtivoFinanceiroScrapper {
 
 	private Map<String, AtivoFinanceiro> ativosFinanceiros;
+	private List<AtivoFinanceiro> changed;
 	private boolean running;
 	private String url;
-	private EESTrading trading = EESTrading.getInstance();
+	private EESTrading trading;
 
 	private int numberOfStocks;
 	private int numberOfStocksChanges;
 
 	public JSONActionsScrapper(){
 		url = "https://financialmodelingprep.com/api/v3/stock/real-time-price";
-		ativosFinanceiros = new TreeMap<>();
+		trading = EESTrading.getInstance();
+		ativosFinanceiros = new HashMap<>();
+		List<AtivoFinanceiro> temp = trading.getAtivos();
+		for(AtivoFinanceiro a : temp)
+			ativosFinanceiros.put(a.getCompany(), a);
 		running = false;
+		changed = new LinkedList<>();
 
 		numberOfStocks = 0;
 		numberOfStocks = 0;
@@ -65,6 +71,8 @@ public class JSONActionsScrapper implements AtivoFinanceiroScrapper {
 						ativoFinanceiro.setCompany(jsonAtivo.getString("symbol"));
 						ativoFinanceiro.setValue(jsonAtivo.getDouble("price"));
 						addAtivoFinanceiro(ativoFinanceiro);
+						trading.putAtivosFinanceiros(changed);
+						changed = new LinkedList<>();
 					});
 					Thread.sleep(5000);
 					System.out.println("Numbers of Stocks analised: " + numberOfStocks + " , stocks changed: " +  numberOfStocksChanges);
@@ -94,9 +102,11 @@ public class JSONActionsScrapper implements AtivoFinanceiroScrapper {
 	private void addAtivoFinanceiro(AtivoFinanceiro ativoFinanceiro){
 		if(!ativosFinanceiros.containsKey(ativoFinanceiro.getCompany())){
 			ativosFinanceiros.put(ativoFinanceiro.getCompany(), ativoFinanceiro);
+			changed.add(ativoFinanceiro);
 		} else {
 			if(ativosFinanceiros.get(ativoFinanceiro.getCompany()).getValue() != ativoFinanceiro.getValue()){
 				numberOfStocksChanges++;
+				changed.add(ativoFinanceiro);
 				System.out.println(ativoFinanceiro.getCompany() + ": oldValue -> " +
 						ativosFinanceiros.get(ativoFinanceiro.getCompany()).getValue() + " newValue -> " +
 						ativoFinanceiro.getValue());
