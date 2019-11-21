@@ -88,8 +88,6 @@ public class EESTrading extends Observable {
 	public void sell(Utilizador utilizador, CFD cfd) {
 		cfdDAO.delete(cfd.getId());
 		deposit(utilizador, cfd.getValue());
-		Utilizador utl = utilizadorDAO.get(utilizador.getUsername());
-		utilizador.setMoney(utl.getMoney());
 	}
 
 	/**
@@ -147,6 +145,14 @@ public class EESTrading extends Observable {
 			return true;
 		}
 		return false;
+	}
+
+	public List<CFD> getPortfolio(Utilizador utilizador){
+		return  cfdDAO.getPortfolio(utilizador, true);
+	}
+
+	public List<CFD> getTransacoesAntigas(Utilizador utilizador){
+		return  cfdDAO.getPortfolio(utilizador, false);
 	}
 /*
 	public List<CFD> getTransacoesAntigas(Utilizador utilizador){

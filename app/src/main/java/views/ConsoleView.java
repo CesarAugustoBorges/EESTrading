@@ -222,7 +222,7 @@ public class ConsoleView extends View {
 
 
     public void menuMeusCFDs(){
-        List<CFD> cfds = trading.getCFDsOfUser(utilizador);
+        List<CFD> cfds = trading.getPortfolio(utilizador);
         menuMeusCFDs(utilizador, cfds);
     }
     /**
@@ -250,19 +250,23 @@ public class ConsoleView extends View {
     }
 
     public void menuTransacoesAntigas(){
-        //List<CFD> cfds = trading
-        //menuTransacoesAntigas(utilizador, cfds);
+        List<CFD> cfds = trading.getTransacoesAntigas(utilizador);
+        menuTransacoesAntigas(utilizador, cfds);
     }
 
     public void menuTransacoesAntigas(Utilizador utilizador, List<CFD> cfds){
         layout("Transações antigas");
-        for(int i = 0; i < cfds.size(); i++){
+        int i;
+        for(i = 0; i < cfds.size(); i++){
             CFD cfd = cfds.get(i);
             System.out.println((i+1)+".( "+ cfd.getData() + ") " + cfd.getName() + " - " + cfd.getValue());
         }
+        System.out.println((i+1)+ ".Retroceder");
         int option = getSelectedOption();
         if(option > 0 && option <= cfds.size()){
             menuCFDPossuido(utilizador, cfds.get(option-1));
+        }else if(option == i+1){
+            menuUtilizador(utilizador);
         }
         else {
             System.out.println("Não existe esse CFD");
