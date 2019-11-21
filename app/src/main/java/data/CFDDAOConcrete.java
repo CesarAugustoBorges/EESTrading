@@ -129,11 +129,12 @@ public class CFDDAOConcrete implements CFDDAO {
             Connection conn = SQLConn.getConn();
             Statement stmt = conn.createStatement();
             int portfolioNum = portfolio ? 1 : 0;
-            ResultSet rs = stmt.executeQuery("select * from CFD where Id='" + u.getUsername() + "' and Portfolio=" + portfolioNum);
+            ResultSet rs = stmt.executeQuery("select * from CFD where Utilizador_Nome='" + u.getUsername() + "' and Portfolio=" + portfolioNum);
             while (rs.next()) {
                 a = afDAO.get(rs.getString("AtivoFinanceiro_Nome"));
                 cfd = new CFD(rs.getDouble("Unidades"), rs.getDouble("TopProfit"), rs.getDouble("StopLoss"), rs.getInt("Id"), u, a,rs.getBoolean("Portfolio"));
                 portfolioList.add(cfd);
+                System.out.println(rs.getString("AtivoFinanceiro_Nome"));
             }
             SQLConn.disconnect();
         }
@@ -176,6 +177,7 @@ public class CFDDAOConcrete implements CFDDAO {
         //cfdDAO.put(cfd2);
         //cfdDAO.get(u);
         //cfdDAO.delete(1);
-        cfdDAO.sell(1);
+        //cfdDAO.sell(1);
+        cfdDAO.getPortfolio(u,true);
     }
 }

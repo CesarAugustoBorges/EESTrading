@@ -22,4 +22,5 @@ public interface CFDDAO extends DAO<Integer, CFD> {
 
 	List<CFD> get(Utilizador user);
 
+	List<CFD> getPortfolio(Utilizador u,boolean portfolio);
 }
