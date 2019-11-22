@@ -32,6 +32,14 @@ public class EESTrading extends Observable {
 		return ativoFinanceiroDAO.getAll();
 	}
 
+	public CFD getCFD(int id){
+		return cfdDAO.get(id);
+	}
+
+	public AtivoFinanceiro getAtivo(String id){
+		return ativoFinanceiroDAO.get(id);
+	}
+
 	public void putAtivosFinanceiros(List<AtivoFinanceiro> ativoFinanceiros){
 		ativoFinanceiros.forEach(novo -> {
 			AtivoFinanceiro before = ativoFinanceiroDAO.get(novo.getCompany());

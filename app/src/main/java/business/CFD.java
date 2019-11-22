@@ -28,6 +28,10 @@ public class CFD {
 		this.utilizador = utilizador;
 		this.ativoFinanceiro = ativoFinanceiro;
 		this.data = data;
+<<<<<<< HEAD
+=======
+		this.inPortfolio = inPortfolio;
+>>>>>>> 25b59701e42929814309b1f61ff115130fbb9f18
 	}
 
 
