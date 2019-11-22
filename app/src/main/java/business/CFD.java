@@ -26,8 +26,8 @@ public class CFD {
 		this.id = id;
 		this.utilizador = utilizador;
 		this.ativoFinanceiro = ativoFinanceiro;
-		this.data = LocalDateTime.now();
-		this.inPortfolio = false;
+		this.data = data;
+		this.inPortfolio = inPortfolio;
 	}
 
 	public CFD(double units, Double topProfit, Double stopLoss, int id, Utilizador utilizador,

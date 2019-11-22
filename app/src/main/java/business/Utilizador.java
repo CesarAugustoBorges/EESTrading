@@ -10,15 +10,11 @@ public class Utilizador {
 	private String username;
 	private String password;
 	private double money;
-	private List<CFD> portfolio;
-	private List<CFD> actives;
 
 	public Utilizador(String username, String password,double money){
 		this.username = username;
 		this.password = password;
 		this.money = money;
-		this.portfolio = new LinkedList<>();
-		this.actives = new LinkedList<>();
 	}
 
 	public String getUsername() {
@@ -43,6 +39,12 @@ public class Utilizador {
 
 	public void setMoney(double money) {
 		this.money = money;
+	}
+
+	public void deconstruct(Utilizador utilizador){
+		this.username = utilizador.getUsername();
+		this.password = utilizador.password;
+		this.money = utilizador.getMoney();
 	}
 
 
