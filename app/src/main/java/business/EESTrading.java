@@ -40,7 +40,7 @@ public class EESTrading extends Observable {
 		return ativoFinanceiroDAO.get(id);
 	}
 
-	public void putAtivosFinanceiros(List<AtivoFinanceiro> ativoFinanceiros){
+	public synchronized void putAtivosFinanceiros(List<AtivoFinanceiro> ativoFinanceiros){
 		ativoFinanceiros.forEach(novo -> {
 			AtivoFinanceiro before = ativoFinanceiroDAO.get(novo.getCompany());
 			if(before == null)
@@ -50,7 +50,7 @@ public class EESTrading extends Observable {
 			}
 		});
 		setChanged();
-		notifyObservers();
+		notifyObservers(ativoFinanceiros);
 	}
 
 

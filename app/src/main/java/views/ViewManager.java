@@ -20,6 +20,7 @@ public abstract class ViewManager implements Observer {
     protected abstract IView getView(String s);
 
     public void start(){
+        trading.addObserver(this);
         IView view = getView(currentView);
         while (view != null)
             view = getView(view.render());

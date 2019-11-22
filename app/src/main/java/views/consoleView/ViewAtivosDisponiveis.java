@@ -24,7 +24,13 @@ public class ViewAtivosDisponiveis extends ConsoleView {
         }
 
         int ativoSelected = getSelectedOption();
+
         if(ativoSelected > 0 && ativoSelected <= ativos.size()) {
+            if(isUpdated()){
+                boolean yes = yesOrNoQuestion("Alguns ativos financeiros foram atualizados, quer continuar?");
+                if(!yes) return ATIVOS_DISPONIVEIS;
+            }
+
             ConsoleViewManager.setSelectedAtivo(ativos.get(ativoSelected - 1).getCompany());
             return COMPRA_CFD;
         }

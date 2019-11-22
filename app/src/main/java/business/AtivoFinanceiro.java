@@ -37,4 +37,12 @@ public abstract class AtivoFinanceiro {
 		return type;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == this) return true;
+		if(obj instanceof AtivoFinanceiro){
+			return this.company.equals(((AtivoFinanceiro)obj).getCompany());
+		}
+		return false;
+	}
 }

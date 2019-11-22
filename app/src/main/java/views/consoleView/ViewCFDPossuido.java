@@ -23,6 +23,10 @@ public class ViewCFDPossuido extends ConsoleView {
         System.out.println("4.Retroceder");
 
         int option = getSelectedOption();
+        if(isUpdated()){
+            boolean yes = yesOrNoQuestion("O valor do CFD foi alterado, quer dar refresh?");
+            if(yes) return CFD_POSSUIDO;
+        }
         switch (option){
             case 1:
                 trading.sell(utilizador, cfd);

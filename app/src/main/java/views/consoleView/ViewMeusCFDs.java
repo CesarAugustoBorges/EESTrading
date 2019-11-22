@@ -19,10 +19,16 @@ public class ViewMeusCFDs extends ConsoleView {
         layout("Meus CFDs");
         int i;
         for(i = 0; i < cfds.size(); i++){
-            System.out.println((i+1)+ "."+ cfds.get(i).getName() + " - " + cfds.get(i).getValue() + " $");
+            System.out.println((i+1)+ "."+ cfds.get(i).getName() + " - " + cfds.get(i).getBoughtValue() + " $");
         }
         System.out.println((i+1)+ ".Retroceder");
         int option = getSelectedOption();
+
+        if(isUpdated()){
+            boolean yes = yesOrNoQuestion("Alguns dos seus contratos foram atualizados\nQuer dar refresh?");
+            if(yes) return MEUS_CFDS;
+        }
+
         if(option > 0 && option <= cfds.size()){
             ConsoleViewManager.setSelectedCFD(cfds.get(i-1).getId());
             return CFD_POSSUIDO;

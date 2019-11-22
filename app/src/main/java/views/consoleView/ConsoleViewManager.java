@@ -1,12 +1,10 @@
 package views.consoleView;
 
-import business.Acao;
-import business.CFD;
-import business.EESTrading;
-import business.Utilizador;
+import business.*;
 import views.IView;
 import views.ViewManager;
 
+import java.util.List;
 import java.util.Observable;
 
 public class ConsoleViewManager extends ViewManager {
@@ -14,7 +12,6 @@ public class ConsoleViewManager extends ViewManager {
         super(trading, view);
     }
 
-    private Utilizador utilizador = new Utilizador("", "", 0);
 
     public static void setSelectedCFD(int cfd) {
         selectedCFD = cfd;
@@ -27,38 +24,97 @@ public class ConsoleViewManager extends ViewManager {
     private static int selectedCFD;
     private static String selectedAtivo;
 
+
+    private Utilizador utilizador = new Utilizador("", "", 0);
+    private ConsoleView lastiView;
+    private String lastViewString;
+    private CFD lastCFD;
+    private AtivoFinanceiro lastAtivo;
+
+
     @Override
     protected IView getView(String viewId) {
         if(viewId == null) return null;
+        lastViewString = viewId;
         switch (viewId){
             case ConsoleView.INICIAL:
-                return new ViewInicial(trading, utilizador);
+                lastiView = new ViewInicial(trading, utilizador);
+                break;
             case ConsoleView.ATIVOS_DISPONIVEIS:
-                return new ViewAtivosDisponiveis(trading, utilizador, trading.getAtivos());
+                lastiView = new ViewAtivosDisponiveis(trading, utilizador, trading.getAtivos());
+                break;
             case ConsoleView.CFD_POSSUIDO:
-                return new ViewCFDPossuido(trading, utilizador, trading.getCFD(selectedCFD));
+                lastCFD = trading.getCFD(selectedCFD);
+                lastiView = new ViewCFDPossuido(trading, utilizador, lastCFD );
+                break;
             case ConsoleView.COMPRA_CFD:
-                return new ViewCompraCFD(trading, utilizador, trading.getAtivo(selectedAtivo));
+                lastAtivo = trading.getAtivo(selectedAtivo);
+                lastiView = new ViewCompraCFD(trading, utilizador, lastAtivo );
+                break;
             case ConsoleView.DEPOSITAR:
-                return new ViewDepositar(trading, utilizador);
+                lastiView = new ViewDepositar(trading, utilizador);
+                break;
             case ConsoleView.LOGIN:
-                return new ViewLogin(trading, utilizador);
+                lastiView = new ViewLogin(trading, utilizador);
+                break;
             case ConsoleView.MEUS_CFDS:
-                return new ViewMeusCFDs(trading, utilizador ,trading.getPortfolio(utilizador));
+                lastiView = new ViewMeusCFDs(trading, utilizador ,trading.getPortfolio(utilizador));
+                break;
             case ConsoleView.REGISTAR:
-                return new ViewRegistar(trading, utilizador);
+                lastiView = new ViewRegistar(trading, utilizador);
+                break;
             case ConsoleView.TRANSACOES_ANTIGAS:
-                return new ViewTransacoesAntigas(trading, utilizador, trading.getTransacoesAntigas(utilizador));
+                lastiView = new ViewTransacoesAntigas(trading, utilizador, trading.getTransacoesAntigas(utilizador));
+                break;
             case ConsoleView.UTILIZADOR:
-                return new ViewUtilizador(trading, utilizador);
+                lastiView = new ViewUtilizador(trading, utilizador);
+                break;
             case ConsoleView.WITHDRAW:
-                return new ViewWithdraw(trading, utilizador);
+                lastiView = new ViewWithdraw(trading, utilizador);
+                break;
             default: System.out.println("ERROR: No view with name " + viewId + "was found !!! Exiting..." ); return null;
         }
+        return lastiView;
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-
+    public synchronized void update(Observable o, Object arg) {
+        if(arg instanceof List){
+            List list = (List) arg;
+            if(list.size() > 0 && list.get(0) instanceof AtivoFinanceiro){
+                List<AtivoFinanceiro> ativos = (List<AtivoFinanceiro>) list;
+                switch (lastViewString){
+                    case ConsoleView.ATIVOS_DISPONIVEIS:
+                        lastiView.setUpdated(true);
+                        break;
+                    case ConsoleView.CFD_POSSUIDO:
+                        for(AtivoFinanceiro f : ativos){
+                            if(lastCFD.getAtivoFinanceiro().equals(f)){
+                                lastiView.setUpdated(true);
+                                break;
+                            }
+                        }
+                        break;
+                    case ConsoleView.COMPRA_CFD:
+                        for(AtivoFinanceiro f : ativos){
+                            if(lastAtivo.equals(f)){
+                                lastiView.setUpdated(true);
+                                break;
+                            }
+                        }
+                        break;
+                    case ConsoleView.MEUS_CFDS:
+                        List<CFD> cfds = trading.getPortfolio(utilizador);
+                        for(CFD cfd : cfds){
+                            for(AtivoFinanceiro f : ativos){
+                                if(cfd.getAtivoFinanceiro().equals(f)){
+                                    lastiView.setUpdated(true);
+                                    break;
+                                }
+                            }
+                        }
+                }
+            }
+        }
     }
 }

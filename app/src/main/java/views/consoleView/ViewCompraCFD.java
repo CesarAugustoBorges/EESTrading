@@ -39,6 +39,12 @@ public class ViewCompraCFD extends ConsoleView {
             cfd.setStopLoss(stoploss);
         } else cfd.setStopLoss(0);
 
+        if(isUpdated()){
+            boolean yes = yesOrNoQuestion("O valor atual do CFD foi alterado, quer dar refresh?");
+            if(yes) return COMPRA_CFD;
+        }
+
+
         if(trading.buy(utilizador, cfd)){
             System.out.println("CFD bought sucessfully");
         } else {

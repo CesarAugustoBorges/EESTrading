@@ -57,6 +57,7 @@ public class JSONActionsScrapper implements AtivoFinanceiroScrapper {
 	public void start(){
 		new Thread(() -> {
 			try{
+				double testValue = 0.10;
 				setRunning(true);
 				while(isRunning()) {
 					numberOfStocks = 0;
@@ -71,11 +72,23 @@ public class JSONActionsScrapper implements AtivoFinanceiroScrapper {
 						ativoFinanceiro.setCompany(jsonAtivo.getString("symbol"));
 						ativoFinanceiro.setValue(jsonAtivo.getDouble("price"));
 						addAtivoFinanceiro(ativoFinanceiro);
+					});
+					Acao acao = new Acao();
+					acao.setCompany("TEST");
+					acao.setValue(testValue);
+					addAtivoFinanceiro(acao);
+					testValue += 0.01;
+					if(changed.size() > 0){
 						trading.putAtivosFinanceiros(changed);
 						changed = new LinkedList<>();
-					});
+					}/* else {
+
+						List<AtivoFinanceiro> temp = new LinkedList<>();
+						temp.add(acao);
+						trading.putAtivosFinanceiros(temp);
+					}*/
 					Thread.sleep(5000);
-					System.out.println("Numbers of Stocks analised: " + numberOfStocks + " , stocks changed: " +  numberOfStocksChanges);
+					//System.out.println("Numbers of Stocks analised: " + numberOfStocks + " , stocks changed: " +  numberOfStocksChanges);
 					//System.out.println(toString());
 				}
 			} catch (Exception e){
@@ -107,9 +120,9 @@ public class JSONActionsScrapper implements AtivoFinanceiroScrapper {
 			if(ativosFinanceiros.get(ativoFinanceiro.getCompany()).getValue() != ativoFinanceiro.getValue()){
 				numberOfStocksChanges++;
 				changed.add(ativoFinanceiro);
-				System.out.println(ativoFinanceiro.getCompany() + ": oldValue -> " +
-						ativosFinanceiros.get(ativoFinanceiro.getCompany()).getValue() + " newValue -> " +
-						ativoFinanceiro.getValue());
+				//System.out.println(ativoFinanceiro.getCompany() + ": oldValue -> " +
+				//		ativosFinanceiros.get(ativoFinanceiro.getCompany()).getValue() + " newValue -> " +
+				//		ativoFinanceiro.getValue());
 			}
 			ativosFinanceiros.replace(ativoFinanceiro.getCompany(), ativoFinanceiro);
 		}
