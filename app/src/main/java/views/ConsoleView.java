@@ -166,16 +166,18 @@ public class ConsoleView extends View {
     public void menuAtivosDisponiveis(Utilizador utilizador, List<AtivoFinanceiro> ativos) {
         layout(utilizador.getUsername() + " $: " + utilizador.getMoney());
         System.out.println("0.Retroceder");
-        for(int i = 0; i < ativos.size(); i++){
+        int i;
+        for(i = 0; i < ativos.size(); i++){
             AtivoFinanceiro ativo = ativos.get(i);
             //Adicionar o tipo do ativo?
             System.out.println((i+1) + ". " + ativo.getCompany() + "- " + ativo.getValue() + " $" );
         }
-
+        System.out.println((i+1) + ".Retroceder");
         int ativoSelected = getSelectedOption();
         if(ativoSelected > 0 && ativoSelected <= ativos.size())
             menuDeCompraCFD(utilizador, ativos.get(ativoSelected-1));
-        else {
+        else if( ativoSelected == i+1)  menuUtilizador(utilizador);
+            else{
             System.out.println("ERROR: Escolha um ativo entre 1 - " + ativos.size());
             menuAtivosDisponiveis(utilizador, ativos);
         }
@@ -234,7 +236,7 @@ public class ConsoleView extends View {
         layout("Meus CFDs");
         int i;
         for(i = 0; i < cfds.size(); i++){
-            System.out.println((i+1)+ "."+ cfds.get(i).getName() + " - " + cfds.get(i).getValue() + " $");
+            System.out.println((i+1)+ "."+ cfds.get(i).getName() + " - " + cfds.get(i).getBoughtValue() + " $");
         }
         System.out.println((i+1)+ ".Retroceder");
         int option = getSelectedOption();

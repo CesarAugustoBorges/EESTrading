@@ -1,5 +1,6 @@
 package business;
 
+
 import java.time.LocalDateTime;
 
 public class CFD {
@@ -11,14 +12,14 @@ public class CFD {
 	private Utilizador utilizador;
 	private AtivoFinanceiro ativoFinanceiro;
 	private LocalDateTime data;
-	private boolean inPortfolio;
+
 
 	public CFD() {
 
 	}
 
 	public CFD(double units, Double topProfit, Double stopLoss, int id, Utilizador utilizador,
-			   AtivoFinanceiro ativoFinanceiro, LocalDateTime data, boolean inPortfolio) {
+			   AtivoFinanceiro ativoFinanceiro, LocalDateTime data) {
 		this.boughtValue=ativoFinanceiro.getValue()*units;
 		this.units = units;
 		this.topProfit = topProfit;
@@ -26,14 +27,14 @@ public class CFD {
 		this.id = id;
 		this.utilizador = utilizador;
 		this.ativoFinanceiro = ativoFinanceiro;
-		this.data = LocalDateTime.now();
-		this.inPortfolio = false;
+		this.data = data;
 	}
 
+
 	public CFD(double units, Double topProfit, Double stopLoss, int id, Utilizador utilizador,
-			   AtivoFinanceiro ativoFinanceiro, boolean inPortfolio) {
+			   AtivoFinanceiro ativoFinanceiro) {
 		this(units,topProfit,stopLoss,id,utilizador,
-				ativoFinanceiro, LocalDateTime.now(),inPortfolio);
+				ativoFinanceiro, LocalDateTime.now());
 	}
 
 	public int getId() {
@@ -93,7 +94,7 @@ public class CFD {
 	}
 
 	public double getValue() {
-		return units * ativoFinanceiro.getValue();
+		return getBoughtValue();
 	}
 
 	public String getName() {
@@ -108,12 +109,5 @@ public class CFD {
 		this.data = data;
 	}
 
-	public boolean isInPortfolio() {
-		return inPortfolio;
-	}
-
-	public void setInPortfolio(boolean inPortfolio) {
-		this.inPortfolio = inPortfolio;
-	}
 
 }

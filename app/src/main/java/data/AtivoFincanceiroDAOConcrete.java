@@ -38,12 +38,19 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
             Connection conn = SQLConn.getConn();
             Statement stmt = conn.createStatement();
 
-            stmt.executeUpdate("delete from AtivoFinanceiro where Nome='" + obj.getCompany()+"'");
+            ResultSet rs=stmt.executeQuery("select * from AtivoFinanceiro where Nome='" + obj.getCompany() +"'");
+            if(rs.next()){
+                stmt.executeUpdate("Update AtivoFinanceiro set ValorUnit=" + obj.getValue()+
+                        " where Nome ='" + obj.getCompany() +"'");
+            }
+            else {
+                stmt.executeUpdate("delete from AtivoFinanceiro where Nome='" + obj.getCompany() + "'");
 
-            String cmd = "insert into AtivoFinanceiro (Nome,ValorUnit,Type) values('" + obj.getCompany() + "'," + obj.getValue() +",'" +obj.getType() +"')";
-            stmt.executeUpdate(cmd);
+                String cmd = "insert into AtivoFinanceiro (Nome,ValorUnit,Type) values('" + obj.getCompany() + "'," + obj.getValue() + ",'" + obj.getType() + "')";
+                stmt.executeUpdate(cmd);
 
-            SQLConn.disconnect();
+                SQLConn.disconnect();
+            }
         }
         catch (SQLException e){
             e.printStackTrace();

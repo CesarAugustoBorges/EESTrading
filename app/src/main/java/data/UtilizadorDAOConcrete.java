@@ -92,7 +92,11 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
             Connection conn = SQLConn.getConn();
             Statement stmt = conn.createStatement();
 
-            stmt.executeUpdate("delete from Utilizador where Nome='" + obj.getUsername()+"'");
+            ResultSet rs = stmt.executeQuery("select * from Utilizador where Nome='"+obj.getUsername()+"'");
+            if(rs.next()){
+                return null;
+            }
+            //stmt.executeUpdate("delete from Utilizador where Nome='" + obj.getUsername()+"'");
             String cmd = "insert into Utilizador (Nome,Password,Saldo) values('" + obj.getUsername() + "','" + obj.getPassword() +"','"+ obj.getMoney() +"')";
             stmt.executeUpdate(cmd);
 

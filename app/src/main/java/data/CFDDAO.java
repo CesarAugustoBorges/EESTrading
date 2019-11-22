@@ -10,9 +10,9 @@ public interface CFDDAO extends DAO<Integer, CFD> {
 
 	/**
 	 * 
-	 * @param id
+	 * @param cfd
 	 */
-	double sell(int id);
+	double sell(CFD cfd);
 
 	/**
 	 * 
@@ -22,5 +22,7 @@ public interface CFDDAO extends DAO<Integer, CFD> {
 
 	List<CFD> get(Utilizador user);
 
-	List<CFD> getPortfolio(Utilizador u,boolean portfolio);
+	List<CFD> getPortfolio(Utilizador u);
+
+	List<CFD> getVendidos(Utilizador u);
 }

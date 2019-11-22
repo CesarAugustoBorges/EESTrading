@@ -148,11 +148,11 @@ public class EESTrading extends Observable {
 	}
 
 	public List<CFD> getPortfolio(Utilizador utilizador){
-		return  cfdDAO.getPortfolio(utilizador, true);
+		return  cfdDAO.getPortfolio(utilizador);
 	}
 
 	public List<CFD> getTransacoesAntigas(Utilizador utilizador){
-		return  cfdDAO.getPortfolio(utilizador, false);
+		return  cfdDAO.getVendidos(utilizador);
 	}
 /*
 	public List<CFD> getTransacoesAntigas(Utilizador utilizador){
