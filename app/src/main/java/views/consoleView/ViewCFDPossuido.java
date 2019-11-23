@@ -29,7 +29,7 @@ public class ViewCFDPossuido extends ConsoleView {
         }
         switch (option){
             case 1:
-                trading.sell(utilizador, cfd);
+                trading.sell(cfd);
                 return MEUS_CFDS;
             case 2:
                 System.out.print("Introduza o Stop Loss: ");

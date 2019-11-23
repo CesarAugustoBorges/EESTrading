@@ -19,7 +19,7 @@ public class ViewMeusCFDs extends ConsoleView {
         layout("Meus CFDs");
         int i;
         for(i = 0; i < cfds.size(); i++){
-            System.out.println((i+1)+ "."+ cfds.get(i).getName() + " - " + cfds.get(i).getBoughtValue() + " $");
+            System.out.println((i+1)+ "."+ cfds.get(i));
         }
         System.out.println((i+1)+ ".Retroceder");
         int option = getSelectedOption();

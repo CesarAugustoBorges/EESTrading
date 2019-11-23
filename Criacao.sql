@@ -34,7 +34,7 @@ DROP TABLE IF EXISTS `TradingPlatform`.`AtivoFinanceiro` ;
 
 CREATE TABLE IF NOT EXISTS `TradingPlatform`.`AtivoFinanceiro` (
   `Nome` VARCHAR(100) NOT NULL,
-  `ValorUnit` DECIMAL(5,2) NOT NULL,
+  `ValorUnit` DECIMAL(11,4) NOT NULL,
   `Type` VARCHAR(100) NULL,
   PRIMARY KEY (`Nome`))
 ENGINE = InnoDB;
@@ -48,12 +48,12 @@ DROP TABLE IF EXISTS `TradingPlatform`.`CFD` ;
 CREATE TABLE IF NOT EXISTS `TradingPlatform`.`CFD` (
   `Id` INT NOT NULL AUTO_INCREMENT,
   `ValorCompra` DECIMAL(8,2) NOT NULL,
-  `Unidades` INT NOT NULL,
+  `Unidades` DECIMAL(8,3) NOT NULL,
   `TopProfit` DECIMAL(8,2) NOT NULL,
   `StopLoss` DECIMAL(8,2) NOT NULL,
   `Utilizador_Nome` VARCHAR(200) NOT NULL,
   `AtivoFinanceiro_Nome` VARCHAR(200) NOT NULL,
-  `Portfolio` TINYINT NOT NULL,
+  `DataCompra` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`Id`),
   INDEX `fk_CFD_Utilizador_idx` (`Utilizador_Nome` ASC) VISIBLE,
   INDEX `fk_CFD_AtivoFinanceiro1_idx` (`AtivoFinanceiro_Nome` ASC) VISIBLE,
@@ -65,6 +65,25 @@ CREATE TABLE IF NOT EXISTS `TradingPlatform`.`CFD` (
   CONSTRAINT `fk_CFD_AtivoFinanceiro1`
     FOREIGN KEY (`AtivoFinanceiro_Nome`)
     REFERENCES `TradingPlatform`.`AtivoFinanceiro` (`Nome`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `TradingPlatform`.`CFDVendido`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `TradingPlatform`.`CFDVendido` ;
+
+CREATE TABLE IF NOT EXISTS `TradingPlatform`.`CFDVendido` (
+  `Id` INT NOT NULL,
+  `DataVenda` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ValorVenda` DECIMAL(11,4) NOT NULL,
+  INDEX `fk_CFD_Vendido_CFD1_idx` (`Id` ASC) VISIBLE,
+  PRIMARY KEY (`Id`),
+  CONSTRAINT `fk_CFD_Vendido_CFD1`
+    FOREIGN KEY (`Id`)
+    REFERENCES `TradingPlatform`.`CFD` (`Id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

@@ -1,6 +1,7 @@
 package data;
 
 import business.AtivoFinanceiro;
+import business.CFD;
 import business.Petroleo;
 
 import java.sql.*;
@@ -10,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
-
 
     @Override
     public AtivoFinanceiro get(String id) {
@@ -38,12 +38,20 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
             Connection conn = SQLConn.getConn();
             Statement stmt = conn.createStatement();
 
-            stmt.executeUpdate("delete from AtivoFinanceiro where Nome='" + obj.getCompany()+"'");
+            ResultSet rs=stmt.executeQuery("select * from AtivoFinanceiro where Nome='" + obj.getCompany() +"'");
+            if(rs.next()){
+                stmt.executeUpdate("Update AtivoFinanceiro set ValorUnit=" + obj.getValue()+
+                        " where Nome ='" + obj.getCompany() +"'");
+            }
+            else {
+                stmt.executeUpdate("delete from AtivoFinanceiro where Nome='" + obj.getCompany() + "'");
 
-            String cmd = "insert into AtivoFinanceiro (Nome,ValorUnit,Type) values('" + obj.getCompany() + "'," + obj.getValue() +",'" +obj.getType() +"')";
-            stmt.executeUpdate(cmd);
+                String cmd = "insert into AtivoFinanceiro (Nome,ValorUnit,Type) values('" + obj.getCompany() + "'," + obj.getValue() + ",'" + obj.getType() + "')";
+                stmt.executeUpdate(cmd);
 
+            }
             SQLConn.disconnect();
+
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -91,7 +99,28 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
         catch (SQLException e ){e.printStackTrace();}
         return ativos;
     }
-    
+
+    @Override
+    public List<CFD> getCFDs(AtivoFinanceiro ativoFinanceiro) {
+        List<CFD> cfds = new ArrayList<>();
+        DBConnection SQLConn = new SQLConnection();
+        CFD cfd;
+        CFDDAO cfddao = DAOFactory.getFactory().newCFDDAO();
+        try{
+            SQLConn.connect();
+            Connection conn = SQLConn.getConn();
+            Statement stmt = conn.createStatement();
+            ResultSet rs=stmt.executeQuery("select Id from CFD inner join AtivoFinanceiro on CFD.AtivoFinanceiro_Nome = AtivoFinanceiro.Nome where AtivoFinanceiro.Nome='"+ ativoFinanceiro.getCompany() + "' and Id not in (select Id from CFDVendido);");
+            while(rs.next()){
+                cfd = cfddao.get(rs.getInt("Id"));
+                cfds.add(cfd);
+            }
+            SQLConn.disconnect();
+        }
+        catch (SQLException e ){e.printStackTrace();}
+        return cfds;
+    }
+
     //teste
     public static void main(String[] args) {
         AtivoFincanceiroDAOConcrete a = new AtivoFincanceiroDAOConcrete();

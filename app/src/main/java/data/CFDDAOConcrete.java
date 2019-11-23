@@ -2,10 +2,13 @@ package data;
 
 import business.AtivoFinanceiro;
 import business.CFD;
+import business.CFDVendido;
 import business.Utilizador;
 
 import java.sql.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +16,7 @@ import java.util.List;
 public class CFDDAOConcrete implements CFDDAO {
 
     @Override
-    public double sell(int id) {
+    public double sell(CFDVendido cfd) {
         DBConnection SQLConn = new SQLConnection();
         UtilizadorDAOConcrete uDAO = new UtilizadorDAOConcrete();
         Utilizador u;
@@ -22,13 +25,14 @@ public class CFDDAOConcrete implements CFDDAO {
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from CFD where Id="+ id);
-            if(rs.next()){
+            //ResultSet rs = stmt.executeQuery("select * from CFD where Id="+ cfd.getId());
+            stmt.executeUpdate("insert into cfdvendido (Id, DataVenda, ValorVenda) values ("+ cfd.getId() + ", NOW() ," + cfd.getSoldValue() + ")");
+           /* if(rs.next()){
                 u = uDAO.get(rs.getString("Utilizador_Nome"));
                 value = rs.getDouble("ValorCompra");
-                uDAO.addMoney(u,value);
-            }
-            delete(id);
+               // uDAO.addMoney(u,value);
+            }*/
+            //delete(cfd.getId());
             SQLConn.disconnect();
 
         }
@@ -54,11 +58,13 @@ public class CFDDAOConcrete implements CFDDAO {
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from CFD inner join Utilizador on Utilizador.Nome=CFD.Utilizador_Nome where Utilizador.Nome='"+user.getUsername()+"'");
+            ResultSet rs = stmt.executeQuery("select * from CFD inner join Utilizador on Utilizador.Nome=CFD.Utilizador_Nome where Utilizador.Nome='"+user.getUsername()+"' and not exists (select * from CFDVendido)");
             while (rs.next()) {
                 u = uDAO.get(rs.getString("Utilizador_Nome"));
                 a = afDAO.get(rs.getString("AtivoFinanceiro_Nome"));
-                cfd = new CFD(rs.getDouble("Unidades"),rs.getDouble("TopProfit"),rs.getDouble("StopLoss"),rs.getInt("Id"),u,a,rs.getBoolean("Portfolio"));
+                cfd = new CFD(rs.getDouble("ValorCompra"), rs.getDouble("Unidades") ,rs.getDouble("TopProfit"),
+                        rs.getDouble("StopLoss"),rs.getInt("Id"),u,a,
+                        rs.getTimestamp("DataVenda").toLocalDateTime());
                 System.out.println("Adicionou CFD com Id:"+cfd.getId());
                 CFDs.add(cfd);
             }
@@ -80,8 +86,8 @@ public class CFDDAOConcrete implements CFDDAO {
             Statement stmt = conn.createStatement();
 
             stmt.executeUpdate("delete from CFD where Id=" + obj.getId());
-            String cmd = "insert into CFD (Id,ValorCompra,Unidades,TopProfit,StopLoss,Utilizador_Nome,AtivoFinanceiro_Nome,Portfolio) values ("+
-                    obj.getId()+ "," +obj.getBoughtValue()+","+obj.getUnits()+","+obj.getTopProfit()+","+obj.getStopLoss()+",'"+obj.getUtilizador().getUsername()+"','"+ obj.getAtivoFinanceiro().getCompany() + "',1)";
+            String cmd = "insert into CFD (Id,ValorCompra,Unidades,TopProfit,StopLoss,Utilizador_Nome,AtivoFinanceiro_Nome) values ("+
+                    obj.getId()+ "," +obj.getBoughtValue()+","+obj.getUnits()+","+obj.getTopProfit()+","+obj.getStopLoss()+",'"+obj.getUtilizador().getUsername()+"','"+ obj.getAtivoFinanceiro().getCompany() + "')";
 
             i=stmt.executeUpdate(cmd);
 
@@ -108,17 +114,49 @@ public class CFDDAOConcrete implements CFDDAO {
             if (rs.next()) {
                 u = uDAO.get(rs.getString("Utilizador_Nome"));
                 a = afDAO.get(rs.getString("AtivoFinanceiro_Nome"));
-                cfd = new CFD(rs.getDouble("Unidades"),rs.getDouble("TopProfit"),rs.getDouble("StopLoss"),rs.getInt("Id"),u,a,rs.getBoolean("Portfolio"));
+                cfd = new CFD(rs.getDouble("ValorCompra"), rs.getDouble("Unidades"),
+                        rs.getDouble("TopProfit"),rs.getDouble("StopLoss"),
+                        rs.getInt("Id"),u,a,
+                        rs.getTimestamp("DataCompra").toLocalDateTime());
             }
 
+        }  catch (SQLException e){e.printStackTrace();}
+        finally {
             SQLConn.disconnect();
-
         }
-        catch (SQLException e){e.printStackTrace();}
+
         return cfd;
     }
 
-    public List<CFD> getPortfolio(Utilizador u,boolean portfolio) { //true- se quer portfolio 0-se nao quer portfolio
+    public List<CFDVendido> getVendidos(Utilizador u) {
+        DBConnection SQLConn = new SQLConnection();
+        List<CFDVendido> portfolioList = new ArrayList<>();
+        CFD cfd;
+        AtivoFincanceiroDAOConcrete afDAO = new AtivoFincanceiroDAOConcrete();
+        AtivoFinanceiro a;
+        try{
+            SQLConn.connect();
+            Connection conn = SQLConn.getConn();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("select * from CFDVendido inner join CFD on CFD.Id=CFDVendido.Id inner join Utilizador on Utilizador.Nome=CFD.Utilizador_Nome where Utilizador.Nome='"+u.getUsername()+"'");
+            while (rs.next()) {
+                a = afDAO.get(rs.getString("AtivoFinanceiro_Nome"));
+                cfd = new CFD(rs.getDouble("ValorCompra"), rs.getDouble("Unidades"),
+                        rs.getDouble("TopProfit"), rs.getDouble("StopLoss"),
+                        rs.getInt("Id"), u, a, rs.getTimestamp("DataCompra").toLocalDateTime());
+                CFDVendido cfdVendido = new CFDVendido(cfd,  rs.getTimestamp("DataVenda").toLocalDateTime() ,
+                        rs.getDouble("ValorVenda"));
+                portfolioList.add(cfdVendido);
+               // System.out.println(rs.getString("AtivoFinanceiro_Nome"));
+            }
+            SQLConn.disconnect();
+        }
+        catch (SQLException e){e.printStackTrace();}
+
+        return portfolioList;
+    }
+
+    public List<CFD> getPortfolio(Utilizador u) {
         DBConnection SQLConn = new SQLConnection();
         List<CFD> portfolioList = new ArrayList<>();
         CFD cfd;
@@ -128,13 +166,14 @@ public class CFDDAOConcrete implements CFDDAO {
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
             Statement stmt = conn.createStatement();
-            int portfolioNum = portfolio ? 1 : 0;
-            ResultSet rs = stmt.executeQuery("select * from CFD where Utilizador_Nome='" + u.getUsername() + "' and Portfolio=" + portfolioNum);
+            ResultSet rs = stmt.executeQuery("select * from CFD inner join Utilizador on Utilizador.Nome = CFD.Utilizador_Nome where Utilizador.Nome='"+u.getUsername()+"' and Id not in (select Id from CFDVendido);");
             while (rs.next()) {
                 a = afDAO.get(rs.getString("AtivoFinanceiro_Nome"));
-                cfd = new CFD(rs.getDouble("Unidades"), rs.getDouble("TopProfit"), rs.getDouble("StopLoss"), rs.getInt("Id"), u, a,rs.getBoolean("Portfolio"));
+                cfd = new CFD(rs.getDouble("ValorCompra"), rs.getDouble("Unidades"),
+                        rs.getDouble("TopProfit"), rs.getDouble("StopLoss"),
+                        rs.getInt("Id"), u, a,rs.getTimestamp("DataCompra").toLocalDateTime());
                 portfolioList.add(cfd);
-                System.out.println(rs.getString("AtivoFinanceiro_Nome"));
+                //System.out.println(rs.getString("AtivoFinanceiro_Nome"));
             }
             SQLConn.disconnect();
         }
@@ -151,7 +190,7 @@ public class CFDDAOConcrete implements CFDDAO {
             Connection conn = SQLConn.getConn();
             Statement stmt = conn.createStatement();
 
-            stmt.executeUpdate("Update CFD set Portfolio=0 where Id=" + id);
+            stmt.executeUpdate("Insert into CFDVendido (Id) values(" + id + ")");
 
             SQLConn.disconnect();
         }
@@ -166,10 +205,10 @@ public class CFDDAOConcrete implements CFDDAO {
 
     public static void main(String[] args) {
         CFDDAOConcrete cfdDAO = new CFDDAOConcrete();
-        Utilizador u = new Utilizador("Fábio","111",250.20);
+        Utilizador u = new Utilizador("Fábio","111",0.0);
         AtivoFinanceiro af = new AtivoFinanceiro("Petroleo",11,"Petroleo") {};
-        CFD cfd = new CFD(15,0.0,0.0,1,u,af,true) ;
-        CFD cfd2 = new CFD(50,0.0,0.0,2,u,af,true) ;
+        CFD cfd = new CFD(15, 2, 0.0,0.0,1,u,af) ;
+        CFD cfd2 = new CFD(50,2, 0.0,0.0,5,u,af) ;
 
         //cfd = cfdDAO.get(1);
         //System.out.println(cfd.getBoughtValue());
@@ -178,6 +217,6 @@ public class CFDDAOConcrete implements CFDDAO {
         //cfdDAO.get(u);
         //cfdDAO.delete(1);
         //cfdDAO.sell(1);
-        cfdDAO.getPortfolio(u,true);
+        //cfdDAO.getPortfolio(u);
     }
 }

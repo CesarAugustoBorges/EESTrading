@@ -1,6 +1,7 @@
 package data;
 
 import business.CFD;
+import business.CFDVendido;
 import business.Utilizador;
 
 import java.util.List;
@@ -10,9 +11,9 @@ public interface CFDDAO extends DAO<Integer, CFD> {
 
 	/**
 	 * 
-	 * @param id
+	 * @param cfd
 	 */
-	double sell(int id);
+	double sell(CFDVendido cfd);
 
 	/**
 	 * 
@@ -22,5 +23,7 @@ public interface CFDDAO extends DAO<Integer, CFD> {
 
 	List<CFD> get(Utilizador user);
 
-	List<CFD> getPortfolio(Utilizador u,boolean portfolio);
+	List<CFD> getPortfolio(Utilizador u);
+
+	List<CFDVendido> getVendidos(Utilizador u);
 }

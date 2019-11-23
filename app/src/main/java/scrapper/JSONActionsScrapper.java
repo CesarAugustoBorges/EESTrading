@@ -37,20 +37,20 @@ public class JSONActionsScrapper implements AtivoFinanceiroScrapper {
 		numberOfStocks = 0;
 	}
 
-	public List<AtivoFinanceiro> getAtivosFinanceiros() {
+	public synchronized List<AtivoFinanceiro> getAtivosFinanceiros() {
 		return new LinkedList<>(ativosFinanceiros.values());
 	}
 
-	public AtivoFinanceiro getAtivoFinanceiro(String company) {
+	public synchronized AtivoFinanceiro getAtivoFinanceiro(String company) {
 		return ativosFinanceiros.get(company);
 	}
 
 
-	public boolean isRunning() {
+	public synchronized boolean isRunning() {
 		return running;
 	}
 
-	public void setRunning(boolean running) {
+	public synchronized void setRunning(boolean running) {
 		this.running = running;
 	}
 
@@ -70,7 +70,7 @@ public class JSONActionsScrapper implements AtivoFinanceiroScrapper {
 						JSONObject jsonAtivo = (JSONObject) jsonObj;
 						AtivoFinanceiro ativoFinanceiro = new Acao();
 						ativoFinanceiro.setCompany(jsonAtivo.getString("symbol"));
-						ativoFinanceiro.setValue(jsonAtivo.getDouble("price"));
+						ativoFinanceiro.setValue(Math.floor(jsonAtivo.getDouble("price") * 100) / 100);
 						addAtivoFinanceiro(ativoFinanceiro);
 					});
 					Acao acao = new Acao();
@@ -87,7 +87,7 @@ public class JSONActionsScrapper implements AtivoFinanceiroScrapper {
 						temp.add(acao);
 						trading.putAtivosFinanceiros(temp);
 					}*/
-					Thread.sleep(5000);
+					Thread.sleep(10000);
 					//System.out.println("Numbers of Stocks analised: " + numberOfStocks + " , stocks changed: " +  numberOfStocksChanges);
 					//System.out.println(toString());
 				}

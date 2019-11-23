@@ -7,6 +7,7 @@ import data.UtilizadorDAO;
 
 import java.util.List;
 import java.util.Observable;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class EESTrading extends Observable {
 	private static EESTrading trading = new EESTrading();
@@ -18,6 +19,7 @@ public class EESTrading extends Observable {
 	private CFDDAO cfdDAO;
 	private AtivoFinanceiroDAO ativoFinanceiroDAO;
 	private UtilizadorDAO utilizadorDAO;
+	private ReentrantLock lock = new ReentrantLock();
 
 
 	public EESTrading(){
@@ -41,16 +43,31 @@ public class EESTrading extends Observable {
 	}
 
 	public synchronized void putAtivosFinanceiros(List<AtivoFinanceiro> ativoFinanceiros){
-		ativoFinanceiros.forEach(novo -> {
+		ativoFinanceiros.forEach(novo -> {/*
 			AtivoFinanceiro before = ativoFinanceiroDAO.get(novo.getCompany());
 			if(before == null)
 				ativoFinanceiroDAO.put(novo);
 			else if(before.getValue() != novo.getValue()){
 				ativoFinanceiroDAO.replace(novo.getCompany(), novo);
-			}
+			}*/
+			ativoFinanceiroDAO.replace(novo.getCompany(), novo);
+			List<CFD> cfds = ativoFinanceiroDAO.getCFDs(novo);
+			cfds.forEach(this::applyThresholds);
 		});
 		setChanged();
 		notifyObservers(ativoFinanceiros);
+	}
+
+	public synchronized void applyThresholds(CFD cfd){
+		if(cfd.checkTopprofit()) {
+			CFDVendido cfdVendido = new CFDVendido(cfd, cfd.getTopProfit());
+			cfdDAO.sell(cfdVendido);
+			deposit(cfd.getUtilizador(), cfd.getTopProfit());
+		} else if(cfd.checkStopLoss()) {
+			CFDVendido cfdVendido = new CFDVendido(cfd, cfd.getStopLoss());
+			cfdDAO.sell(cfdVendido);
+			deposit(cfd.getUtilizador(), cfd.getStopLoss());
+		}
 	}
 
 
@@ -82,7 +99,7 @@ public class EESTrading extends Observable {
 	public boolean buy(Utilizador utilizador, CFD cfd) {
 		int idCFD = cfdDAO.put(cfd);
 		if(idCFD > 0){
-			double value = cfd.getValue();
+			double value = cfd.getBoughtValue();
 			return withdraw(utilizador, value);
 		}
 		return false;
@@ -90,12 +107,13 @@ public class EESTrading extends Observable {
 
 	/**
 	 *
-	 * @param utilizador
 	 * @param cfd
 	 */
-	public void sell(Utilizador utilizador, CFD cfd) {
-		cfdDAO.delete(cfd.getId());
-		deposit(utilizador, cfd.getValue());
+	public void sell(CFD cfd) {
+		double valorAtual = cfd.getValue();
+		CFDVendido cfdVendido = new CFDVendido(cfd, valorAtual);
+		cfdDAO.sell(cfdVendido);
+		deposit(cfd.getUtilizador(), valorAtual);
 	}
 
 	/**
@@ -148,7 +166,7 @@ public class EESTrading extends Observable {
 
 	public boolean setCFDStopLoss(CFD cfd, double stopLoss) {
 		if (stopLoss < cfd.getValue()) {
-			cfd.setTopProfit(stopLoss);
+			cfd.setStopLoss(stopLoss);
 			cfdDAO.replace(cfd.getId(), cfd);
 			return true;
 		}
@@ -156,11 +174,11 @@ public class EESTrading extends Observable {
 	}
 
 	public List<CFD> getPortfolio(Utilizador utilizador){
-		return  cfdDAO.getPortfolio(utilizador, true);
+		return  cfdDAO.getPortfolio(utilizador);
 	}
 
-	public List<CFD> getTransacoesAntigas(Utilizador utilizador){
-		return  cfdDAO.getPortfolio(utilizador, false);
+	public List<CFDVendido> getTransacoesAntigas(Utilizador utilizador){
+		return  cfdDAO.getVendidos(utilizador);
 	}
 /*
 	public List<CFD> getTransacoesAntigas(Utilizador utilizador){

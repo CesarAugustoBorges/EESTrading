@@ -1,5 +1,6 @@
 package business;
 
+
 import java.time.LocalDateTime;
 
 public class CFD {
@@ -11,15 +12,26 @@ public class CFD {
 	private Utilizador utilizador;
 	private AtivoFinanceiro ativoFinanceiro;
 	private LocalDateTime data;
-	private boolean inPortfolio;
+
 
 	public CFD() {
 
 	}
 
-	public CFD(double units, Double topProfit, Double stopLoss, int id, Utilizador utilizador,
-			   AtivoFinanceiro ativoFinanceiro, LocalDateTime data, boolean inPortfolio) {
-		this.boughtValue=ativoFinanceiro.getValue()*units;
+	public CFD(CFD cfd){
+		this.setBoughtValue(cfd.getBoughtValue());
+		this.setUnits(cfd.getUnits());
+		this.setTopProfit(cfd.getTopProfit());
+		this.setStopLoss(cfd.getStopLoss());
+		this.setId(cfd.getId());
+		this.setAtivoFinanceiro(cfd.getAtivoFinanceiro());
+		this.setUtilizador(cfd.getUtilizador());
+		this.setData(cfd.getData());
+	}
+
+	public CFD(double boughtValue, double units, Double topProfit, Double stopLoss, int id, Utilizador utilizador,
+			   AtivoFinanceiro ativoFinanceiro, LocalDateTime data) {
+		this.boughtValue= boughtValue;
 		this.units = units;
 		this.topProfit = topProfit;
 		this.stopLoss = stopLoss;
@@ -27,13 +39,13 @@ public class CFD {
 		this.utilizador = utilizador;
 		this.ativoFinanceiro = ativoFinanceiro;
 		this.data = data;
-		this.inPortfolio = inPortfolio;
 	}
 
-	public CFD(double units, Double topProfit, Double stopLoss, int id, Utilizador utilizador,
-			   AtivoFinanceiro ativoFinanceiro, boolean inPortfolio) {
-		this(units,topProfit,stopLoss,id,utilizador,
-				ativoFinanceiro, LocalDateTime.now(),inPortfolio);
+
+	public CFD(double boughtValue, double units, Double topProfit, Double stopLoss, int id, Utilizador utilizador,
+			   AtivoFinanceiro ativoFinanceiro) {
+		this( boughtValue ,units,topProfit,stopLoss,id,utilizador,
+				ativoFinanceiro, LocalDateTime.now());
 	}
 
 	public int getId() {
@@ -93,7 +105,7 @@ public class CFD {
 	}
 
 	public double getValue() {
-		return units * ativoFinanceiro.getValue();
+		return units*ativoFinanceiro.getValue();
 	}
 
 	public String getName() {
@@ -108,12 +120,18 @@ public class CFD {
 		this.data = data;
 	}
 
-	public boolean isInPortfolio() {
-		return inPortfolio;
+	public boolean checkTopprofit(){
+		return topProfit < getValue();
 	}
 
-	public void setInPortfolio(boolean inPortfolio) {
-		this.inPortfolio = inPortfolio;
+	public boolean checkStopLoss(){
+		return stopLoss > getValue();
+	}
+
+	@Override
+	public String toString(){
+		return ativoFinanceiro.toString() + " comprado ( " + boughtValue + "$ ) em " +
+				data.getYear() + "-" + data.getMonth() + "-" + data.getDayOfMonth() + " | valor atual -" + getValue() + "$";
 	}
 
 }
