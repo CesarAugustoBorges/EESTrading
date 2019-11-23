@@ -24,23 +24,24 @@ public class ViewCompraCFD extends ConsoleView {
         double valor = getDouble();
         cfd.setBoughtValue(valor);
         cfd.setUnits(valor / ativo.getValue());
-        System.out.print("Deseja definir um Top Profit? [Y/N] ");
-        String answer = scanner.next();
-        if(answer.equals("Y")){
+        printMessage("Juros aplicados - " + valor*(trading.getFee()) + " (" + valor*(1-trading.getFee()) + ") ", '/');
+        boolean yes = yesOrNoQuestion("Deseja definir um Top Profit?");
+        if(yes){
             System.out.print("Introduza o valor: ");
             double topProfit = getDouble();
-            cfd.setTopProfit(topProfit);
+            if(!cfd.setTopProfit(topProfit))
+                printMessage("Valor de TopProfit inválido: " + topProfit);
         } else cfd.setTopProfit(0);
-        System.out.print("Deseja definir um Stop Profit= [Y/N] ");
-        answer = scanner.next();
-        if(answer.equals("Y")){
+        yes = yesOrNoQuestion("Deseja definir um Stop Profit?");
+        if(yes){
             System.out.print("Introduza o valor: ");
             double stoploss = getDouble();
-            cfd.setStopLoss(stoploss);
+            if(!cfd.setStopLoss(stoploss))
+                printMessage("Valor de StopLoss inválido: "  + stoploss);
         } else cfd.setStopLoss(0);
 
         if(isUpdated()){
-            boolean yes = yesOrNoQuestion("O valor atual do CFD foi alterado, quer dar refresh?");
+            yes = yesOrNoQuestion("O valor atual do CFD foi alterado, quer dar refresh?");
             if(yes) return COMPRA_CFD;
         }
 

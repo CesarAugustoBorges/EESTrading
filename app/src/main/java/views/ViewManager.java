@@ -9,7 +9,6 @@ import java.util.Stack;
 
 public abstract class ViewManager implements Observer {
     private String currentView;
-    private Stack<String> lastViews;
     protected EESTrading trading;
 
     public ViewManager(EESTrading trading, String initialView){

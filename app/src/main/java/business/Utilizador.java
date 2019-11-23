@@ -1,10 +1,5 @@
 package business;
 
-import business.CFD;
-
-import java.util.LinkedList;
-import java.util.List;
-
 public class Utilizador {
 
 	private String username;

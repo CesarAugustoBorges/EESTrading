@@ -84,16 +84,20 @@ public class CFD {
 		return topProfit;
 	}
 
-	public void setTopProfit(double takeProfit) {
+	public boolean setTopProfit(double takeProfit) {
+		if(getValue() > takeProfit) return false;
 		this.topProfit = takeProfit;
+		return true;
 	}
 
 	public Double getStopLoss() {
 		return stopLoss;
 	}
 
-	public void setStopLoss(double stopLoss) {
+	public boolean setStopLoss(double stopLoss) {
+		if(getValue()< stopLoss) return false;
 		this.stopLoss = stopLoss;
+		return true;
 	}
 
 	public AtivoFinanceiro getAtivoFinanceiro() {
@@ -126,6 +130,12 @@ public class CFD {
 
 	public boolean checkStopLoss(){
 		return stopLoss > getValue();
+	}
+
+	public void applyFee(double fee){
+		this.units *= (1-fee);
+		if(getValue() < getStopLoss())
+			setStopLoss(getStopLoss() * (1-fee));
 	}
 
 	@Override

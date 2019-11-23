@@ -25,7 +25,7 @@ public class ConsoleViewManager extends ViewManager {
     private static String selectedAtivo;
 
 
-    private Utilizador utilizador = new Utilizador("", "", 0);
+    private volatile Utilizador utilizador = new Utilizador("", "", 0);
     private ConsoleView lastiView;
     private String lastViewString;
     private CFD lastCFD;
@@ -74,7 +74,17 @@ public class ConsoleViewManager extends ViewManager {
                 break;
             default: System.out.println("ERROR: No view with name " + viewId + "was found !!! Exiting..." ); return null;
         }
+        //clearConsole();
         return lastiView;
+    }
+
+    private void clearConsole(){
+        String[] cls = new String[] {"cmd.exe", "/c", "cls"};
+        ProcessBuilder builder = new ProcessBuilder(cls);
+        builder.inheritIO();
+        try{
+            builder.start().waitFor();
+        } catch (Exception e){ }
     }
 
     @Override
@@ -115,6 +125,10 @@ public class ConsoleViewManager extends ViewManager {
                         }
                 }
             }
+        }
+        Utilizador util = trading.login(utilizador.getUsername(), utilizador.getPassword());
+        if(util != null){
+            utilizador.deconstruct(util);
         }
     }
 }
