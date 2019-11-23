@@ -69,7 +69,7 @@ public abstract class JSONAtivoFinanceiroScrapper implements AtivoFinanceiroScra
                         changed = new LinkedList<>();
                     }
                     Thread.sleep(10000);
-                    System.out.println("Numbers of Stocks analised: " + numberOfStocks + " , stocks changed: " +  numberOfStocksChanges);
+                    //System.out.println("Numbers of Stocks analised: " + numberOfStocks + " , stocks changed: " +  numberOfStocksChanges);
                 }
             } catch (Exception e){
                 setRunning(false);
