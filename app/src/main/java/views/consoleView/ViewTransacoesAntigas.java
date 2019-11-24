@@ -17,10 +17,13 @@ public class ViewTransacoesAntigas extends ConsoleView {
     @Override
     public String render() {
         layout("Transações antigas");
-        for(CFD cfd : cfds){
-            System.out.println("." + cfd);
+        double total = 0;
+        for(CFDVendido cfd : cfds){
+            System.out.println(cfd);
+            total += cfd.getSoldValue();
         }
-        System.out.println(" ---- Pressione o ENTER para sair ----");
+        printMessage("\nTotal vendido : " + total);
+        printMessage("Pressione o ENTER para sair");
         scanner.nextLine();
         return UTILIZADOR;
     }
