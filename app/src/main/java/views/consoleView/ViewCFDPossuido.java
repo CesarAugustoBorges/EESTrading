@@ -18,8 +18,8 @@ public class ViewCFDPossuido extends ConsoleView {
         System.out.print("Top Profit: " + (cfd.getTopProfit() == null ? "--" : cfd.getTopProfit()));
         System.out.println("Stop Loss: " + (cfd.getStopLoss() == null ? "--" : cfd.getStopLoss()));
         System.out.println("1.Vender");
-        System.out.println("2.Definir Top Profit");
-        System.out.println("3.Definir Stop Loss");
+        System.out.println("2.Definir Stop Loss");
+        System.out.println("3.Definir Top Profit");
         System.out.println("4.Retroceder");
 
         int option = getSelectedOption();

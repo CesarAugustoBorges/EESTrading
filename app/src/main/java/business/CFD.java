@@ -131,7 +131,7 @@ public class CFD {
 	@Override
 	public String toString(){
 		return ativoFinanceiro.toString() + " comprado ( " + boughtValue + "$ ) em " +
-				data.getYear() + "-" + data.getMonth() + "-" + data.getDayOfMonth() + " | valor atual -" + getValue() + "$";
+				data.getYear() + "-" + data.getMonth() + "-" + data.getDayOfMonth() + " | valor atual: 1" + getValue() + "$";
 	}
 
 }
