@@ -7,7 +7,6 @@ import data.UtilizadorDAO;
 
 import java.util.List;
 import java.util.Observable;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class EESTrading extends Observable {
 	private static EESTrading trading = new EESTrading();
@@ -19,7 +18,6 @@ public class EESTrading extends Observable {
 	private CFDDAO cfdDAO;
 	private AtivoFinanceiroDAO ativoFinanceiroDAO;
 	private UtilizadorDAO utilizadorDAO;
-	private ReentrantLock lock = new ReentrantLock();
 
 
 	public EESTrading(){
@@ -28,6 +26,10 @@ public class EESTrading extends Observable {
 		cfdDAO = daoFactory.newCFDDAO();
 		ativoFinanceiroDAO = daoFactory.newAtivoFinanceiroDAO();
 		utilizadorDAO = daoFactory.newUtilizadorDAO();
+	}
+
+	public double getFee(){
+		return fee;
 	}
 
 	public List<AtivoFinanceiro> getAtivos(){
@@ -97,6 +99,8 @@ public class EESTrading extends Observable {
 	 * @param cfd
 	 */
 	public boolean buy(Utilizador utilizador, CFD cfd) {
+		cfd.applyFee(fee);
+		cfd.setUtilizador(utilizador);
 		int idCFD = cfdDAO.put(cfd);
 		if(idCFD > 0){
 			double value = cfd.getBoughtValue();
@@ -138,8 +142,8 @@ public class EESTrading extends Observable {
 	public void deposit(Utilizador utilizador, double value) {
 		if(value < 0) return;
 		utilizadorDAO.addMoney(utilizador, value);
-		Utilizador ult = utilizadorDAO.get(utilizador.getUsername());
-		utilizador.setMoney(ult.getMoney());
+		setChanged();
+		notifyObservers();
 	}
 
 	/**
@@ -150,24 +154,24 @@ public class EESTrading extends Observable {
 	public boolean withdraw(Utilizador utilizador, double value) {
 		if(utilizador.getMoney() < value || value < 0) return false;
 		utilizadorDAO.removeMoney(utilizador, value);
-		Utilizador utl = utilizadorDAO.get(utilizador.getUsername());
-		utilizador.setMoney(utl.getMoney());
+		setChanged();
+		notifyObservers();
 		return true;
 	}
 
 	public boolean setCFDTopProfit(CFD cfd, double topProfit) {
-		if (topProfit > cfd.getValue()) {
-			cfd.setTopProfit(topProfit);
+		if(cfd.setTopProfit(topProfit)){
 			cfdDAO.replace(cfd.getId(), cfd);
+			applyThresholds(cfd);
 			return true;
 		}
 		return false;
 	}
 
 	public boolean setCFDStopLoss(CFD cfd, double stopLoss) {
-		if (stopLoss < cfd.getValue()) {
-			cfd.setStopLoss(stopLoss);
+		if(cfd.setStopLoss(stopLoss)){
 			cfdDAO.replace(cfd.getId(), cfd);
+			applyThresholds(cfd);
 			return true;
 		}
 		return false;
@@ -180,10 +184,5 @@ public class EESTrading extends Observable {
 	public List<CFDVendido> getTransacoesAntigas(Utilizador utilizador){
 		return  cfdDAO.getVendidos(utilizador);
 	}
-/*
-	public List<CFD> getTransacoesAntigas(Utilizador utilizador){
-		return cfdDAO.getTransacoesAntigas(utilizador);
-	}
-	*/
 
 }

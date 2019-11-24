@@ -3,6 +3,7 @@ package business;
 public abstract class AtivoFinanceiro {
 
 	private String company;
+	//private String companyFullName;
 	private double value;
 	private String type;
 

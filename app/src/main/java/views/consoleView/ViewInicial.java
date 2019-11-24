@@ -21,7 +21,7 @@ public class ViewInicial extends ConsoleView {
         switch (option){
             case 1: return LOGIN;
             case 2: return REGISTAR;
-            case 3: return null;
+            case 3: System.exit(0);
             default: System.out.println("Não é uma opção válida: " + option);
         }
         return INICIAL;

@@ -25,7 +25,6 @@ public abstract class ConsoleView implements IView {
     protected EESTrading trading;
     protected Scanner scanner;
     protected Utilizador utilizador;
-    private boolean abortRead = false;
     private volatile boolean updated = false;
 
     public ConsoleView(EESTrading trading, Utilizador utilizador){
@@ -59,6 +58,25 @@ public abstract class ConsoleView implements IView {
         System.out.println(res.toString());
     }
 
+    protected void printMessage(String message, char filler){
+        int i = 0;
+        int width = 50;
+        StringBuilder sb = new StringBuilder();
+        for(; i < ((width - (message.length()+2)) / 2); i++ )
+            sb.append('-');
+        sb.append(' ');
+        sb.append(message);
+        sb.append(' ');
+        i+= message.length() + 2;
+        for(; i < width; i++)
+            sb.append('-');
+        System.out.println(sb.toString());
+    }
+
+    protected void printMessage(String message){
+        printMessage(message, '-');
+    }
+
     protected int getSelectedOption(){
         try {
             return scanner.nextInt();
@@ -74,7 +92,7 @@ public abstract class ConsoleView implements IView {
         try{
             return scanner.nextDouble();
         } catch (Exception e){
-            //clearInput();
+            clearInput();
             System.out.println("ERROR: Insira um número válido na comsola");
             return getDouble();
         }
