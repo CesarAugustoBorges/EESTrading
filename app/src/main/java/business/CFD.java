@@ -125,7 +125,7 @@ public class CFD {
 	}
 
 	public boolean checkTopprofit(){
-		return topProfit < getValue();
+		return topProfit != 0 &&  topProfit < getValue();
 	}
 
 	public boolean checkStopLoss(){
