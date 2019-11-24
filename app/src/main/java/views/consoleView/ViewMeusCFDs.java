@@ -30,7 +30,7 @@ public class ViewMeusCFDs extends ConsoleView {
         }
 
         if(option > 0 && option <= cfds.size()){
-            ConsoleViewManager.setSelectedCFD(cfds.get(i-1).getId());
+            ConsoleViewManager.setSelectedCFD(cfds.get(option-1).getId());
             return CFD_POSSUIDO;
         }else if(option == i+1){
             return UTILIZADOR;
