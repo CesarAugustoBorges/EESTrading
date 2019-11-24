@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 public class CFD {
 	private double boughtValue;
 	private double units;
-	private Double topProfit;
-	private Double stopLoss;
+	private double topProfit;
+	private double stopLoss;
 	private int id;
 	private Utilizador utilizador;
 	private AtivoFinanceiro ativoFinanceiro;
@@ -19,25 +19,25 @@ public class CFD {
 	}
 
 	public CFD(CFD cfd){
+		this.setAtivoFinanceiro(cfd.getAtivoFinanceiro());
 		this.setBoughtValue(cfd.getBoughtValue());
 		this.setUnits(cfd.getUnits());
 		this.setTopProfit(cfd.getTopProfit());
 		this.setStopLoss(cfd.getStopLoss());
 		this.setId(cfd.getId());
-		this.setAtivoFinanceiro(cfd.getAtivoFinanceiro());
 		this.setUtilizador(cfd.getUtilizador());
 		this.setData(cfd.getData());
 	}
 
 	public CFD(double boughtValue, double units, Double topProfit, Double stopLoss, int id, Utilizador utilizador,
 			   AtivoFinanceiro ativoFinanceiro, LocalDateTime data) {
+		this.ativoFinanceiro = ativoFinanceiro;
 		this.boughtValue= boughtValue;
 		this.units = units;
 		this.topProfit = topProfit;
 		this.stopLoss = stopLoss;
 		this.id = id;
 		this.utilizador = utilizador;
-		this.ativoFinanceiro = ativoFinanceiro;
 		this.data = data;
 	}
 

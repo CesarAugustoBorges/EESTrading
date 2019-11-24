@@ -24,7 +24,7 @@ public class ViewAtivosDisponiveis extends ConsoleView {
         }
 
         int ativoSelected = getSelectedOption();
-
+        if(ativoSelected == 0) return UTILIZADOR;
         if(ativoSelected > 0 && ativoSelected <= ativos.size()) {
             if(isUpdated()){
                 boolean yes = yesOrNoQuestion("Alguns ativos financeiros foram atualizados, quer continuar?");
