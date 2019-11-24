@@ -49,6 +49,6 @@ public abstract class AtivoFinanceiro {
 
 	@Override
 	public String toString(){
-		return getCompany() + "(" + getValue() + "$" + ")";
+		return getCompany() + "(" + getValue() + "$" + ") -> " + getType();
 	}
 }
