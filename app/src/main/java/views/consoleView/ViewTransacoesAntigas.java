@@ -22,7 +22,8 @@ public class ViewTransacoesAntigas extends ConsoleView {
             System.out.println(cfd);
             total += cfd.getSoldValue();
         }
-        printMessage("\nTotal vendido : " + total);
+        System.out.println();
+        printMessage("Total vendido : " + total);
         printMessage("Pressione o ENTER para sair");
         scanner.nextLine();
         return UTILIZADOR;

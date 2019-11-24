@@ -133,7 +133,7 @@ public class CFD {
 	}
 
 	public void applyFee(double fee){
-		this.units *= (1-fee);
+		this.units = this.units * (1-fee);
 		if(getValue() < getStopLoss())
 			setStopLoss(getStopLoss() * (1-fee));
 	}
@@ -141,7 +141,7 @@ public class CFD {
 	@Override
 	public String toString(){
 		return ativoFinanceiro.toString() + " comprado ( " + boughtValue + "$ ) em " +
-				data.getYear() + "-" + data.getMonth() + "-" + data.getDayOfMonth() + " | valor atual: 1" + getValue() + "$";
+				data.getYear() + "-" + data.getMonth() + "-" + data.getDayOfMonth() + " | valor atual: " + getValue() + "$";
 	}
 
 }

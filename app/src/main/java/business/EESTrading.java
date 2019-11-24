@@ -99,6 +99,7 @@ public class EESTrading extends Observable {
 	 * @param cfd
 	 */
 	public boolean buy(Utilizador utilizador, CFD cfd) {
+		if(cfd.getBoughtValue() < 0) return false;
 		cfd.applyFee(fee);
 		cfd.setUtilizador(utilizador);
 		int idCFD = cfdDAO.put(cfd);
