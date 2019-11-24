@@ -90,8 +90,7 @@ public abstract class JSONAtivoFinanceiroScrapper implements AtivoFinanceiroScra
                 .ignoreContentType(true)
                 .get();
         Element info = doc.body();
-        String infoText = info.text();
-        return infoText;
+        return info.text();
     }
 
     protected void addAtivoFinanceiro(AtivoFinanceiro ativoFinanceiro){

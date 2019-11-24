@@ -14,6 +14,8 @@ public class Main {
         actionsScrapper.start();
         criptoScrapper.start();
 
+        //System.out.println(System.getProperty("os.name"));
+
         ViewManager viewManager = new ConsoleViewManager("inicial", trading);
         viewManager.start();
 

@@ -79,12 +79,15 @@ public class ConsoleViewManager extends ViewManager {
     }
 
     private void clearConsole(){
-        String[] cls = new String[] {"cmd.exe", "/c", "cls"};
-        ProcessBuilder builder = new ProcessBuilder(cls);
-        builder.inheritIO();
-        try{
-            builder.start().waitFor();
-        } catch (Exception e){ }
+        String os = System.getProperty("os.name");
+        if(os.toUpperCase().contains("WINDOWS")){
+            String[] cls = new String[] {"cmd.exe", "/c", "cls"};
+            ProcessBuilder builder = new ProcessBuilder(cls);
+            builder.inheritIO();
+            try{
+                builder.start().waitFor();
+            } catch (Exception e){ }
+        }
     }
 
     @Override
