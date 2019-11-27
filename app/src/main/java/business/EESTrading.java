@@ -7,6 +7,7 @@ import data.UtilizadorDAO;
 
 import java.util.List;
 import java.util.Observable;
+import java.util.function.Function;
 
 public class EESTrading extends Observable {
 	private static EESTrading trading = new EESTrading();
@@ -58,6 +59,15 @@ public class EESTrading extends Observable {
 		});
 		setChanged();
 		notifyObservers(ativoFinanceiros);
+	}
+
+	public List<AtivoFinanceiro> getAtivosByFilter(Function<AtivoFinanceiro, Boolean> isValid){
+		List<AtivoFinanceiro> lista = ativoFinanceiroDAO.getAll();
+		for(int i = 0; i < lista.size(); i++)
+			if(!isValid.apply(lista.get(i))){
+				lista.remove(i); i--;
+			}
+		return lista;
 	}
 
 	public synchronized void applyThresholds(CFD cfd){

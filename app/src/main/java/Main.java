@@ -8,8 +8,8 @@ public class Main {
     public static void main(String[] args) {
         EESTrading trading = EESTrading.getInstance();
         AtivoFinanceiroScrapperFactory scrapperFactory = new AtivoFinanceiroScrapperFactory();
-        AtivoFinanceiroScrapper actionsScrapper = scrapperFactory.newJSONActions();
-        AtivoFinanceiroScrapper criptoScrapper = scrapperFactory.newJSONCrypto();
+        AtivoFinanceiroScrapper actionsScrapper = scrapperFactory.newAtivoFinanceiroScrapper("jsonAcoes");
+        AtivoFinanceiroScrapper criptoScrapper = scrapperFactory.newAtivoFinanceiroScrapper("jsonCrypto");
 
         actionsScrapper.start();
         criptoScrapper.start();

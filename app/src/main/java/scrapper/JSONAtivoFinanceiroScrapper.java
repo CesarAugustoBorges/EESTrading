@@ -19,8 +19,8 @@ public abstract class JSONAtivoFinanceiroScrapper implements AtivoFinanceiroScra
     private EESTrading trading;
 
     // USED MORE FOR DEBUGGING PORPUSES
-    protected int numberOfStocks;
-    protected int numberOfStocksChanges;
+    private int numberOfStocks;
+    private int numberOfStocksChanges;
 
     public JSONAtivoFinanceiroScrapper(String url){
         this.url = url;
@@ -63,13 +63,16 @@ public abstract class JSONAtivoFinanceiroScrapper implements AtivoFinanceiroScra
                     numberOfStocksChanges = 0;
                     String json = getJson();
                     JSONObject obj = new JSONObject(json);
-                    handleJSON(obj);
+                    jsonToAtivosFinanceiros(obj).forEach(ativo -> {
+                        numberOfStocks++;
+                        addAtivoFinanceiro(ativo);
+                    });
                     if(changed.size() > 0){
                         trading.putAtivosFinanceiros(changed);
                         changed = new LinkedList<>();
                     }
                     Thread.sleep(10000);
-                    //System.out.println("Numbers of Stocks analised: " + numberOfStocks + " , stocks changed: " +  numberOfStocksChanges);
+                    //System.out.println("Numbers of Finances analised: " + numberOfStocks + " , stocks changed: " +  numberOfStocksChanges);
                 }
             } catch (Exception e){
                 setRunning(false);
@@ -78,22 +81,28 @@ public abstract class JSONAtivoFinanceiroScrapper implements AtivoFinanceiroScra
         }).start();
     }
 
-    protected abstract void handleJSON(JSONObject obj);
+    protected abstract Set<AtivoFinanceiro> jsonToAtivosFinanceiros(JSONObject obj);
 
-    public void stop(){
+    public synchronized void stop(){
         if(!isRunning()) System.out.println("Scrapper wasn't running");
         setRunning(false);
     }
 
-    private String getJson() throws Exception{
-        Document doc = Jsoup.connect(url)
-                .ignoreContentType(true)
-                .get();
-        Element info = doc.body();
-        return info.text();
+    private synchronized String getJson() throws Exception{
+        try{
+            Document doc = Jsoup.connect(url)
+                    .ignoreContentType(true)
+                    .get();
+            Element info = doc.body();
+            return info.text();
+        } catch (Exception e){
+            System.out.println("Não foi possível connectar o scrapper a +\"" + url + "\"");
+            System.exit(0);
+            return null;
+        }
     }
 
-    protected void addAtivoFinanceiro(AtivoFinanceiro ativoFinanceiro){
+    private synchronized void addAtivoFinanceiro(AtivoFinanceiro ativoFinanceiro){
         if(!ativosFinanceiros.containsKey(ativoFinanceiro.getCompany())){
             ativosFinanceiros.put(ativoFinanceiro.getCompany(), ativoFinanceiro);
             changed.add(ativoFinanceiro);

@@ -19,23 +19,23 @@ public class JSONActionsScrapper extends JSONAtivoFinanceiroScrapper{
 		super("https://financialmodelingprep.com/api/v3/stock/real-time-price");
 	}
 
-
 	@Override
-	protected void handleJSON(JSONObject obj) {
+	protected Set<AtivoFinanceiro> jsonToAtivosFinanceiros(JSONObject obj) {
+		Set<AtivoFinanceiro> res = new HashSet<>();
 		JSONArray ativos = obj.getJSONArray("stockList");
 		ativos.forEach(jsonObj -> {
-			numberOfStocks++;
 			JSONObject jsonAtivo = (JSONObject) jsonObj;
 			AtivoFinanceiro ativoFinanceiro = new Acao();
 			ativoFinanceiro.setCompany(jsonAtivo.getString("symbol"));
 			ativoFinanceiro.setValue(Math.floor(jsonAtivo.getDouble("price") * 100) / 100);
-			addAtivoFinanceiro(ativoFinanceiro);
+			res.add(ativoFinanceiro);
 		});
 		Acao acao = new Acao();
 		acao.setCompany("TEST");
 		acao.setValue(testValue);
-		addAtivoFinanceiro(acao);
 		testValue += 0.01;
+		res.add(acao);
+		return res;
 	}
 
 	public static void main(String[] args){

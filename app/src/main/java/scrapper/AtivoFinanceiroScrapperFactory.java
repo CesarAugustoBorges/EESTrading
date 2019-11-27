@@ -2,13 +2,11 @@ package scrapper;
 
 public class AtivoFinanceiroScrapperFactory {
 
-	public AtivoFinanceiroScrapper newJSONActions() {
-		return new JSONActionsScrapper();
+	public AtivoFinanceiroScrapper newAtivoFinanceiroScrapper(String scrapper) {
+		switch (scrapper){
+			case "jsonAcoes" : return new JSONActionsScrapper();
+			case "jsonCrypto" : return new JSONCryptoScrapper();
+			default: return null;
+		}
 	}
-
-	public AtivoFinanceiroScrapper newJSONCrypto() {
-		// TODO - implement AtivoFinanceiroScrapperFactory.newJSONCrypto
-		return new JSONCryptoScrapper();
-	}
-
 }
