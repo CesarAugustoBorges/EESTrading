@@ -2,13 +2,13 @@ package views.consoleView;
 
 import business.*;
 import views.IView;
-import views.ViewManager;
+import views.ViewMediator;
 
 import java.util.List;
 import java.util.Observable;
 
-public class ConsoleViewManager extends ViewManager {
-    public ConsoleViewManager(String view, EESTrading trading){
+public class ConsoleViewMediator extends ViewMediator {
+    public ConsoleViewMediator(String view, EESTrading trading){
         super(trading, view);
     }
 
@@ -128,6 +128,10 @@ public class ConsoleViewManager extends ViewManager {
                         }
                 }
             }
+        }
+        if(arg instanceof CFDVendido){
+            CFDVendido cfdVendido = (CFDVendido) arg;
+            System.out.println(cfdVendido + "foi vendido (atingiu treshold)");
         }
         Utilizador util = trading.login(utilizador.getUsername(), utilizador.getPassword());
         if(util != null){

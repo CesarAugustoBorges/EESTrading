@@ -28,17 +28,4 @@ public class JSONCryptoScrapper extends JSONAtivoFinanceiroScrapper {
 		});
 		return res;
 	}
-
-
-	public static void main(String[] args){
-		AtivoFinanceiroScrapper js = new JSONCryptoScrapper();
-		js.start();
-		Scanner s = new Scanner(System.in);
-		while (js.isRunning()){
-			String next = s.next();
-			if(next.toUpperCase().equals("STOP")){
-				js.setRunning(false);
-			}
-		}
-	}
 }

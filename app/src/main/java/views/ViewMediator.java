@@ -7,11 +7,11 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Stack;
 
-public abstract class ViewManager implements Observer {
+public abstract class ViewMediator implements Observer {
     private String currentView;
     protected EESTrading trading;
 
-    public ViewManager(EESTrading trading, String initialView){
+    public ViewMediator(EESTrading trading, String initialView){
         this.trading = trading;
         this.currentView = initialView;
     }

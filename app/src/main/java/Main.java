@@ -1,8 +1,8 @@
 import business.EESTrading;
 import scrapper.AtivoFinanceiroScrapper;
 import scrapper.AtivoFinanceiroScrapperFactory;
-import views.ViewManager;
-import views.consoleView.ConsoleViewManager;
+import views.ViewMediator;
+import views.consoleView.ConsoleViewMediator;
 
 public class Main {
     public static void main(String[] args) {
@@ -16,7 +16,7 @@ public class Main {
 
         //System.out.println(System.getProperty("os.name"));
 
-        ViewManager viewManager = new ConsoleViewManager("inicial", trading);
+        ViewMediator viewManager = new ConsoleViewMediator("inicial", trading);
         viewManager.start();
 
     }

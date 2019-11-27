@@ -14,6 +14,7 @@ import java.util.*;
 
 public class JSONActionsScrapper extends JSONAtivoFinanceiroScrapper{
 	private double testValue = 0.10;
+	private double TSLValue = 100;
 
 	public JSONActionsScrapper(){
 		super("https://financialmodelingprep.com/api/v3/stock/real-time-price");
@@ -35,19 +36,12 @@ public class JSONActionsScrapper extends JSONAtivoFinanceiroScrapper{
 		acao.setValue(testValue);
 		testValue += 0.01;
 		res.add(acao);
+		Acao tsl = new Acao();
+		acao.setCompany("TSL");
+		acao.setValue(TSLValue);
+		if(TSLValue - 1 > 1)
+			TSLValue -= 1;
+		res.add(tsl);
 		return res;
-	}
-
-	public static void main(String[] args){
-		JSONActionsScrapper js = new JSONActionsScrapper();
-		js.start();
-		Scanner s = new Scanner(System.in);
-		while (js.isRunning()){
-			String next = s.next();
-			if(next.toUpperCase().equals("STOP")){
-				js.setRunning(false);
-			}
-		}
-		//System.out.println(js.toString());
 	}
 }

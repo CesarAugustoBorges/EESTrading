@@ -34,6 +34,10 @@ public class CFDVendido extends CFD {
         this.dataVenda = dataVenda;
     }
 
+    public double getProfit(){
+        return getSoldValue() - getBoughtValue();
+    }
+
     @Override
     public String toString(){
         return getAtivoFinanceiro().getCompany() + " vendido ( " + getSoldValue() + " ) em " + dataVenda.getYear() + "-" + dataVenda.getMonth() + "-" + dataVenda.getDayOfMonth();

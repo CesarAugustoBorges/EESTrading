@@ -4,10 +4,7 @@ import business.AtivoFinanceiro;
 import business.EESTrading;
 import business.Utilizador;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -118,7 +115,7 @@ public class ViewAtivosDisponiveis extends ConsoleView {
                 if(!yes) return subViewVerAtivos();
             }
 
-            ConsoleViewManager.setSelectedAtivo(ativos.get(ativoSelected - 1).getCompany());
+            ConsoleViewMediator.setSelectedAtivo(ativos.get(ativoSelected - 1).getCompany());
             return COMPRA_CFD;
         }
         else {
@@ -131,8 +128,8 @@ public class ViewAtivosDisponiveis extends ConsoleView {
         int length = 10;
         if( i > ativos.size() / length) i = ativos.size() / length - 1;
         if( i < 0 ) i = 0;
-        for(int j = 0; i * length < ativos.size() && j < length; j++ ){
-            int listI = i*length+j;
+        for(int j = 0; i*length+j < ativos.size() && j < length; j++ ){
+            int listI = i*length+j ;
             AtivoFinanceiro ativo = ativos.get(listI);
             System.out.println((listI + 1) + ". " + ativo.getCompany() + "- " + ativo.getValue() + " $" );
         }
@@ -143,18 +140,5 @@ public class ViewAtivosDisponiveis extends ConsoleView {
         System.out.println("0.Retroceder");
         printPage(page);
         printMessage("Use \":page <numero>\" para mudar de página", '#');
-    }
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-        while(input.matches("[ ]*:[ ]*page[ ]+[0-9]+[ ]*")){
-            Pattern pattern = Pattern.compile("[ ]*:[ ]*page[ ]+([0-9]+)[ ]*");
-            Matcher matcher = pattern.matcher(input);
-            if(matcher.find()) {
-               System.out.println(matcher.group());
-            }
-            input = scanner.nextLine();
-        }
     }
 }

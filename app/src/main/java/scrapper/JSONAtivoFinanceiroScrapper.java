@@ -34,7 +34,7 @@ public abstract class JSONAtivoFinanceiroScrapper implements AtivoFinanceiroScra
         changed = new LinkedList<>();
 
         numberOfStocks = 0;
-        numberOfStocks = 0;
+        numberOfStocksChanges = 0;
     }
 
     public synchronized List<AtivoFinanceiro> getAtivosFinanceiros() {
@@ -88,7 +88,7 @@ public abstract class JSONAtivoFinanceiroScrapper implements AtivoFinanceiroScra
         setRunning(false);
     }
 
-    private synchronized String getJson() throws Exception{
+    private synchronized String getJson(){
         try{
             Document doc = Jsoup.connect(url)
                     .ignoreContentType(true)

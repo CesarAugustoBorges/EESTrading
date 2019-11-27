@@ -75,10 +75,14 @@ public class EESTrading extends Observable {
 			CFDVendido cfdVendido = new CFDVendido(cfd, cfd.getTopProfit());
 			cfdDAO.sell(cfdVendido);
 			deposit(cfd.getUtilizador(), cfd.getTopProfit());
+			setChanged();
+			notifyObservers(cfdVendido);
 		} else if(cfd.checkStopLoss()) {
 			CFDVendido cfdVendido = new CFDVendido(cfd, cfd.getStopLoss());
 			cfdDAO.sell(cfdVendido);
 			deposit(cfd.getUtilizador(), cfd.getStopLoss());
+			setChanged();
+			notifyObservers(cfdVendido);
 		}
 	}
 
