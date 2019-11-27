@@ -81,7 +81,6 @@ public abstract class ConsoleView implements IView {
         try {
             return scanner.nextInt();
         } catch (Exception e){
-            e.printStackTrace();
             clearInput();
             System.out.println("ERROR: Insira apenas um número na consola");
             return getSelectedOption();

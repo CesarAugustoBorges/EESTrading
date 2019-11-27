@@ -6,6 +6,10 @@ import business.Utilizador;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ViewAtivosDisponiveis extends ConsoleView {
@@ -40,60 +44,78 @@ public class ViewAtivosDisponiveis extends ConsoleView {
                 }).collect(Collectors.toList());
                 break;
             case 4:
-                boolean done = false;
-                while(!done){
-                    System.out.println("0.Retroceder");
-                    System.out.println("1.Procurar por sigla");
-                    System.out.println("2.Procurar por preço minímo");
-                    System.out.println("3.Procurar por preço máximo");
-                    System.out.println("4.Ver");
-
-                    int filterOption = getSelectedOption();
-                    switch (filterOption){
-                        case 0: return ATIVOS_DISPONIVEIS;
-                        case 1:
-                            System.out.print("Introduza o filtro: ");
-                            String filtro = scanner.next().toUpperCase();
-                            this.ativos = this.ativos.stream().filter(a -> a.getCompany().startsWith(filtro))
-                                    .collect(Collectors.toList());
-                            break;
-                        case 2:
-                            System.out.print("Introduza o preço mínimo: ");
-                            double precoMin = getDouble();
-                            this.ativos = this.ativos.stream().filter(a -> a.getValue() >= precoMin)
-                                    .collect(Collectors.toList());
-                            break;
-                        case 3:
-                            System.out.println("Introduza o preço máximo: ");
-                            double precoMax = getDouble();
-                            this.ativos = this.ativos.stream().filter(a -> a.getValue() <= precoMax)
-                                    .collect(Collectors.toList());
-                            break;
-                        case 4: done = true; break;
-                        default: System.out.println("Opção não encontrada1"); break;
-                    }
-                }
+                String nextView = subMenuFiltrar();
+                if(nextView != null) return nextView;
                 break;
             default:
                 System.out.println("Opção nao encontrada");
                 return ATIVOS_DISPONIVEIS;
 
         }
+        return subViewVerAtivos();
+    }
 
-        layout(utilizador.getUsername() + " $: " + utilizador.getMoney());
-        System.out.println("0.Retroceder");
-        for(int i = 0; i < ativos.size(); i++){
-            AtivoFinanceiro ativo = ativos.get(i);
-            //Adicionar o tipo do ativo?
-            System.out.println((i+1) + ". " + ativo.getCompany() + "- " + ativo.getValue() + " $" );
+    private String subMenuFiltrar(){
+        boolean done = false;
+        while(!done){
+            System.out.println("0.Retroceder");
+            System.out.println("1.Procurar por sigla");
+            System.out.println("2.Procurar por preço minímo");
+            System.out.println("3.Procurar por preço máximo");
+            System.out.println("4.Ver");
+
+            int filterOption = getSelectedOption();
+            switch (filterOption){
+                case 0: return ATIVOS_DISPONIVEIS;
+                case 1:
+                    System.out.print("Introduza o filtro: ");
+                    String filtro = scanner.next().toUpperCase();
+                    this.ativos = this.ativos.stream().filter(a -> a.getCompany().startsWith(filtro))
+                            .collect(Collectors.toList());
+                    break;
+                case 2:
+                    System.out.print("Introduza o preço mínimo: ");
+                    double precoMin = getDouble();
+                    this.ativos = this.ativos.stream().filter(a -> a.getValue() >= precoMin)
+                            .collect(Collectors.toList());
+                    break;
+                case 3:
+                    System.out.println("Introduza o preço máximo: ");
+                    double precoMax = getDouble();
+                    this.ativos = this.ativos.stream().filter(a -> a.getValue() <= precoMax)
+                            .collect(Collectors.toList());
+                    break;
+                case 4: done = true; break;
+                default: System.out.println("Opção não encontrada"); break;
+            }
         }
+        return null;
+    }
 
-        int ativoSelected = getSelectedOption();
+    private String subViewVerAtivos(){
+        printAtivos(0);
+        boolean optionSelected = false;
+        int ativoSelected = 0;
+        while (!optionSelected){
+            String input = scanner.nextLine();
+            if(input.matches("[0-9]+")){
+                ativoSelected = Integer.parseInt(input);
+                optionSelected = true;
+            } else if(input.matches("[ ]*:[ ]*page[ ]+[0-9]+[ ]*")){
+                Pattern pattern = Pattern.compile("[ ]*:[ ]*page[ ]+([0-9]+)[ ]*");
+                Matcher matcher = pattern.matcher(input);
+                if(matcher.find()) {
+                    int pageNumber = Integer.parseInt(matcher.group(1));
+                    System.out.println(pageNumber);
+                    printAtivos(pageNumber);
+                }
+            }
+        }
         if(ativoSelected == 0) return ATIVOS_DISPONIVEIS;
         if(ativoSelected > 0 && ativoSelected <= ativos.size()) {
             if(isUpdated()){
                 boolean yes = yesOrNoQuestion("Alguns ativos financeiros foram atualizados, quer continuar?");
-                if(!yes) return ATIVOS_DISPONIVEIS;
+                if(!yes) return subViewVerAtivos();
             }
 
             ConsoleViewManager.setSelectedAtivo(ativos.get(ativoSelected - 1).getCompany());
@@ -102,6 +124,37 @@ public class ViewAtivosDisponiveis extends ConsoleView {
         else {
             System.out.println("ERROR: Escolha um ativo entre 1 - " + ativos.size());
             return ATIVOS_DISPONIVEIS;
+        }
+    }
+
+    private void printPage(int i){
+        int length = 10;
+        if( i > ativos.size() / length) i = ativos.size() / length - 1;
+        if( i < 0 ) i = 0;
+        for(int j = 0; i * length < ativos.size() && j < length; j++ ){
+            int listI = i*length+j;
+            AtivoFinanceiro ativo = ativos.get(listI);
+            System.out.println((listI + 1) + ". " + ativo.getCompany() + "- " + ativo.getValue() + " $" );
+        }
+    }
+
+    private void printAtivos(int page){
+        layout(utilizador.getUsername() + " $: " + utilizador.getMoney());
+        System.out.println("0.Retroceder");
+        printPage(page);
+        printMessage("Use \":page <numero>\" para mudar de página", '#');
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        while(input.matches("[ ]*:[ ]*page[ ]+[0-9]+[ ]*")){
+            Pattern pattern = Pattern.compile("[ ]*:[ ]*page[ ]+([0-9]+)[ ]*");
+            Matcher matcher = pattern.matcher(input);
+            if(matcher.find()) {
+               System.out.println(matcher.group());
+            }
+            input = scanner.nextLine();
         }
     }
 }
