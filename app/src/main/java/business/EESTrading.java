@@ -185,4 +185,6 @@ public class EESTrading extends Observable {
 		return  cfdDAO.getVendidos(utilizador);
 	}
 
+	public List<AtivoFinanceiro> getAtivosPreferidos(Utilizador utilizador) {return utilizadorDAO.getPreferidos(utilizador);}
+
 }

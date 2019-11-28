@@ -20,7 +20,7 @@ public class SQLConnection implements DBConnection{
 
 	public void connect() {
 		try{
-			this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/tradingplatform?useTimezone=true&serverTimezone=UTC","root","1234");
+			this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/tradingplatform?useTimezone=true&serverTimezone=UTC","root","");
 		}
 		catch (SQLException e){
 			e.printStackTrace(); System.out.println("Não conseguiu conectar!");}
@@ -31,23 +31,6 @@ public class SQLConnection implements DBConnection{
 			this.conn.close();
 		}
 		catch(SQLException e){e.printStackTrace();}
-	}
-
-	//Main de teste de conexão
-	public static void main(String args[]){
-		SQLConnection SQLConn = new SQLConnection();
-
-
-		try{
-			SQLConn.connect();
-			Statement stmt = SQLConn.conn.createStatement();
-			ResultSet rs=stmt.executeQuery("select * from AtivoFinanceiro");
-			while(rs.next())
-				System.out.println(rs.getString("Nome")+"  "+rs.getInt("ValorUnit"));
-
-			SQLConn.disconnect();
-		}
-		catch(Exception e){ System.out.println(e);}
 	}
 
 }

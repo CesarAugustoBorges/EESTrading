@@ -147,7 +147,6 @@ public class CFDDAOConcrete implements CFDDAO {
                 CFDVendido cfdVendido = new CFDVendido(cfd,  rs.getTimestamp("DataVenda").toLocalDateTime() ,
                         rs.getDouble("ValorVenda"));
                 portfolioList.add(cfdVendido);
-               // System.out.println(rs.getString("AtivoFinanceiro_Nome"));
             }
             SQLConn.disconnect();
         }
@@ -173,7 +172,6 @@ public class CFDDAOConcrete implements CFDDAO {
                         rs.getDouble("TopProfit"), rs.getDouble("StopLoss"),
                         rs.getInt("Id"), u, a,rs.getTimestamp("DataCompra").toLocalDateTime());
                 portfolioList.add(cfd);
-                //System.out.println(rs.getString("AtivoFinanceiro_Nome"));
             }
             SQLConn.disconnect();
         }
@@ -203,20 +201,4 @@ public class CFDDAOConcrete implements CFDDAO {
         put(obj);
     }
 
-    public static void main(String[] args) {
-        CFDDAOConcrete cfdDAO = new CFDDAOConcrete();
-        Utilizador u = new Utilizador("Fábio","111",0.0);
-        AtivoFinanceiro af = new AtivoFinanceiro("Petroleo",11,"Petroleo") {};
-        CFD cfd = new CFD(15, 2, 0.0,0.0,1,u,af) ;
-        CFD cfd2 = new CFD(50,2, 0.0,0.0,5,u,af) ;
-
-        //cfd = cfdDAO.get(1);
-        //System.out.println(cfd.getBoughtValue());
-
-        //cfdDAO.put(cfd2);
-        //cfdDAO.get(u);
-        //cfdDAO.delete(1);
-        //cfdDAO.sell(1);
-        //cfdDAO.getPortfolio(u);
-    }
 }

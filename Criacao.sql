@@ -89,6 +89,30 @@ CREATE TABLE IF NOT EXISTS `TradingPlatform`.`CFDVendido` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `TradingPlatform`.`AtivosPreferidos`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `TradingPlatform`.`AtivosPreferidos` ;
+
+CREATE TABLE IF NOT EXISTS `TradingPlatform`.`AtivosPreferidos` (
+  `AtivoFinanceiro` VARCHAR(100) NOT NULL,
+  `Utilizador` VARCHAR(200) NOT NULL,
+  `Valor` DECIMAL(11,4) NULL,
+  INDEX `fk_AtivosPreferidos_AtivoFinanceiro1_idx` (`AtivoFinanceiro` ASC) VISIBLE,
+  INDEX `fk_AtivosPreferidos_Utilizador1_idx` (`Utilizador` ASC) VISIBLE,
+  CONSTRAINT `fk_AtivosPreferidos_AtivoFinanceiro1`
+    FOREIGN KEY (`AtivoFinanceiro`)
+    REFERENCES `TradingPlatform`.`AtivoFinanceiro` (`Nome`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_AtivosPreferidos_Utilizador1`
+    FOREIGN KEY (`Utilizador`)
+    REFERENCES `TradingPlatform`.`Utilizador` (`Nome`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

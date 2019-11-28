@@ -1,43 +1,23 @@
 package data;
 
+import business.AtivoFinanceiro;
 import business.CFD;
+import business.Petroleo;
 import business.Utilizador;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 import java.util.List;
 
 public class UtilizadorDAOConcrete implements UtilizadorDAO {
-
-    //Não são necessárias
-    @Override
-    public double addCFD(Utilizador user, CFD cfd) {
-        return 0;
-    }
-
-    @Override
-    public double removeCFD(Utilizador user, CFD cfd) {
-        return 0;
-    }
-
-    //Feito no delete do CFD
-    @Override
-    public void putPortfolio(Utilizador user, CFD cfd) {
-
-    }
-
-    //Adicionar tempo ao CFD
-    @Override
-    public List<CFD> getLastCFDBought(Utilizador user, int maxSize) {
-        return null;
-    }
+    DBConnection SQLConn = new SQLConnection();
 
     @Override
     public boolean login(String username, String password) {
         boolean ret=false;
-        DBConnection SQLConn = new SQLConnection();
         try{
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
@@ -55,7 +35,6 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
 
     @Override
     public void addMoney(Utilizador user, double value) {
-        DBConnection SQLConn = new SQLConnection();
         try {
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
@@ -70,7 +49,6 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
 
     @Override
     public void removeMoney(Utilizador user, double value) {
-        DBConnection SQLConn = new SQLConnection();
         try {
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
@@ -86,7 +64,6 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
 
     @Override
     public String put(Utilizador obj) {
-        DBConnection SQLConn = new SQLConnection();
         try{
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
@@ -108,7 +85,6 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
 
     @Override
     public Utilizador get(String id) {
-        DBConnection SQLConn = new SQLConnection();
         Utilizador u = null;
         try{
             SQLConn.connect();
@@ -126,7 +102,6 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
 
     @Override
     public void delete(String id) {
-        DBConnection SQLConn = new SQLConnection();
         try{
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
@@ -145,15 +120,54 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
 
     }
 
-    public static void main(String[] args) {
-        UtilizadorDAOConcrete uc = new UtilizadorDAOConcrete();
-        Utilizador u = new Utilizador("Fábio","111",200.20);
+    @Override
+    public void addPreferido( Utilizador u,AtivoFinanceiro a){
+        try{
+            SQLConn.connect();
+            Connection conn = SQLConn.getConn();
+            Statement stmt = conn.createStatement();
+            String cmd = "insert into AtivosPreferidos (AtivoFinanceiro,Utilizador) values('" + a.getCompany() + "','" + u.getUsername() +"')";
+            stmt.executeUpdate(cmd);
 
-        //uc.get("Fábio");
-        //uc.delete("Fábio");
-        //uc.put(u);
-        //uc.addMoney(u,100);
-        //uc.removeMoney(u,50);
-        //System.out.println(uc.login("Fábio","111"));
+            SQLConn.disconnect();
+        }
+        catch (SQLException e){e.printStackTrace();}
     }
+
+    @Override
+    public List<AtivoFinanceiro> getPreferidos(Utilizador u){
+        List<AtivoFinanceiro> ativos = new LinkedList<>();
+        AtivoFinanceiro a;
+        try{
+            SQLConn.connect();
+            Connection conn = SQLConn.getConn();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("select * from AtivosPreferidos inner join AtivoFinanceiro on AtivosPreferidos.AtivoFinanceiro=AtivoFinanceiro.Nome where Utilizador='"+u.getUsername()+"'");
+
+            while(rs.next()){
+                a = new AtivoFinanceiro(rs.getString("Nome"),rs.getDouble("ValorUnit"),rs.getString("Type")) {};
+                System.out.println(rs.getString("Nome"));
+                ativos.add(a);
+            }
+
+            SQLConn.disconnect();
+        }
+        catch (SQLException e){e.printStackTrace();}
+
+        return ativos;
+    }
+
+    public void setValorPref(Utilizador u,AtivoFinanceiro a,double val){
+        try{
+            SQLConn.connect();
+            Connection conn = SQLConn.getConn();
+            Statement stmt = conn.createStatement();
+            String cmd = "update  AtivosPreferidos set Valor=" + val  +"where Utilizador='" + u.getUsername()+"' and AtivoFinanceiro='" + a.getCompany() +"'";
+            stmt.executeUpdate(cmd);
+
+            SQLConn.disconnect();
+        }
+        catch (SQLException e){e.printStackTrace();}
+    }
+    
 }

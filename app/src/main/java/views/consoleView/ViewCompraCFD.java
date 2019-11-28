@@ -40,6 +40,7 @@ public class ViewCompraCFD extends ConsoleView {
                 printMessage("Valor de StopLoss inválido: "  + stoploss);
         } else cfd.setStopLoss(0);
 
+
         if(isUpdated()){
             yes = yesOrNoQuestion("O valor atual do CFD foi alterado, quer dar refresh?");
             if(yes) return COMPRA_CFD;

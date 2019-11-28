@@ -1,40 +1,12 @@
 package data;
 
+import business.AtivoFinanceiro;
 import business.CFD;
 import business.Utilizador;
 
 import java.util.List;
 
 public interface UtilizadorDAO extends DAO<String, Utilizador> {
-
-
-	/**
-	 * 
-	 * @param user
-	 * @param cfd
-	 */
-	double addCFD(Utilizador user, CFD cfd);
-
-	/**
-	 * 
-	 * @param user
-	 * @param cfd
-	 */
-	double removeCFD(Utilizador user, CFD cfd);
-
-	/**
-	 * 
-	 * @param user
-	 * @param cfd
-	 */
-	void putPortfolio(Utilizador user, CFD cfd);
-
-	/**
-	 * 
-	 * @param user
-	 * @param maxSize
-	 */
-	List<CFD> getLastCFDBought(Utilizador user, int maxSize);
 
 	/**
 	 * 
@@ -51,5 +23,9 @@ public interface UtilizadorDAO extends DAO<String, Utilizador> {
 	void removeMoney(Utilizador user, double value);
 
 	boolean login(String username, String password);
+
+	List<AtivoFinanceiro> getPreferidos(Utilizador u);
+
+	void addPreferido(Utilizador u,AtivoFinanceiro a);
 
 }
