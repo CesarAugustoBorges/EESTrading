@@ -1,9 +1,12 @@
 package views.consoleView;
 
+import business.CFD;
+import business.CFDVendido;
 import business.EESTrading;
 import business.Utilizador;
 import views.IView;
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
@@ -125,6 +128,18 @@ public abstract class ConsoleView implements IView {
         } catch (Exception e){
             return yesOrNoQuestion(message);
         }
+    }
+
+    protected void printPage(int i, List<? extends Object> list){
+        int length = 10;
+        if( i > list.size() / length) i = list.size() / length;
+        if( i < 0 ) i = 0;
+        for(int j = 0; i*length+j < list.size() && j < length; j++ ){
+            int listI = i*length+j ;
+            Object object = list.get(listI);
+            System.out.println((listI + 1) + ". " + object);
+        }
+        printMessage("Use \":page <numero>\" para mudar de página", '#');
     }
 
 

@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
-
+    DBConnection SQLConn = new SQLConnection();
     @Override
     public AtivoFinanceiro get(String id) {
-        DBConnection SQLConn = new SQLConnection();
+        
         AtivoFinanceiro a = null;
         try{
             SQLConn.connect();
@@ -32,7 +32,7 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
 
     @Override
     public String put(AtivoFinanceiro obj) {
-        DBConnection SQLConn = new SQLConnection();
+        
         try{
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
@@ -62,7 +62,7 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
 
     @Override
     public void delete(String id) {
-        DBConnection SQLConn = new SQLConnection();
+        
         try {
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
@@ -84,7 +84,7 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
     @Override
     public List<AtivoFinanceiro> getAll(){
         List<AtivoFinanceiro> ativos = new ArrayList<>();
-        DBConnection SQLConn = new SQLConnection();
+        
         AtivoFinanceiro a = null;
         try{
             SQLConn.connect();
@@ -104,7 +104,7 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
     @Override
     public List<CFD> getCFDs(AtivoFinanceiro ativoFinanceiro) {
         List<CFD> cfds = new ArrayList<>();
-        DBConnection SQLConn = new SQLConnection();
+        
         CFD cfd;
         CFDDAO cfddao = DAOFactory.getFactory().newCFDDAO();
         try{

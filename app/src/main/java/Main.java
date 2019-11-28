@@ -7,6 +7,7 @@ import views.consoleView.ConsoleViewMediator;
 public class Main {
     public static void main(String[] args) {
         EESTrading trading = EESTrading.getInstance();
+
         AtivoFinanceiroScrapperFactory scrapperFactory = new AtivoFinanceiroScrapperFactory();
         AtivoFinanceiroScrapper actionsScrapper = scrapperFactory.newAtivoFinanceiroScrapper("jsonAcoes");
         AtivoFinanceiroScrapper cryptoScrapper = scrapperFactory.newAtivoFinanceiroScrapper("jsonCrypto");

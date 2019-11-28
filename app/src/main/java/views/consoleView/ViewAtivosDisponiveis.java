@@ -103,7 +103,6 @@ public class ViewAtivosDisponiveis extends ConsoleView {
                 Matcher matcher = pattern.matcher(input);
                 if(matcher.find()) {
                     int pageNumber = Integer.parseInt(matcher.group(1));
-                    System.out.println(pageNumber);
                     printAtivos(pageNumber);
                 }
             }
@@ -124,21 +123,9 @@ public class ViewAtivosDisponiveis extends ConsoleView {
         }
     }
 
-    private void printPage(int i){
-        int length = 10;
-        if( i > ativos.size() / length) i = ativos.size() / length - 1;
-        if( i < 0 ) i = 0;
-        for(int j = 0; i*length+j < ativos.size() && j < length; j++ ){
-            int listI = i*length+j ;
-            AtivoFinanceiro ativo = ativos.get(listI);
-            System.out.println((listI + 1) + ". " + ativo.getCompany() + "- " + ativo.getValue() + " $" );
-        }
-    }
-
     private void printAtivos(int page){
         layout(utilizador.getUsername() + " $: " + utilizador.getMoney());
         System.out.println("0.Retroceder");
-        printPage(page);
-        printMessage("Use \":page <numero>\" para mudar de página", '#');
+        printPage(page, this.ativos);
     }
 }
