@@ -129,7 +129,7 @@ public class ConsoleViewMediator extends ViewMediator {
                 }
             }
         }
-        if(arg instanceof CFDVendido){
+        if(arg instanceof CFDVendido && utilizador != null && ! utilizador.getUsername().equals("")){
             CFDVendido cfdVendido = (CFDVendido) arg;
             System.out.println(cfdVendido + "foi vendido (atingiu treshold)");
         }

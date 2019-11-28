@@ -31,17 +31,14 @@ public class JSONActionsScrapper extends JSONAtivoFinanceiroScrapper{
 			ativoFinanceiro.setValue(Math.floor(jsonAtivo.getDouble("price") * 100) / 100);
 			res.add(ativoFinanceiro);
 		});
-		Acao acao = new Acao();
-		acao.setCompany("TEST");
-		acao.setValue(testValue);
+		Acao acao = new Acao("TEST", testValue);
 		testValue += 0.01;
 		res.add(acao);
-		Acao tsl = new Acao();
-		acao.setCompany("TSL");
-		acao.setValue(TSLValue);
+		Acao tsl = new Acao("TSL", TSLValue);
 		if(TSLValue - 1 > 1)
 			TSLValue -= 1;
 		res.add(tsl);
 		return res;
 	}
+
 }

@@ -37,14 +37,6 @@ public abstract class JSONAtivoFinanceiroScrapper implements AtivoFinanceiroScra
         numberOfStocksChanges = 0;
     }
 
-    public synchronized List<AtivoFinanceiro> getAtivosFinanceiros() {
-        return new LinkedList<>(ativosFinanceiros.values());
-    }
-
-    public synchronized AtivoFinanceiro getAtivoFinanceiro(String company) {
-        return ativosFinanceiros.get(company);
-    }
-
 
     public synchronized boolean isRunning() {
         return running;
@@ -128,5 +120,4 @@ public abstract class JSONAtivoFinanceiroScrapper implements AtivoFinanceiroScra
         }
         return sb.toString();
     }
-
 }

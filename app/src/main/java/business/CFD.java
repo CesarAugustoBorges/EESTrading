@@ -1,6 +1,8 @@
 package business;
 
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 
 public class CFD {
@@ -138,10 +140,16 @@ public class CFD {
 			setStopLoss(getStopLoss() * (1-fee));
 	}
 
+	public double getProfit(){
+		return getValue() - getBoughtValue();
+	}
+
 	@Override
 	public String toString(){
-		return ativoFinanceiro.toString() + " comprado ( " + boughtValue + "$ ) em " +
-				data.getYear() + "-" + data.getMonth() + "-" + data.getDayOfMonth() + " | valor atual: " + getValue() + "$";
+		NumberFormat formatter = new DecimalFormat("#0.00");
+		return ativoFinanceiro.toString() + " comprado ( " + formatter.format(boughtValue) + "$ ) em " +
+				data.getYear() + "-" + data.getMonth() + "-" + data.getDayOfMonth() + " | valor atual: " + formatter.format(getValue()) +
+				"$ | lucro: " + formatter.format(getProfit()) ;
 	}
 
 }

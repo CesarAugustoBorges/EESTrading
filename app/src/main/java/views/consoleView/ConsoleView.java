@@ -63,13 +63,13 @@ public abstract class ConsoleView implements IView {
         int width = 50;
         StringBuilder sb = new StringBuilder();
         for(; i < ((width - (message.length()+2)) / 2); i++ )
-            sb.append('-');
+            sb.append(filler);
         sb.append(' ');
         sb.append(message);
         sb.append(' ');
         i+= message.length() + 2;
         for(; i < width; i++)
-            sb.append('-');
+            sb.append(filler);
         System.out.println(sb.toString());
     }
 

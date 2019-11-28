@@ -9,15 +9,12 @@ public class Main {
         EESTrading trading = EESTrading.getInstance();
         AtivoFinanceiroScrapperFactory scrapperFactory = new AtivoFinanceiroScrapperFactory();
         AtivoFinanceiroScrapper actionsScrapper = scrapperFactory.newAtivoFinanceiroScrapper("jsonAcoes");
-        AtivoFinanceiroScrapper criptoScrapper = scrapperFactory.newAtivoFinanceiroScrapper("jsonCrypto");
+        AtivoFinanceiroScrapper cryptoScrapper = scrapperFactory.newAtivoFinanceiroScrapper("jsonCrypto");
 
         actionsScrapper.start();
-        criptoScrapper.start();
-
-        //System.out.println(System.getProperty("os.name"));
+        cryptoScrapper.start();
 
         ViewMediator viewManager = new ConsoleViewMediator("inicial", trading);
         viewManager.start();
-
     }
 }

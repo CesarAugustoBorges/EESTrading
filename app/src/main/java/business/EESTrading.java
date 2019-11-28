@@ -46,28 +46,13 @@ public class EESTrading extends Observable {
 	}
 
 	public synchronized void putAtivosFinanceiros(List<AtivoFinanceiro> ativoFinanceiros){
-		ativoFinanceiros.forEach(novo -> {/*
-			AtivoFinanceiro before = ativoFinanceiroDAO.get(novo.getCompany());
-			if(before == null)
-				ativoFinanceiroDAO.put(novo);
-			else if(before.getValue() != novo.getValue()){
-				ativoFinanceiroDAO.replace(novo.getCompany(), novo);
-			}*/
+		ativoFinanceiros.forEach(novo -> {
 			ativoFinanceiroDAO.replace(novo.getCompany(), novo);
 			List<CFD> cfds = ativoFinanceiroDAO.getCFDs(novo);
 			cfds.forEach(this::applyThresholds);
 		});
 		setChanged();
 		notifyObservers(ativoFinanceiros);
-	}
-
-	public List<AtivoFinanceiro> getAtivosByFilter(Function<AtivoFinanceiro, Boolean> isValid){
-		List<AtivoFinanceiro> lista = ativoFinanceiroDAO.getAll();
-		for(int i = 0; i < lista.size(); i++)
-			if(!isValid.apply(lista.get(i))){
-				lista.remove(i); i--;
-			}
-		return lista;
 	}
 
 	public synchronized void applyThresholds(CFD cfd){
@@ -113,7 +98,7 @@ public class EESTrading extends Observable {
 	 * @param cfd
 	 */
 	public boolean buy(Utilizador utilizador, CFD cfd) {
-		if(cfd.getBoughtValue() < 0) return false;
+		if(cfd.getBoughtValue() <= 0) return false;
 		cfd.applyFee(fee);
 		cfd.setUtilizador(utilizador);
 		int idCFD = cfdDAO.put(cfd);

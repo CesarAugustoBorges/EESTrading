@@ -1,5 +1,7 @@
 package business;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 
 public class CFDVendido extends CFD {
@@ -34,12 +36,15 @@ public class CFDVendido extends CFD {
         this.dataVenda = dataVenda;
     }
 
+    @Override
     public double getProfit(){
         return getSoldValue() - getBoughtValue();
     }
 
     @Override
     public String toString(){
-        return getAtivoFinanceiro().getCompany() + " vendido ( " + getSoldValue() + " ) em " + dataVenda.getYear() + "-" + dataVenda.getMonth() + "-" + dataVenda.getDayOfMonth();
+        NumberFormat formatter = new DecimalFormat("#0.00");
+        return getAtivoFinanceiro().getCompany() + " vendido ( " + formatter.format(getSoldValue()) + " ) em " +
+                dataVenda.getYear() + "-" + dataVenda.getMonth() + "-" + dataVenda.getDayOfMonth();
     }
 }

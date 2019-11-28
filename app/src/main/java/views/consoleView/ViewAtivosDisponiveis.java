@@ -67,7 +67,7 @@ public class ViewAtivosDisponiveis extends ConsoleView {
                 case 1:
                     System.out.print("Introduza o filtro: ");
                     String filtro = scanner.next().toUpperCase();
-                    this.ativos = this.ativos.stream().filter(a -> a.getCompany().startsWith(filtro))
+                    this.ativos = this.ativos.stream().filter(a -> a.getCompany().toUpperCase().startsWith(filtro))
                             .collect(Collectors.toList());
                     break;
                 case 2:

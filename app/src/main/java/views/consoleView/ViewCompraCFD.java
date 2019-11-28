@@ -32,7 +32,7 @@ public class ViewCompraCFD extends ConsoleView {
             if(!cfd.setTopProfit(topProfit))
                 printMessage("Valor de TopProfit inválido: " + topProfit);
         } else cfd.setTopProfit(0);
-        yes = yesOrNoQuestion("Deseja definir um Stop Profit?");
+        yes = yesOrNoQuestion("Deseja definir um Stop Loss?");
         if(yes){
             System.out.print("Introduza o valor: ");
             double stoploss = getDouble();
@@ -47,9 +47,9 @@ public class ViewCompraCFD extends ConsoleView {
 
 
         if(trading.buy(utilizador, cfd)){
-            System.out.println("CFD bought sucessfully");
+            printMessage("CFD bought sucessfully", '#');
         } else {
-            System.out.println("CFD not bought");
+            printMessage("CFD not bought", '#');
         }
         return UTILIZADOR;
     }

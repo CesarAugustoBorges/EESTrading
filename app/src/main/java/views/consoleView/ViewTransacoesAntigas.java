@@ -5,6 +5,8 @@ import business.CFDVendido;
 import business.EESTrading;
 import business.Utilizador;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,9 +32,10 @@ public class ViewTransacoesAntigas extends ConsoleView {
             total += cfd.getSoldValue();
             profit += cfd.getProfit();
         }
+        NumberFormat formatter = new DecimalFormat("#0.00");
         System.out.println();
-        printMessage("Total vendido : " + total);
-        printMessage("Lucro total: " + profit);
+        printMessage("Total vendido : " + formatter.format(total));
+        printMessage("Lucro total: " + formatter.format(profit));
         printMessage("Pressione o ENTER para sair");
         scanner.nextLine();
         return UTILIZADOR;

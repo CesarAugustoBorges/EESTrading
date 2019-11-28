@@ -6,7 +6,7 @@ public class SQLConnection implements DBConnection{
 
 	private Connection conn;
 
-	public Connection getConn() {
+	public java.sql.Connection getConn() {
 		return conn;
 	}
 

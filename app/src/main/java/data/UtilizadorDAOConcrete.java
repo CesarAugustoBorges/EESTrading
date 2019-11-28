@@ -76,7 +76,7 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
             Connection conn = SQLConn.getConn();
             Statement stmt = conn.createStatement();
 
-            stmt.executeUpdate("Update Utilizador set  Saldo = if(Saldo> +" + value + ",Saldo-"+ value + ",Saldo) where Nome='" + user.getUsername() + "'");
+            stmt.executeUpdate("Update Utilizador set  Saldo = if(Saldo>= +" + value + ",Saldo-"+ value + ",Saldo) where Nome='" + user.getUsername() + "'");
 
             SQLConn.disconnect();
         }
