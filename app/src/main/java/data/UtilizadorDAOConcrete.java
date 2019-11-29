@@ -73,7 +73,6 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
             if(rs.next()){
                 return null;
             }
-            //stmt.executeUpdate("delete from Utilizador where Nome='" + obj.getUsername()+"'");
             String cmd = "insert into Utilizador (Nome,Password,Saldo) values('" + obj.getUsername() + "','" + obj.getPassword() +"','"+ obj.getMoney() +"')";
             stmt.executeUpdate(cmd);
 
@@ -86,6 +85,7 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
     @Override
     public Utilizador get(String id) {
         Utilizador u = null;
+        AtivoFinanceiro a;
         try{
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
@@ -93,7 +93,15 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
             ResultSet rs = stmt.executeQuery("select * from Utilizador where Nome='"+id+"'");
             if (rs.next()) {
                 u = new Utilizador(rs.getString("Nome"), rs.getString("Password"), rs.getDouble("Saldo"));
+
             }
+
+            ResultSet rs1 = stmt.executeQuery("select * from AtivosPreferidos inner join AtivoFinanceiro on AtivosPreferidos.AtivoFinanceiro=AtivoFinanceiro.Nome where Utilizador='"+u.getUsername()+"'");
+            while(rs1.next()){
+                a = new AtivoFinanceiro(rs.getString("Nome"),rs.getDouble("ValorUnit"),rs.getString("Type")) {};
+                u.addFavorito(a);
+            }
+
             SQLConn.disconnect();
         }
         catch (SQLException e) {e.printStackTrace();}
@@ -147,29 +155,6 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
             SQLConn.disconnect();
         }
         catch (SQLException e){e.printStackTrace();}
-    }
-
-    @Override
-    public List<AtivoFinanceiro> getPreferidos(Utilizador u){
-        List<AtivoFinanceiro> ativos = new LinkedList<>();
-        AtivoFinanceiro a;
-        try{
-            SQLConn.connect();
-            Connection conn = SQLConn.getConn();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from AtivosPreferidos inner join AtivoFinanceiro on AtivosPreferidos.AtivoFinanceiro=AtivoFinanceiro.Nome where Utilizador='"+u.getUsername()+"'");
-
-            while(rs.next()){
-                a = new AtivoFinanceiro(rs.getString("Nome"),rs.getDouble("ValorUnit"),rs.getString("Type")) {};
-                System.out.println(rs.getString("Nome"));
-                ativos.add(a);
-            }
-
-            SQLConn.disconnect();
-        }
-        catch (SQLException e){e.printStackTrace();}
-
-        return ativos;
     }
 
     public void setValorPref(Utilizador u,AtivoFinanceiro a,double val){
