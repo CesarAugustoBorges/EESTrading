@@ -18,7 +18,7 @@ public abstract class ViewMediator implements Observer {
 
     public abstract void changeView(String s);
 
-    public void start(){
+    public final void start(){
         trading.addObserver(this);
         changeView(currentView);
     }

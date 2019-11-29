@@ -46,7 +46,7 @@ public abstract class JSONAtivoFinanceiroScrapper implements AtivoFinanceiroScra
         this.running = running;
     }
 
-    public void start(){
+    public final void start(){
         new Thread(() -> {
             try{
                 setRunning(true);
