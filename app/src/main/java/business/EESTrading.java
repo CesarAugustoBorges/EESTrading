@@ -91,7 +91,7 @@ public class EESTrading extends Observable {
 	}
 
 	public void removeFavorito(Utilizador utilizador, AtivoFinanceiro ativoFinanceiro){
-		throw new UnsupportedOperationException();
+		utilizadorDAO.removePreferido(utilizador,ativoFinanceiro);
 	}
 
 	/**

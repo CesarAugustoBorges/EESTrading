@@ -28,4 +28,6 @@ public interface UtilizadorDAO extends DAO<String, Utilizador> {
 
 	void addPreferido(Utilizador u,AtivoFinanceiro a);
 
+	void removePreferido(Utilizador u,AtivoFinanceiro a);
+
 }

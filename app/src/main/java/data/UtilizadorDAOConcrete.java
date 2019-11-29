@@ -135,6 +135,21 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
     }
 
     @Override
+    public void removePreferido(Utilizador u, AtivoFinanceiro a){
+        try{
+            SQLConn.connect();
+            Connection conn = SQLConn.getConn();
+            Statement stmt = conn.createStatement();
+            String cmd = "delete from AtivosPreferidos where Utilizador ='" + u.getUsername() + "' and AtivoFinanceiro='" + a.getCompany() + "'";
+            System.out.println(cmd);
+            stmt.executeUpdate(cmd);
+
+            SQLConn.disconnect();
+        }
+        catch (SQLException e){e.printStackTrace();}
+    }
+
+    @Override
     public List<AtivoFinanceiro> getPreferidos(Utilizador u){
         List<AtivoFinanceiro> ativos = new LinkedList<>();
         AtivoFinanceiro a;
@@ -168,6 +183,21 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
             SQLConn.disconnect();
         }
         catch (SQLException e){e.printStackTrace();}
+    }
+
+    public static void main(String[] args) {
+        UtilizadorDAOConcrete uc = new UtilizadorDAOConcrete();
+        AtivoFincanceiroDAOConcrete ac = new AtivoFincanceiroDAOConcrete();
+        Petroleo p = new Petroleo("pet",20.0);
+        Utilizador u = new Utilizador("fabio","111",10000.0);
+
+        uc.put(u);
+        ac.put(p);
+
+        //uc.addPreferido(u,p);
+
+        uc.removePreferido(u,p);
+
     }
     
 }
