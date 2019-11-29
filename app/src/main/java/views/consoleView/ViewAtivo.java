@@ -7,13 +7,14 @@ import business.Utilizador;
 public class ViewAtivo extends ConsoleView {
     private AtivoFinanceiro ativoFinanceiro;
 
-    public ViewAtivo(EESTrading trading, Utilizador utilizador, AtivoFinanceiro ativoFinanceiro) {
-        super(trading, utilizador);
+    public ViewAtivo(EESTrading trading, Utilizador utilizador, ConsoleViewMediator mediator, AtivoFinanceiro ativoFinanceiro) {
+        super(trading, utilizador, mediator);
         this.ativoFinanceiro = ativoFinanceiro;
     }
 
+
     @Override
-    public String render() {
+    public void render() {
         System.out.println("0.Retroceder");
         System.out.println("1.Comprar");
         boolean isFavorito = utilizador.hasFavorito(ativoFinanceiro);
@@ -24,10 +25,12 @@ public class ViewAtivo extends ConsoleView {
         int option = getSelectedOption();
 
         switch (option){
-            case 0: return UTILIZADOR;
+            case 0:
+                mediator.changeView(UTILIZADOR);
+                break;
             case 1:
-                ConsoleViewMediator.setSelectedAtivo(ativoFinanceiro.getCompany());
-                return COMPRA_CFD;
+                mediator.changeView(COMPRA_CFD, ativoFinanceiro);
+                break;
             case 2:
                 if(isFavorito){
                     boolean yes = yesOrNoQuestion("Remover " + ativoFinanceiro.getCompany() + " dos favoritos?");
@@ -44,8 +47,9 @@ public class ViewAtivo extends ConsoleView {
                         trading.update(utilizador);
                     }
                 }
-                return ATIVOS_DISPONIVEIS;
-            default: return ATIVO_FINANCEIRO;
+                mediator.changeView(ATIVOS_DISPONIVEIS);
+                break;
+            default: render();
         }
     }
 }

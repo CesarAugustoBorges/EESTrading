@@ -32,12 +32,14 @@ public abstract class ConsoleView implements IView {
     protected EESTrading trading;
     protected Scanner scanner;
     protected Utilizador utilizador;
+    protected ConsoleViewMediator mediator;
     private volatile boolean updated = false;
 
-    public ConsoleView(EESTrading trading, Utilizador utilizador){
+    public ConsoleView(EESTrading trading, Utilizador utilizador, ConsoleViewMediator mediator){
         this.scanner = new Scanner(System.in);
         this.utilizador = utilizador;
         this.trading = trading;
+        this.mediator = mediator;
     }
 
     protected void layout(String title){
@@ -166,7 +168,7 @@ public abstract class ConsoleView implements IView {
         return ativoSelected;
     }
 
-    public abstract String render();
+    public abstract void render();
 
     public boolean isUpdated() {
         return updated;

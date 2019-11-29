@@ -8,7 +8,7 @@ import java.util.Observer;
 import java.util.Stack;
 
 public abstract class ViewMediator implements Observer {
-    private String currentView;
+    protected String currentView;
     protected EESTrading trading;
 
     public ViewMediator(EESTrading trading, String initialView){
@@ -16,13 +16,11 @@ public abstract class ViewMediator implements Observer {
         this.currentView = initialView;
     }
 
-    protected abstract IView getView(String s);
+    public abstract void changeView(String s);
 
     public void start(){
         trading.addObserver(this);
-        IView view = getView(currentView);
-        while (view != null)
-            view = getView(view.render());
+        changeView(currentView);
     }
 
     @Override

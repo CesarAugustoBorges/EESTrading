@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 
 public class ViewTransacoesAntigas extends ConsoleView {
     private List<CFDVendido> cfds;
-    public ViewTransacoesAntigas(EESTrading trading, Utilizador utilizador, List<CFDVendido> cfds) {
-        super(trading, utilizador);
+    public ViewTransacoesAntigas(EESTrading trading, Utilizador utilizador, ConsoleViewMediator mediator, List<CFDVendido> cfds) {
+        super(trading, utilizador, mediator);
         this.cfds = cfds;
         this.cfds.sort((cfd1, cfd2) -> {
             LocalDateTime d1 = cfd1.getDataVenda();
@@ -22,7 +22,7 @@ public class ViewTransacoesAntigas extends ConsoleView {
     }
 
     @Override
-    public String render() {
+    public void render() {
         layout("Transações antigas");
         double total = 0;
         double profit = 0;
@@ -53,6 +53,6 @@ public class ViewTransacoesAntigas extends ConsoleView {
                     optionSelected = true;
                 }
         }
-        return UTILIZADOR;
+        mediator.changeView(UTILIZADOR);
     }
 }

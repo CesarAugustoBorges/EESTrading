@@ -11,20 +11,23 @@ import java.util.regex.Pattern;
 public class ViewMeusCFDs extends ConsoleView {
     private List<CFD> cfds;
 
-    public ViewMeusCFDs(EESTrading trading, Utilizador utilizador, List<CFD> cfds) {
-        super(trading, utilizador);
+    public ViewMeusCFDs(EESTrading trading, Utilizador utilizador, ConsoleViewMediator mediator, List<CFD> cfds) {
+        super(trading, utilizador, mediator);
         this.cfds = cfds;
     }
 
     @Override
-    public String render() {
+    public void render() {
         layout("Meus CFDs");
         System.out.println("0.Retroceder");
         printPage(0, cfds);
 
         if(isUpdated()){
             boolean yes = yesOrNoQuestion("Alguns dos seus contratos foram atualizados\nQuer dar refresh?");
-            if(yes) return MEUS_CFDS;
+            if(yes){
+                mediator.changeView(MEUS_CFDS);
+                return ;
+            }
         }
 
         int option = 0;
@@ -46,14 +49,13 @@ public class ViewMeusCFDs extends ConsoleView {
         }
 
         if(option > 0 && option <= cfds.size()){
-            ConsoleViewMediator.setSelectedCFD(cfds.get(option-1).getId());
-            return CFD_POSSUIDO;
+            mediator.changeView(CFD_POSSUIDO, cfds.get(option-1));
         }else if(option == 0){
-            return UTILIZADOR;
+            mediator.changeView(UTILIZADOR);
         }
         else {
             System.out.println("Não existe esse CFD");
-            return MEUS_CFDS;
+            mediator.changeView(MEUS_CFDS);
         }
     }
 }

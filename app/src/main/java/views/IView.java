@@ -1,5 +1,5 @@
 package views;
 
 public interface IView {
-    String render();
+    void render();
 }

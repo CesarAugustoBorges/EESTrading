@@ -4,12 +4,12 @@ import business.EESTrading;
 import business.Utilizador;
 
 public class ViewRegistar extends ConsoleView {
-    public ViewRegistar(EESTrading trading, Utilizador utilizador) {
-        super(trading, utilizador);
+    public ViewRegistar(EESTrading trading, Utilizador utilizador, ConsoleViewMediator mediator) {
+        super(trading, utilizador, mediator);
     }
 
     @Override
-    public String render() {
+    public void render() {
         layout("Menu Inicial");
         System.out.print("Username: ");
         String username = scanner.next();
@@ -18,11 +18,11 @@ public class ViewRegistar extends ConsoleView {
         Utilizador util = trading.regist(username, password);
         if(util != null){
             utilizador.deconstruct(util);
-            return UTILIZADOR;
+            mediator.changeView(UTILIZADOR);
         }
         else{
             System.out.println("Não foi possivel registar o utilizador");
-            return INICIAL;
+            mediator.changeView(INICIAL);
         }
     }
 }

@@ -8,13 +8,13 @@ import business.Utilizador;
 public class ViewCompraCFD extends ConsoleView {
     private AtivoFinanceiro ativo;
 
-    public ViewCompraCFD(EESTrading trading, Utilizador utilizador, AtivoFinanceiro ativoFinanceiro) {
-        super(trading, utilizador);
+    public ViewCompraCFD(EESTrading trading, Utilizador utilizador,ConsoleViewMediator mediator, AtivoFinanceiro ativoFinanceiro) {
+        super(trading, utilizador , mediator);
         this.ativo = ativoFinanceiro;
     }
 
     @Override
-    public String render() {
+    public void render() {
         CFD cfd = new CFD();
         cfd.setUtilizador(utilizador);
         cfd.setAtivoFinanceiro(ativo);
@@ -43,7 +43,10 @@ public class ViewCompraCFD extends ConsoleView {
 
         if(isUpdated()){
             yes = yesOrNoQuestion("O valor atual do CFD foi alterado, quer dar refresh?");
-            if(yes) return COMPRA_CFD;
+            if(yes){
+                render();
+                return ;
+            }
         }
 
 
@@ -52,6 +55,6 @@ public class ViewCompraCFD extends ConsoleView {
         } else {
             printMessage("CFD not bought", '#');
         }
-        return UTILIZADOR;
+        mediator.changeView(UTILIZADOR);
     }
 }

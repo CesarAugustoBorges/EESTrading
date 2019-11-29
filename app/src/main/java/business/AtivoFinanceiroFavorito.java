@@ -13,8 +13,8 @@ public class AtivoFinanceiroFavorito extends AtivoFinanceiro {
     }
 
     public boolean reachedThreshold(double value){
-        return (valueToNotify >= getValue() && valueToNotify <= value) ||
-                (valueToNotify <= getValue() && valueToNotify >= value);
+        return (valueToNotify >= getValue() && valueToNotify < value) ||
+                (valueToNotify < getValue() && valueToNotify >= value);
     }
 
     @Override

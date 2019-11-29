@@ -12,13 +12,13 @@ import java.util.stream.Collectors;
 public class ViewAtivosDisponiveis extends ConsoleView {
     private List<AtivoFinanceiro> ativos;
 
-    public ViewAtivosDisponiveis(EESTrading trading, Utilizador utilizador, List<AtivoFinanceiro> ativoFinanceiros) {
-        super(trading, utilizador);
+    public ViewAtivosDisponiveis(EESTrading trading, Utilizador utilizador, ConsoleViewMediator mediator, List<AtivoFinanceiro> ativoFinanceiros) {
+        super(trading, utilizador, mediator);
         this.ativos = ativoFinanceiros;
     }
 
     @Override
-    public String render() {
+    public void render() {
         layout("Ativos Financeiros");
         System.out.println("0.Retroceder");
         System.out.println("1.Ver tudo (crypto moedas e ações)");
@@ -28,7 +28,9 @@ public class ViewAtivosDisponiveis extends ConsoleView {
 
         int option = getSelectedOption();
         switch (option){
-            case 0: return UTILIZADOR;
+            case 0:
+                mediator.changeView(UTILIZADOR);
+                return;
             case 1:
                 break;
             case 2:
@@ -42,15 +44,15 @@ public class ViewAtivosDisponiveis extends ConsoleView {
                 }).collect(Collectors.toList());
                 break;
             case 4:
-                String nextView = subMenuFiltrar();
-                if(nextView != null) return nextView;
+                subMenuFiltrar();
                 break;
             default:
                 System.out.println("Opção nao encontrada");
-                return ATIVOS_DISPONIVEIS;
+                render();
+                return;
 
         }
-        return subViewVerAtivos();
+        subViewVerAtivos();
     }
 
     private String subMenuFiltrar(){
@@ -90,7 +92,7 @@ public class ViewAtivosDisponiveis extends ConsoleView {
         return null;
     }
 
-    private String subViewVerAtivos(){
+    private void subViewVerAtivos(){
         printAtivos(0);
         boolean optionSelected = false;
         int ativoSelected = 0;
@@ -108,20 +110,20 @@ public class ViewAtivosDisponiveis extends ConsoleView {
                 }
             }
         }
-        if(ativoSelected == 0) return ATIVOS_DISPONIVEIS;
-        if(ativoSelected > 0 && ativoSelected <= ativos.size()) {
+        if(ativoSelected == 0){
+            mediator.changeView(ATIVOS_DISPONIVEIS);
+        }
+        else if(ativoSelected > 0 && ativoSelected <= ativos.size()) {
             if(isUpdated()){
                 boolean yes = yesOrNoQuestion("Alguns ativos financeiros foram atualizados, quer continuar?");
-                if(!yes) return subViewVerAtivos();
+                if(!yes) subViewVerAtivos();
             }
-
             AtivoFinanceiro ativoFinanceiro = ativos.get(ativoSelected -1);
-            ConsoleViewMediator.setSelectedAtivo(ativoFinanceiro.getCompany());
-            return ATIVO_FINANCEIRO;
+            mediator.changeView(ATIVO_FINANCEIRO, ativoFinanceiro);
         }
         else {
             System.out.println("ERROR: Escolha um ativo entre 1 - " + ativos.size());
-            return ATIVOS_DISPONIVEIS;
+            mediator.changeView(ATIVOS_DISPONIVEIS);
         }
     }
 

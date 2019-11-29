@@ -7,13 +7,13 @@ import business.Utilizador;
 public class ViewCFDPossuido extends ConsoleView {
     private CFD cfd;
 
-    public ViewCFDPossuido(EESTrading trading, Utilizador utilizador, CFD cfd ) {
-        super(trading, utilizador);
+    public ViewCFDPossuido(EESTrading trading, Utilizador utilizador, ConsoleViewMediator mediator,  CFD cfd ) {
+        super(trading, utilizador, mediator);
         this.cfd = cfd;
     }
 
     @Override
-    public String render() {
+    public void render() {
         layout(cfd.getName() + " - " + cfd.getValue() + "$");
         System.out.print("Top Profit: " + (cfd.getTopProfit() == null ? "--" : cfd.getTopProfit()));
         System.out.println(" Stop Loss: " + (cfd.getStopLoss() == null ? "--" : cfd.getStopLoss()));
@@ -25,17 +25,22 @@ public class ViewCFDPossuido extends ConsoleView {
         int option = getSelectedOption();
         if(isUpdated()){
             boolean yes = yesOrNoQuestion("O valor do CFD foi alterado, quer dar refresh?");
-            if(yes) return CFD_POSSUIDO;
+            if(yes){
+                render();
+                return;
+            }
         }
         switch (option){
             case 1:
                 trading.sell(cfd);
-                return MEUS_CFDS;
+                mediator.changeView(MEUS_CFDS);
+                return;
             case 2:
                 System.out.print("Introduza o Stop Loss: ");
                 double valor = getDouble();
                 if(trading.setCFDStopLoss(cfd, valor)){
-                    return CFD_POSSUIDO;
+                    mediator.changeView( CFD_POSSUIDO);
+                    return;
                 }else{
                     System.out.println("O stop loss tem de ser menor que o valor do CFD");
                     break;
@@ -44,16 +49,20 @@ public class ViewCFDPossuido extends ConsoleView {
                 System.out.print("Introduza o Top Profit: ");
                 double topProfit = getDouble();
                 if(trading.setCFDTopProfit(cfd, topProfit)){
-                    return CFD_POSSUIDO;
+                    mediator.changeView(CFD_POSSUIDO);
+                    return ;
                 }else{
                     System.out.println("O top profit tem de ser maior que o valor do CFD");
                     break;
                 }
-            case 4: return MEUS_CFDS;
+            case 4:
+                mediator.changeView(MEUS_CFDS);
+                return ;
             default:
                 System.out.println("Não é uma opção válida: " + option);
-                return CFD_POSSUIDO;
+                render();
+                return ;
         }
-        return MEUS_CFDS;
+        mediator.changeView(MEUS_CFDS);
     }
 }

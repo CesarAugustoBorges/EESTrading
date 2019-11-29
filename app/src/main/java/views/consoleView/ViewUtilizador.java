@@ -4,12 +4,12 @@ import business.EESTrading;
 import business.Utilizador;
 
 public class ViewUtilizador extends ConsoleView {
-    public ViewUtilizador(EESTrading trading, Utilizador utilizador) {
-        super(trading, utilizador);
+    public ViewUtilizador(EESTrading trading, Utilizador utilizador, ConsoleViewMediator mediator) {
+        super(trading, utilizador, mediator);
     }
 
     @Override
-    public String render() {
+    public void render() {
         layout("Olá " + utilizador.getUsername() + " - " + utilizador.getMoney() + "$");
         System.out.println("1.Comprar CFD");
         System.out.println("2.Ver portfolio");
@@ -21,18 +21,31 @@ public class ViewUtilizador extends ConsoleView {
 
         int option = getSelectedOption();
         switch (option){
-            case 1: return ATIVOS_DISPONIVEIS;
-            case 2: return MEUS_CFDS;
-            case 3: return TRANSACOES_ANTIGAS;
-            case 4: return FAVORITOS;
-            case 5: return DEPOSITAR;
-            case 6: return WITHDRAW;
+            case 1:
+                mediator.changeView(ATIVOS_DISPONIVEIS);
+                return ;
+            case 2:
+                mediator.changeView(MEUS_CFDS);
+                return ;
+            case 3:
+                mediator.changeView(TRANSACOES_ANTIGAS);
+                return ;
+            case 4:
+                mediator.changeView(FAVORITOS);
+                return ;
+            case 5:
+                mediator.changeView(DEPOSITAR);
+                return ;
+            case 6:
+                mediator.changeView(WITHDRAW);
+                return ;
             case 7:
                 this.utilizador = null;
-                return INICIAL;
+                mediator.changeView(INICIAL);
+                return ;
             default:
                 System.out.println("ERROR: Não é uma opção válida");
-                return UTILIZADOR;
+                render();
         }
     }
 }

@@ -12,90 +12,80 @@ public class ConsoleViewMediator extends ViewMediator {
         super(trading, view);
     }
 
-
-    public static void setSelectedCFD(int cfd) {
-        selectedCFD = cfd;
-    }
-
-    public static void setSelectedAtivo(String selectedAtiv) {
-        selectedAtivo = selectedAtiv;
-    }
-
-    private static int selectedCFD;
-    private static String selectedAtivo;
-
-
     private volatile Utilizador utilizador = new Utilizador("", "", 0);
     private ConsoleView lastiView;
-    private String lastViewString;
+
     private CFD lastCFD;
     private AtivoFinanceiro lastAtivo;
 
 
     @Override
-    protected IView getView(String viewId) {
-        if(viewId == null) return null;
-        lastViewString = viewId;
+    public void changeView(String viewId) {
+        if(viewId == null) return;
+        currentView = viewId;
         switch (viewId){
             case ConsoleView.INICIAL:
-                lastiView = new ViewInicial(trading, utilizador);
-                break;
-            case ConsoleView.ATIVOS_DISPONIVEIS:
-                lastiView = new ViewAtivosDisponiveis(trading, utilizador, trading.getAtivos());
-                break;
-            case ConsoleView.CFD_POSSUIDO:
-                lastCFD = trading.getCFD(selectedCFD);
-                lastiView = new ViewCFDPossuido(trading, utilizador, lastCFD );
-                break;
-            case ConsoleView.COMPRA_CFD:
-                lastAtivo = trading.getAtivo(selectedAtivo);
-                lastiView = new ViewCompraCFD(trading, utilizador, lastAtivo );
+                lastiView = new ViewInicial(trading, utilizador, this);
                 break;
             case ConsoleView.DEPOSITAR:
-                lastiView = new ViewDepositar(trading, utilizador);
+                lastiView = new ViewDepositar(trading, utilizador, this);
                 break;
-            case ConsoleView.LOGIN:
-                lastiView = new ViewLogin(trading, utilizador);
+            case ConsoleView.ATIVOS_DISPONIVEIS:
+                lastiView = new ViewAtivosDisponiveis(trading, utilizador, this, trading.getAtivos());
                 break;
             case ConsoleView.MEUS_CFDS:
-                lastiView = new ViewMeusCFDs(trading, utilizador ,trading.getPortfolio(utilizador));
-                break;
-            case ConsoleView.REGISTAR:
-                lastiView = new ViewRegistar(trading, utilizador);
+                lastiView = new ViewMeusCFDs(trading, utilizador, this ,trading.getPortfolio(utilizador));
                 break;
             case ConsoleView.TRANSACOES_ANTIGAS:
-                lastiView = new ViewTransacoesAntigas(trading, utilizador, trading.getTransacoesAntigas(utilizador));
+                lastiView = new ViewTransacoesAntigas(trading, utilizador, this, trading.getTransacoesAntigas(utilizador));
+                break;
+            case ConsoleView.LOGIN:
+                lastiView = new ViewLogin(trading, utilizador, this);
+                break;
+            case ConsoleView.REGISTAR:
+                lastiView = new ViewRegistar(trading, utilizador, this);
                 break;
             case ConsoleView.UTILIZADOR:
-                lastiView = new ViewUtilizador(trading, utilizador);
+                lastiView = new ViewUtilizador(trading, utilizador, this);
                 break;
             case ConsoleView.WITHDRAW:
-                lastiView = new ViewWithdraw(trading, utilizador);
+                lastiView = new ViewWithdraw(trading, utilizador, this);
                 break;
             case ConsoleView.FAVORITOS:
-                lastiView = new ViewFavoritos(trading, utilizador);
+                lastiView = new ViewFavoritos(trading, utilizador, this);
                 break;
-            case ConsoleView.ATIVO_FINANCEIRO:
-                lastAtivo = trading.getAtivo(selectedAtivo);
-                lastiView = new ViewAtivo(trading, utilizador, lastAtivo);
-                break;
-            default: System.out.println("ERROR: No view with name " + viewId + "was found !!! Exiting..." ); return null;
+            default: System.out.println("ERROR: No view with name " + viewId + "was found !!! Exiting..." );
         }
-        //clearConsole();
-        return lastiView;
+        lastiView.render();
     }
 
-    private void clearConsole(){
-        String os = System.getProperty("os.name");
-        if(os.toUpperCase().contains("WINDOWS")){
-            String[] cls = new String[] {"cmd.exe", "/c", "cls"};
-            ProcessBuilder builder = new ProcessBuilder(cls);
-            builder.inheritIO();
-            try{
-                builder.start().waitFor();
-            } catch (Exception e){ }
+    public void changeView(String viewId, CFD cfd) {
+        cfd = trading.getCFD(cfd.getId());
+        this.lastCFD = cfd;
+        switch (viewId){
+            case ConsoleView.CFD_POSSUIDO:
+                lastiView = new ViewCFDPossuido(trading, utilizador, this, cfd );
+                break;
+            default: System.out.println("ERROR: No view with name " + viewId + "was found !!! Exiting..." );
         }
+        lastiView.render();
     }
+
+    public void changeView(String viewId, AtivoFinanceiro ativoFinanceiro) {
+        ativoFinanceiro = trading.getAtivo(ativoFinanceiro.getCompany());
+        this.lastAtivo = ativoFinanceiro;
+        switch (viewId){
+            case ConsoleView.COMPRA_CFD:
+                lastiView = new ViewCompraCFD(trading, utilizador,this,  ativoFinanceiro );
+                break;
+            case ConsoleView.ATIVO_FINANCEIRO:
+                lastiView = new ViewAtivo(trading, utilizador, this, ativoFinanceiro);
+                break;
+            default: System.out.println("ERROR: No view with name " + viewId + "was found !!! Exiting..." );
+        }
+        lastiView.render();
+    }
+
 
     @Override
     public synchronized void update(Observable o, Object arg) {
@@ -110,7 +100,7 @@ public class ConsoleViewMediator extends ViewMediator {
                             System.out.println(a + " passou o treshold " + favorito.getValueToNotify());
                         }
                     }
-                switch (lastViewString){
+                switch (currentView){
                     case ConsoleView.ATIVOS_DISPONIVEIS:
                         lastiView.setUpdated(true);
                         break;

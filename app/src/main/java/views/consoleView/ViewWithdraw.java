@@ -4,12 +4,12 @@ import business.EESTrading;
 import business.Utilizador;
 
 public class ViewWithdraw extends ConsoleView {
-    public ViewWithdraw(EESTrading trading, Utilizador utilizador) {
-        super(trading, utilizador);
+    public ViewWithdraw(EESTrading trading, Utilizador utilizador, ConsoleViewMediator mediator) {
+        super(trading, utilizador, mediator);
     }
 
     @Override
-    public String render() {
+    public void render() {
         layout("Withdraw - " + utilizador.getMoney() + "$");
         System.out.print("Inserir dinheiro: ");
         double valor = getDouble();
@@ -18,6 +18,6 @@ public class ViewWithdraw extends ConsoleView {
         } else {
             System.out.println("ERROR: Não possui essa quantidade");
         }
-        return UTILIZADOR;
+        mediator.changeView(UTILIZADOR);
     }
 }

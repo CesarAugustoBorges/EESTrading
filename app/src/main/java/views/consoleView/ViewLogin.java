@@ -4,12 +4,12 @@ import business.EESTrading;
 import business.Utilizador;
 
 public class ViewLogin extends ConsoleView {
-    public ViewLogin(EESTrading trading, Utilizador utilizador) {
-        super(trading, utilizador);
+    public ViewLogin(EESTrading trading, Utilizador utilizador, ConsoleViewMediator mediator) {
+        super(trading, utilizador, mediator);
     }
 
     @Override
-    public String render() {
+    public void render() {
         layout("Login");
         System.out.print("Username: ");
         String username = scanner.next();
@@ -18,11 +18,11 @@ public class ViewLogin extends ConsoleView {
         Utilizador user = trading.login(username, password);
         if(user != null){
             utilizador.deconstruct(user);
-            return UTILIZADOR;
+            mediator.changeView(UTILIZADOR);
         }
         else{
             System.out.println("Credenciais incorretas");
-            return INICIAL;
+            mediator.changeView(INICIAL);
         }
     }
 }
