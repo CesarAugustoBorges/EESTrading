@@ -61,6 +61,7 @@ public class Utilizador {
 		this.username = utilizador.getUsername();
 		this.password = utilizador.password;
 		this.money = utilizador.getMoney();
+		this.favoritos = utilizador.getFavoritos();
 	}
 
 

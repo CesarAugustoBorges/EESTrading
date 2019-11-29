@@ -73,7 +73,7 @@ public class ConsoleViewMediator extends ViewMediator {
                 lastiView = new ViewWithdraw(trading, utilizador);
                 break;
             case ConsoleView.FAVORITOS:
-                lastiView = new ViewFavoritos(trading, utilizador, trading.getAtivosPreferidos(utilizador));
+                lastiView = new ViewFavoritos(trading, utilizador);
                 break;
             default: System.out.println("ERROR: No view with name " + viewId + "was found !!! Exiting..." ); return null;
         }
@@ -139,7 +139,7 @@ public class ConsoleViewMediator extends ViewMediator {
             }
             if(arg instanceof AtivoFinanceiro){
                 AtivoFinanceiro ativoFinanceiro = (AtivoFinanceiro) arg;
-                if(trading.getFavoritos(utilizador).contains(arg))//(utilizador.hasFavorito(ativoFinanceiro))
+                if(utilizador.hasFavorito(ativoFinanceiro))
                     System.out.println("O ativo financeiro " + ativoFinanceiro.getCompany() + " sofreu uma alteração significativa");
             }
         }

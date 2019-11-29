@@ -24,8 +24,4 @@ public interface UtilizadorDAO extends DAO<String, Utilizador> {
 
 	boolean login(String username, String password);
 
-	void addPreferido(Utilizador u,AtivoFinanceiro a);
-
-	void removePreferido(Utilizador u,AtivoFinanceiro a);
-
 }

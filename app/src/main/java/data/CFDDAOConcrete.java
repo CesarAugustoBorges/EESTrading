@@ -33,10 +33,13 @@ public class CFDDAOConcrete implements CFDDAO {
                // uDAO.addMoney(u,value);
             }*/
             //delete(cfd.getId());
-            SQLConn.disconnect();
+
 
         }
         catch (SQLException e){e.printStackTrace();}
+        finally {
+            SQLConn.disconnect();
+        }
         return value;
     }
 
@@ -69,10 +72,11 @@ public class CFDDAOConcrete implements CFDDAO {
                 CFDs.add(cfd);
             }
 
-            SQLConn.disconnect();
-
         }
         catch (SQLException e){e.printStackTrace();}
+        finally {
+            SQLConn.disconnect();
+        }
         return CFDs;
     }
 
@@ -91,10 +95,11 @@ public class CFDDAOConcrete implements CFDDAO {
 
             i=stmt.executeUpdate(cmd);
 
-            SQLConn.disconnect();
-
         }
         catch (SQLException e){e.printStackTrace();}
+        finally {
+            SQLConn.disconnect();
+        }
         return i;
     }
 
@@ -148,9 +153,11 @@ public class CFDDAOConcrete implements CFDDAO {
                         rs.getDouble("ValorVenda"));
                 portfolioList.add(cfdVendido);
             }
-            SQLConn.disconnect();
         }
         catch (SQLException e){e.printStackTrace();}
+        finally {
+            SQLConn.disconnect();
+        }
 
         return portfolioList;
     }
@@ -173,9 +180,11 @@ public class CFDDAOConcrete implements CFDDAO {
                         rs.getInt("Id"), u, a,rs.getTimestamp("DataCompra").toLocalDateTime());
                 portfolioList.add(cfd);
             }
-            SQLConn.disconnect();
         }
         catch (SQLException e){e.printStackTrace();}
+        finally {
+            SQLConn.disconnect();
+        }
 
         return portfolioList;
     }
@@ -190,9 +199,11 @@ public class CFDDAOConcrete implements CFDDAO {
 
             stmt.executeUpdate("Insert into CFDVendido (Id) values(" + id + ")");
 
-            SQLConn.disconnect();
         }
         catch (SQLException e){e.printStackTrace();}
+        finally {
+            SQLConn.disconnect();
+        }
     }
 
     @Override

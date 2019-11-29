@@ -12,9 +12,9 @@ public class ViewFavoritos extends ConsoleView {
     private List<AtivoFinanceiro> favoritos;
 
 
-    public ViewFavoritos(EESTrading trading, Utilizador utilizador, List<AtivoFinanceiro> favoritos) {
+    public ViewFavoritos(EESTrading trading, Utilizador utilizador) {
         super(trading, utilizador);
-        this.favoritos = favoritos;
+        this.favoritos = utilizador.getFavoritos();
     }
 
     @Override
@@ -29,7 +29,8 @@ public class ViewFavoritos extends ConsoleView {
 
         boolean yes = yesOrNoQuestion("Quer remover " + favoritos.get(option-1).getCompany() + " dos favoritos?");
         if(yes){
-            trading.removeFavorito(utilizador, favoritos.get(option-1));
+            utilizador.removeFavorito(favoritos.get(option-1));
+            trading.update(utilizador);
         }
         return FAVORITOS;
     }

@@ -127,7 +127,7 @@ public class ViewAtivosDisponiveis extends ConsoleView {
     private String subsubViewAtivoOptions(AtivoFinanceiro ativoFinanceiro){
         System.out.println("0.Retroceder");
         System.out.println("1.Comprar");
-        boolean isFavorito = trading.isFavorito(utilizador, ativoFinanceiro);
+        boolean isFavorito = utilizador.hasFavorito(ativoFinanceiro);
         if(isFavorito)
             System.out.println("2.Remover dos favoritos");
         else System.out.println("2.Adicionar a favoritos");
@@ -142,10 +142,16 @@ public class ViewAtivosDisponiveis extends ConsoleView {
             case 2:
                 if(isFavorito){
                     boolean yes = yesOrNoQuestion("Remover " + ativoFinanceiro.getCompany() + " dos favoritos?");
-                    if (yes) trading.removeFavorito(utilizador, ativoFinanceiro);
+                    if (yes){
+                        utilizador.removeFavorito(ativoFinanceiro);
+                        trading.update(utilizador);
+                    }
                 }else {
                     boolean yes = yesOrNoQuestion("Adicionar " + ativoFinanceiro.getCompany() + " aos favoritos?");
-                    if (yes) trading.addFavorito(utilizador, ativoFinanceiro);
+                    if (yes) {
+                        utilizador.addFavorito(ativoFinanceiro);
+                        trading.update(utilizador);
+                    }
                 }
                 return ATIVOS_DISPONIVEIS;
             default: return subsubViewAtivoOptions(ativoFinanceiro);

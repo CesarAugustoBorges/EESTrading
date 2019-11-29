@@ -51,11 +51,11 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
                 stmt.executeUpdate(cmd);
 
             }
-            SQLConn.disconnect();
-
         }
         catch (SQLException e){
             e.printStackTrace();
+        }finally {
+            SQLConn.disconnect();
         }
         return obj.getCompany();
     }
@@ -70,9 +70,12 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
 
             stmt.executeUpdate("delete from AtivoFinanceiro where Nome='" + id +"'");
 
-            SQLConn.disconnect();
+
         }
         catch (SQLException e){e.printStackTrace();}
+        finally {
+            SQLConn.disconnect();
+        }
     }
 
     @Override
@@ -95,9 +98,12 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
                 a = new AtivoFinanceiro(rs.getString("Nome"),rs.getDouble("ValorUnit"),rs.getString("Type")) {};
                 ativos.add(a);
             }
-            SQLConn.disconnect();
+
         }
         catch (SQLException e ){e.printStackTrace();}
+        finally {
+            SQLConn.disconnect();
+        }
         return ativos;
     }
 
@@ -116,9 +122,11 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
                 cfd = cfddao.get(rs.getInt("Id"));
                 cfds.add(cfd);
             }
-            SQLConn.disconnect();
         }
         catch (SQLException e ){e.printStackTrace();}
+        finally {
+            SQLConn.disconnect();
+        }
         return cfds;
     }
 

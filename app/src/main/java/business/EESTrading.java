@@ -7,7 +7,6 @@ import data.UtilizadorDAO;
 
 import java.util.List;
 import java.util.Observable;
-import java.util.function.Function;
 
 public class EESTrading extends Observable {
 	private static EESTrading trading = new EESTrading();
@@ -48,7 +47,7 @@ public class EESTrading extends Observable {
 	public synchronized void putAtivosFinanceiros(List<AtivoFinanceiro> ativoFinanceiros){
 		ativoFinanceiros.forEach(novo -> {
 			AtivoFinanceiro old = ativoFinanceiroDAO.get(novo.getCompany());
-			if(Math.abs(novo.getUpdateValue(old.getValue())) > 0.02){
+			if(old != null && Math.abs(novo.getUpdateValue(old.getValue())) > 0.02){
 				setChanged();
 				notifyObservers(novo);
 			}
@@ -76,22 +75,10 @@ public class EESTrading extends Observable {
 		}
 	}
 
-
-	public boolean isFavorito(Utilizador utilizador, AtivoFinanceiro ativoFinanceiro){
-		List<AtivoFinanceiro> favoritos = getFavoritos(utilizador);
-		return favoritos.contains(ativoFinanceiro);
-	}
-
-	public List<AtivoFinanceiro> getFavoritos(Utilizador utilizador){
-		return utilizadorDAO.getPreferidos(utilizador);
-	}
-
-	public void addFavorito(Utilizador utilizador, AtivoFinanceiro ativoFinanceiro){
-		utilizadorDAO.addPreferido(utilizador, ativoFinanceiro);
-	}
-
-	public void removeFavorito(Utilizador utilizador, AtivoFinanceiro ativoFinanceiro){
-		utilizadorDAO.removePreferido(utilizador,ativoFinanceiro);
+	public void update(Utilizador utilizador){
+		utilizadorDAO.replace(utilizador.getUsername(), utilizador);
+		setChanged();
+		notifyObservers();
 	}
 
 	/**
@@ -101,7 +88,8 @@ public class EESTrading extends Observable {
 	 */
 	public Utilizador login(String user, String pass) {
 		if(utilizadorDAO.login(user, pass)){
-			return utilizadorDAO.get(user);
+			Utilizador utilizador = utilizadorDAO.get(user);
+			return utilizador;
 		}
 		return null;
 	}
@@ -198,7 +186,5 @@ public class EESTrading extends Observable {
 	public List<CFDVendido> getTransacoesAntigas(Utilizador utilizador){
 		return  cfdDAO.getVendidos(utilizador);
 	}
-
-	public List<AtivoFinanceiro> getAtivosPreferidos(Utilizador utilizador) {return utilizadorDAO.getPreferidos(utilizador);}
 
 }
