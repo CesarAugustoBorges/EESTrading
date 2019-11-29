@@ -38,6 +38,10 @@ public abstract class AtivoFinanceiro {
 		return type;
 	}
 
+	public double getUpdateValue(double value){
+		return Math.floor(((getValue() - value) / getValue()) * 100) / 100;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == this) return true;

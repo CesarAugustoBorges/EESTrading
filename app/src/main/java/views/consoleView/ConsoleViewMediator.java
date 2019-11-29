@@ -72,6 +72,9 @@ public class ConsoleViewMediator extends ViewMediator {
             case ConsoleView.WITHDRAW:
                 lastiView = new ViewWithdraw(trading, utilizador);
                 break;
+            case ConsoleView.FAVORITOS:
+                lastiView = new ViewFavoritos(trading, utilizador, trading.getAtivosPreferidos(utilizador));
+                break;
             default: System.out.println("ERROR: No view with name " + viewId + "was found !!! Exiting..." ); return null;
         }
         //clearConsole();
@@ -129,10 +132,18 @@ public class ConsoleViewMediator extends ViewMediator {
                 }
             }
         }
-        if(arg instanceof CFDVendido && utilizador != null && ! utilizador.getUsername().equals("")){
-            CFDVendido cfdVendido = (CFDVendido) arg;
-            System.out.println(cfdVendido + "foi vendido (atingiu treshold)");
+        if(utilizador != null && ! utilizador.getUsername().equals("")){
+            if(arg instanceof CFDVendido){
+                CFDVendido cfdVendido = (CFDVendido) arg;
+                System.out.println(cfdVendido + "foi vendido (atingiu treshold)");
+            }
+            if(arg instanceof AtivoFinanceiro){
+                AtivoFinanceiro ativoFinanceiro = (AtivoFinanceiro) arg;
+                if(trading.getFavoritos(utilizador).contains(arg))//(utilizador.hasFavorito(ativoFinanceiro))
+                    System.out.println("O ativo financeiro " + ativoFinanceiro.getCompany() + " sofreu uma alteração significativa");
+            }
         }
+
         Utilizador util = trading.login(utilizador.getUsername(), utilizador.getPassword());
         if(util != null){
             utilizador.deconstruct(util);

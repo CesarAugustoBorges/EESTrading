@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 public class ViewAtivosDisponiveis extends ConsoleView {
     private List<AtivoFinanceiro> ativos;
+
     public ViewAtivosDisponiveis(EESTrading trading, Utilizador utilizador, List<AtivoFinanceiro> ativoFinanceiros) {
         super(trading, utilizador);
         this.ativos = ativoFinanceiros;
@@ -114,12 +115,40 @@ public class ViewAtivosDisponiveis extends ConsoleView {
                 if(!yes) return subViewVerAtivos();
             }
 
-            ConsoleViewMediator.setSelectedAtivo(ativos.get(ativoSelected - 1).getCompany());
-            return COMPRA_CFD;
+            AtivoFinanceiro ativoFinanceiro = ativos.get(ativoSelected -1);
+            return subsubViewAtivoOptions(ativoFinanceiro);
         }
         else {
             System.out.println("ERROR: Escolha um ativo entre 1 - " + ativos.size());
             return ATIVOS_DISPONIVEIS;
+        }
+    }
+
+    private String subsubViewAtivoOptions(AtivoFinanceiro ativoFinanceiro){
+        System.out.println("0.Retroceder");
+        System.out.println("1.Comprar");
+        boolean isFavorito = trading.isFavorito(utilizador, ativoFinanceiro);
+        if(isFavorito)
+            System.out.println("2.Remover dos favoritos");
+        else System.out.println("2.Adicionar a favoritos");
+
+        int option = getSelectedOption();
+
+        switch (option){
+            case 0: return ATIVOS_DISPONIVEIS;
+            case 1:
+                ConsoleViewMediator.setSelectedAtivo(ativoFinanceiro.getCompany());
+                return COMPRA_CFD;
+            case 2:
+                if(isFavorito){
+                    boolean yes = yesOrNoQuestion("Remover " + ativoFinanceiro.getCompany() + " dos favoritos?");
+                    if (yes) trading.removeFavorito(utilizador, ativoFinanceiro);
+                }else {
+                    boolean yes = yesOrNoQuestion("Adicionar " + ativoFinanceiro.getCompany() + " aos favoritos?");
+                    if (yes) trading.addFavorito(utilizador, ativoFinanceiro);
+                }
+                return ATIVOS_DISPONIVEIS;
+            default: return subsubViewAtivoOptions(ativoFinanceiro);
         }
     }
 

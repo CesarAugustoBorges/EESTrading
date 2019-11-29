@@ -1,15 +1,20 @@
 package business;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Utilizador {
 
 	private String username;
 	private String password;
 	private double money;
+	private List<AtivoFinanceiro> favoritos;
 
 	public Utilizador(String username, String password,double money){
 		this.username = username;
 		this.password = password;
 		this.money = money;
+		this.favoritos = new LinkedList<>();
 	}
 
 	public String getUsername() {
@@ -34,6 +39,22 @@ public class Utilizador {
 
 	public void setMoney(double money) {
 		this.money = money;
+	}
+
+	public void addFavorito(AtivoFinanceiro ativoFinanceiro){
+		this.favoritos.add(ativoFinanceiro);
+	}
+
+	public List<AtivoFinanceiro> getFavoritos(){
+		return this.favoritos;
+	}
+
+	public boolean hasFavorito(AtivoFinanceiro ativoFinanceiro){
+		return this.favoritos.contains(ativoFinanceiro);
+	}
+
+	public void removeFavorito(AtivoFinanceiro ativoFinanceiro){
+		this.favoritos.remove(ativoFinanceiro);
 	}
 
 	public void deconstruct(Utilizador utilizador){

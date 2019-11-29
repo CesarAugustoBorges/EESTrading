@@ -9,6 +9,8 @@ import views.IView;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class ConsoleView implements IView {
     public static final String ATIVOS_DISPONIVEIS = "ativosDisponiveis";
@@ -22,6 +24,7 @@ public abstract class ConsoleView implements IView {
     public static final String TRANSACOES_ANTIGAS = "transacoesAntigas";
     public static final String UTILIZADOR = "utilizador";
     public static final String WITHDRAW = "withdraw";
+    public static final String FAVORITOS = "favoritos";
     public static final String EXIT = null;
 
 
@@ -142,6 +145,25 @@ public abstract class ConsoleView implements IView {
         printMessage("Use \":page <numero>\" para mudar de página", '#');
     }
 
+    protected int getOptionInPage(List<? extends Object> list){
+        int ativoSelected = 0;
+        boolean optionSelected = false;
+        while (!optionSelected){
+            String input = scanner.nextLine();
+            if(input.matches("[0-9]+")){
+                ativoSelected = Integer.parseInt(input);
+                optionSelected = true;
+            } else if(input.matches("[ ]*:[ ]*page[ ]+[0-9]+[ ]*")){
+                Pattern pattern = Pattern.compile("[ ]*:[ ]*page[ ]+([0-9]+)[ ]*");
+                Matcher matcher = pattern.matcher(input);
+                if(matcher.find()) {
+                    int pageNumber = Integer.parseInt(matcher.group(1));
+                    printPage(0, list);
+                }
+            }
+        }
+        return ativoSelected;
+    }
 
     public abstract String render();
 

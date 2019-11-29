@@ -47,6 +47,11 @@ public class EESTrading extends Observable {
 
 	public synchronized void putAtivosFinanceiros(List<AtivoFinanceiro> ativoFinanceiros){
 		ativoFinanceiros.forEach(novo -> {
+			AtivoFinanceiro old = ativoFinanceiroDAO.get(novo.getCompany());
+			if(Math.abs(novo.getUpdateValue(old.getValue())) > 0.02){
+				setChanged();
+				notifyObservers(novo);
+			}
 			ativoFinanceiroDAO.replace(novo.getCompany(), novo);
 			List<CFD> cfds = ativoFinanceiroDAO.getCFDs(novo);
 			cfds.forEach(this::applyThresholds);
@@ -72,12 +77,21 @@ public class EESTrading extends Observable {
 	}
 
 
-	/**
-	 *
-	 * @param user
-	 */
-	public List<CFD> getCFDsOfUser(Utilizador user) {
-		return cfdDAO.get(user);
+	public boolean isFavorito(Utilizador utilizador, AtivoFinanceiro ativoFinanceiro){
+		List<AtivoFinanceiro> favoritos = getFavoritos(utilizador);
+		return favoritos.contains(ativoFinanceiro);
+	}
+
+	public List<AtivoFinanceiro> getFavoritos(Utilizador utilizador){
+		return utilizadorDAO.getPreferidos(utilizador);
+	}
+
+	public void addFavorito(Utilizador utilizador, AtivoFinanceiro ativoFinanceiro){
+		utilizadorDAO.addPreferido(utilizador, ativoFinanceiro);
+	}
+
+	public void removeFavorito(Utilizador utilizador, AtivoFinanceiro ativoFinanceiro){
+		throw new UnsupportedOperationException();
 	}
 
 	/**

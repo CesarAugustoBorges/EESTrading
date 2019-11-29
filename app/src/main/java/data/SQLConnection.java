@@ -20,7 +20,7 @@ public class SQLConnection implements DBConnection{
 
 	public void connect() {
 		try{
-			this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/tradingplatform?useTimezone=true&serverTimezone=UTC","root","");
+			this.conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/tradingplatform?useTimezone=true&serverTimezone=UTC","root","1234");
 		}
 		catch (SQLException e){
 			e.printStackTrace(); System.out.println("Não conseguiu conectar!");}
