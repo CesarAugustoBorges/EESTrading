@@ -46,11 +46,6 @@ public class EESTrading extends Observable {
 
 	public synchronized void putAtivosFinanceiros(List<AtivoFinanceiro> ativoFinanceiros){
 		ativoFinanceiros.forEach(novo -> {
-			AtivoFinanceiro old = ativoFinanceiroDAO.get(novo.getCompany());
-			if(old != null && Math.abs(novo.getUpdateValue(old.getValue())) > 0.02){
-				setChanged();
-				notifyObservers(novo);
-			}
 			ativoFinanceiroDAO.replace(novo.getCompany(), novo);
 			List<CFD> cfds = ativoFinanceiroDAO.getCFDs(novo);
 			cfds.forEach(this::applyThresholds);

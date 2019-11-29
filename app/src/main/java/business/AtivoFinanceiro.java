@@ -18,6 +18,10 @@ public abstract class AtivoFinanceiro {
 		this.value=0;
 	}
 
+	public AtivoFinanceiro(AtivoFinanceiro a){
+		this(a.getCompany(), a.getValue(), a.getType());
+	}
+
 	public String getCompany() {
 		return company;
 	}

@@ -8,7 +8,7 @@ public class Utilizador {
 	private String username;
 	private String password;
 	private double money;
-	private List<AtivoFinanceiro> favoritos;
+	private List<AtivoFinanceiroFavorito> favoritos;
 
 	public Utilizador(String username, String password,double money){
 		this.username = username;
@@ -41,11 +41,20 @@ public class Utilizador {
 		this.money = money;
 	}
 
-	public void addFavorito(AtivoFinanceiro ativoFinanceiro){
-		this.favoritos.add(ativoFinanceiro);
+	public void addFavorito(AtivoFinanceiro ativoFinanceiro, double value){
+		this.favoritos.add(new AtivoFinanceiroFavorito(ativoFinanceiro, value));
 	}
 
-	public List<AtivoFinanceiro> getFavoritos(){
+	public AtivoFinanceiroFavorito getFavorito(AtivoFinanceiro ativoFinanceiro){
+		for(AtivoFinanceiroFavorito favorito : favoritos){
+			if(favorito.equals(ativoFinanceiro)){
+				return favorito;
+			}
+		}
+		return null;
+	}
+
+	public List<AtivoFinanceiroFavorito> getFavoritos(){
 		return this.favoritos;
 	}
 

@@ -116,7 +116,8 @@ public class ViewAtivosDisponiveis extends ConsoleView {
             }
 
             AtivoFinanceiro ativoFinanceiro = ativos.get(ativoSelected -1);
-            return subsubViewAtivoOptions(ativoFinanceiro);
+            ConsoleViewMediator.setSelectedAtivo(ativoFinanceiro.getCompany());
+            return ATIVO_FINANCEIRO;
         }
         else {
             System.out.println("ERROR: Escolha um ativo entre 1 - " + ativos.size());
@@ -124,39 +125,6 @@ public class ViewAtivosDisponiveis extends ConsoleView {
         }
     }
 
-    private String subsubViewAtivoOptions(AtivoFinanceiro ativoFinanceiro){
-        System.out.println("0.Retroceder");
-        System.out.println("1.Comprar");
-        boolean isFavorito = utilizador.hasFavorito(ativoFinanceiro);
-        if(isFavorito)
-            System.out.println("2.Remover dos favoritos");
-        else System.out.println("2.Adicionar a favoritos");
-
-        int option = getSelectedOption();
-
-        switch (option){
-            case 0: return ATIVOS_DISPONIVEIS;
-            case 1:
-                ConsoleViewMediator.setSelectedAtivo(ativoFinanceiro.getCompany());
-                return COMPRA_CFD;
-            case 2:
-                if(isFavorito){
-                    boolean yes = yesOrNoQuestion("Remover " + ativoFinanceiro.getCompany() + " dos favoritos?");
-                    if (yes){
-                        utilizador.removeFavorito(ativoFinanceiro);
-                        trading.update(utilizador);
-                    }
-                }else {
-                    boolean yes = yesOrNoQuestion("Adicionar " + ativoFinanceiro.getCompany() + " aos favoritos?");
-                    if (yes) {
-                        utilizador.addFavorito(ativoFinanceiro);
-                        trading.update(utilizador);
-                    }
-                }
-                return ATIVOS_DISPONIVEIS;
-            default: return subsubViewAtivoOptions(ativoFinanceiro);
-        }
-    }
 
     private void printAtivos(int page){
         layout(utilizador.getUsername() + " $: " + utilizador.getMoney());

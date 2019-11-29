@@ -75,6 +75,10 @@ public class ConsoleViewMediator extends ViewMediator {
             case ConsoleView.FAVORITOS:
                 lastiView = new ViewFavoritos(trading, utilizador);
                 break;
+            case ConsoleView.ATIVO_FINANCEIRO:
+                lastAtivo = trading.getAtivo(selectedAtivo);
+                lastiView = new ViewAtivo(trading, utilizador, lastAtivo);
+                break;
             default: System.out.println("ERROR: No view with name " + viewId + "was found !!! Exiting..." ); return null;
         }
         //clearConsole();
@@ -99,6 +103,13 @@ public class ConsoleViewMediator extends ViewMediator {
             List list = (List) arg;
             if(list.size() > 0 && list.get(0) instanceof AtivoFinanceiro){
                 List<AtivoFinanceiro> ativos = (List<AtivoFinanceiro>) list;
+                for(AtivoFinanceiro a: ativos)
+                    if(utilizador.getFavoritos().contains(a)){
+                        AtivoFinanceiroFavorito favorito = utilizador.getFavorito(a);
+                        if(favorito.reachedThreshold(a.getValue())){
+                            System.out.println(a + " passou o treshold " + favorito.getValueToNotify());
+                        }
+                    }
                 switch (lastViewString){
                     case ConsoleView.ATIVOS_DISPONIVEIS:
                         lastiView.setUpdated(true);

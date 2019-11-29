@@ -1,15 +1,15 @@
 package views.consoleView;
 
 import business.AtivoFinanceiro;
+import business.AtivoFinanceiroFavorito;
 import business.EESTrading;
 import business.Utilizador;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 public class ViewFavoritos extends ConsoleView {
-    private List<AtivoFinanceiro> favoritos;
+    private List<AtivoFinanceiroFavorito> favoritos;
 
 
     public ViewFavoritos(EESTrading trading, Utilizador utilizador) {
@@ -26,12 +26,7 @@ public class ViewFavoritos extends ConsoleView {
             option = getOptionInPage(favoritos);
         }
         if(option == 0) return UTILIZADOR;
-
-        boolean yes = yesOrNoQuestion("Quer remover " + favoritos.get(option-1).getCompany() + " dos favoritos?");
-        if(yes){
-            utilizador.removeFavorito(favoritos.get(option-1));
-            trading.update(utilizador);
-        }
-        return FAVORITOS;
+        ConsoleViewMediator.setSelectedAtivo(favoritos.get(option-1).getCompany());
+        return ATIVO_FINANCEIRO;
     }
 }

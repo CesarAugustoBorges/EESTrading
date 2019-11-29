@@ -1,9 +1,6 @@
 package data;
 
-import business.AtivoFinanceiro;
-import business.CFD;
-import business.Petroleo;
-import business.Utilizador;
+import business.*;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -103,7 +100,7 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
                 AtivoFinanceiro ativoFinanceiro = new AtivoFinanceiro(rs1.getString("Nome"),rs1.getDouble("ValorUnit"),rs1.getString("Type")) {};
                 ativoFinanceiros.add(ativoFinanceiro);
             }
-            for(AtivoFinanceiro ativoFinanceiro : utilizador.getFavoritos()){
+            for(AtivoFinanceiroFavorito ativoFinanceiro : utilizador.getFavoritos()){
                 if(!ativoFinanceiros.contains(ativoFinanceiro)){
                     addPreferido(utilizador, ativoFinanceiro);
                 }
@@ -139,11 +136,10 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
             Statement stmt2 = conn.createStatement();
             ResultSet rs1 = stmt2.executeQuery("select * from AtivosPreferidos inner join AtivoFinanceiro on AtivosPreferidos.AtivoFinanceiro=AtivoFinanceiro.Nome where Utilizador='"+u.getUsername()+"'");
             while(rs1.next()){
+                double value = rs1.getDouble("Valor");
                 a = new AtivoFinanceiro(rs1.getString("Nome"),rs1.getDouble("ValorUnit"),rs1.getString("Type")) {};
-                u.addFavorito(a);
+                u.addFavorito(a, value);
             }
-
-
         }
         catch (SQLException e) {
             e.printStackTrace();}
@@ -176,15 +172,14 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
     }
 
 
-    private void addPreferido( Utilizador u,AtivoFinanceiro a){
+    private void addPreferido( Utilizador u,AtivoFinanceiroFavorito a){
         try{
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
             Statement stmt = conn.createStatement();
-            String cmd = "insert into AtivosPreferidos (AtivoFinanceiro,Utilizador) values('" + a.getCompany() + "','" + u.getUsername() +"')";
+            String cmd = "insert into AtivosPreferidos (AtivoFinanceiro,Utilizador, Valor) values('" + a.getCompany() + "','"
+                    + u.getUsername() +"'," + a.getValueToNotify() + ")";
             stmt.executeUpdate(cmd);
-
-
         }
         catch (SQLException e){e.printStackTrace();}
         finally {
@@ -200,8 +195,6 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
             String cmd = "delete from AtivosPreferidos where Utilizador ='" + u.getUsername() + "' and AtivoFinanceiro='" + a.getCompany() + "'";
             System.out.println(cmd);
             stmt.executeUpdate(cmd);
-
-
         }
         catch (SQLException e){e.printStackTrace();}
         finally {
@@ -227,11 +220,14 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
         AtivoFincanceiroDAOConcrete ac = new AtivoFincanceiroDAOConcrete();
         Petroleo p = new Petroleo("pet",20.0);
         Utilizador u = new Utilizador("fabio","111",10000.0);
-        u.addFavorito(p);
+        u.addFavorito(p, 10);
 
         ac.put(p);
 
         uc.put(u);
+
+        Utilizador utilizador = uc.get("fabio");
+        System.out.println(utilizador);
 
     }
     

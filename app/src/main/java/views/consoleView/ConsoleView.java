@@ -25,6 +25,7 @@ public abstract class ConsoleView implements IView {
     public static final String UTILIZADOR = "utilizador";
     public static final String WITHDRAW = "withdraw";
     public static final String FAVORITOS = "favoritos";
+    public static final String ATIVO_FINANCEIRO = "ativoFinanceiro";
     public static final String EXIT = null;
 
 
