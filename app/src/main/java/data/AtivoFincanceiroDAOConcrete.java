@@ -32,7 +32,6 @@ public class AtivoFincanceiroDAOConcrete implements AtivoFinanceiroDAO {
 
     @Override
     public String put(AtivoFinanceiro obj) {
-        
         try{
             SQLConn.connect();
             Connection conn = SQLConn.getConn();

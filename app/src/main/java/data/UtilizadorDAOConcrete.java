@@ -230,5 +230,5 @@ public class UtilizadorDAOConcrete implements UtilizadorDAO {
         System.out.println(utilizador);
 
     }
-    
+
 }

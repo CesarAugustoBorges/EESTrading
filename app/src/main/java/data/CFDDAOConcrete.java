@@ -14,10 +14,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CFDDAOConcrete implements CFDDAO {
-
+    DBConnection SQLConn = new SQLConnection();
+    
+    
     @Override
     public double sell(CFDVendido cfd) {
-        DBConnection SQLConn = new SQLConnection();
         UtilizadorDAOConcrete uDAO = new UtilizadorDAOConcrete();
         Utilizador u;
         double value=0;
@@ -51,7 +52,7 @@ public class CFDDAOConcrete implements CFDDAO {
     @Override
     public List<CFD> get(Utilizador user) {
         List<CFD> CFDs= new ArrayList<>();
-        DBConnection SQLConn = new SQLConnection();
+        
         CFD cfd = null;
         UtilizadorDAOConcrete uDAO = new UtilizadorDAOConcrete();
         Utilizador u;
@@ -68,7 +69,7 @@ public class CFDDAOConcrete implements CFDDAO {
                 cfd = new CFD(rs.getDouble("ValorCompra"), rs.getDouble("Unidades") ,rs.getDouble("TopProfit"),
                         rs.getDouble("StopLoss"),rs.getInt("Id"),u,a,
                         rs.getTimestamp("DataVenda").toLocalDateTime());
-                System.out.println("Adicionou CFD com Id:"+cfd.getId());
+                //System.out.println("Adicionou CFD com Id:"+cfd.getId());
                 CFDs.add(cfd);
             }
 
@@ -82,7 +83,7 @@ public class CFDDAOConcrete implements CFDDAO {
 
     @Override
     public Integer put(CFD obj) {
-        DBConnection SQLConn = new SQLConnection();
+        
         int i=0;
         try{
             SQLConn.connect();
@@ -105,7 +106,7 @@ public class CFDDAOConcrete implements CFDDAO {
 
     @Override
     public CFD get(Integer id) {
-        DBConnection SQLConn = new SQLConnection();
+        
         CFD cfd = null;
         UtilizadorDAOConcrete uDAO = new UtilizadorDAOConcrete();
         Utilizador u;
@@ -134,7 +135,7 @@ public class CFDDAOConcrete implements CFDDAO {
     }
 
     public List<CFDVendido> getVendidos(Utilizador u) {
-        DBConnection SQLConn = new SQLConnection();
+        
         List<CFDVendido> portfolioList = new ArrayList<>();
         CFD cfd;
         AtivoFincanceiroDAOConcrete afDAO = new AtivoFincanceiroDAOConcrete();
@@ -163,7 +164,7 @@ public class CFDDAOConcrete implements CFDDAO {
     }
 
     public List<CFD> getPortfolio(Utilizador u) {
-        DBConnection SQLConn = new SQLConnection();
+        
         List<CFD> portfolioList = new ArrayList<>();
         CFD cfd;
         AtivoFincanceiroDAOConcrete afDAO = new AtivoFincanceiroDAOConcrete();
@@ -191,7 +192,7 @@ public class CFDDAOConcrete implements CFDDAO {
 
     @Override
     public void delete(Integer id) {
-        DBConnection SQLConn = new SQLConnection();
+        
         try{
             SQLConn.connect();
             Connection conn = SQLConn.getConn();
