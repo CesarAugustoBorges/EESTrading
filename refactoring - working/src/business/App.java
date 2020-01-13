@@ -9,10 +9,13 @@ import gui.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class App {
     public static final String BUY = "Buy";
+    public static final String DEALT = "Dealt";
+    public static final String WAITING = "Waiting";
     //------------------------------------ INSTANCE VARIABLES -----------------------------------------------
     private User user;
     private UserDAO userDAO;
@@ -295,7 +298,7 @@ public class App {
         boolean sameUserId = pst.getidUser() == user.getIdUser();
         boolean sameStockId = pst.getMarketstock_id() == id_stock;
         boolean buyingType = pst.getType().equals(BUY);
-        boolean dealtStatus = pst.getStatus().equals("Dealt");
+        boolean dealtStatus = pst.getStatus().equals(DEALT);
         return sameUserId && sameStockId && buyingType && dealtStatus;
     }
 
@@ -442,7 +445,7 @@ public class App {
         List<MarketStock> lstksl = new ArrayList<>();
 
         for (Position pst : positionDAO.values()) {
-            if ((pst.getidUser() == (user.getIdUser())) && (pst.getType().equals(BUY) && (pst.getStatus().equals("Dealt"))) && (pst.getUnits_remaining() > 0))
+            if ((pst.getidUser() == (user.getIdUser())) && (pst.getType().equals(BUY) && (pst.getStatus().equals(DEALT))) && (pst.getUnits_remaining() > 0))
                 lstksl.add(Mstock_id(pst.getMarketstock_id()));
         }
         return lstksl;
@@ -456,7 +459,7 @@ public class App {
         List<MarketStock> lstksl = new ArrayList<>();
 
         for (Position pst : positionDAO.values()) {
-            if ((pst.getidUser() == (user.getIdUser())) && (pst.getType().equals(BUY) && (pst.getStatus().equals("Waiting"))) && (pst.getUnits_remaining() > 0))
+            if ((pst.getidUser() == (user.getIdUser())) && (pst.getType().equals(BUY) && (pst.getStatus().equals(WAITING))) && (pst.getUnits_remaining() > 0))
                 lstksl.add(Mstock_id(pst.getMarketstock_id()));
         }
         return lstksl;
@@ -547,7 +550,7 @@ public class App {
         year = String.valueOf(LocalDateTime.now().getYear());
         date = day + "-" + month + "-" + year;
         buy_pst.setDeal_date(date);
-        buy_pst.setStatus("Dealt");
+        buy_pst.setStatus(DEALT);
 
         positionDAO.put(buy_pst.getIdPosition(), buy_pst);
         debitFund(buy_pst.getDeal_value());
@@ -581,7 +584,7 @@ public class App {
 
         Position buy_pst = openBuyPosition(stockname, amount, stop_loss, take_profit, sz);
 
-        buy_pst.setStatus("Waiting");
+        buy_pst.setStatus(WAITING);
         buy_pst.setDeal_value(0);
         buy_pst.setDeal_date("00-00-0000");
 
@@ -601,11 +604,11 @@ public class App {
         int nsz = notificationDAO.size() + 1;
 
         for (Position pst : positionDAO.values()) {
-            if ((pst.getMarketstock_id() == mstk.getId_stock() && (pst.getType().equals(BUY) && (pst.getStatus().equals("Waiting"))))) {
-                if (isAbleToBuy(checkAccount(), mstk.getName(), pst.getAmount())) {
-                    if (existsProfitOnBuy(mstk.getName(), pst.getStop_loss(), pst.getTake_profit())) {
-
-                        pst.setStatus("Dealt");
+            MarketStock marketStock = stockDAO.get(stock_id(mstk.getName()));
+            if ((pst.getMarketstock_id() == mstk.getId_stock() && (pst.getType().equals(BUY) && (pst.getStatus().equals(WAITING))))) {
+                if (user.canBuyPosition(marketStock, pst)) {
+                    if (marketStock.existsProfitOnBuy(pst)) {
+                        pst.setStatus(DEALT);
 
                         dv = pst.getAmount() * (mstk.getCfd_Buy());
                         pst.setDeal_value(dv);
@@ -625,7 +628,7 @@ public class App {
                         ntf.setInfo(prettyPositionNotification(pst));
                         notificationDAO.put(ntf.getId_notification(), ntf);
 
-                        stockDAO.get(mstk.getId_stock()).removeBuyPositionObservingStock(pst);
+                        marketStock.removeBuyPositionObservingStock(pst);
                     }
                 }
             }
@@ -654,7 +657,7 @@ public class App {
         sale_pst.setUnits_remaining(0);
         sale_pst.setStop_loss(stop_loss);
         sale_pst.setTake_profit(take_profit);
-        sale_pst.setStatus("Dealt");
+        sale_pst.setStatus(DEALT);
         dv = amount * (stockDAO.get(stock_id(stockname)).getCfd_Sale());
         sale_pst.setDeal_value(dv);
         day = String.valueOf(LocalDateTime.now().getDayOfMonth());
@@ -687,7 +690,7 @@ public class App {
         sale_pst.setUnits_remaining(0);
         sale_pst.setStop_loss(stop_loss);
         sale_pst.setTake_profit(take_profit);
-        sale_pst.setStatus("Waiting");
+        sale_pst.setStatus(WAITING);
         sale_pst.setDeal_value(0);
         sale_pst.setDeal_date("00-00-0000");
 
@@ -708,10 +711,10 @@ public class App {
         int nsz = notificationDAO.size() + 1;
 
         for (Position pst : positionDAO.values()) {
-            if ((pst.getMarketstock_id() == mstk.getId_stock() && (pst.getType().equals("Sale") && (pst.getStatus().equals("Waiting"))))) {
+            if ((pst.getMarketstock_id() == mstk.getId_stock() && (pst.getType().equals("Sale") && (pst.getStatus().equals(WAITING))))) {
                 if (existsProfitOnSale(mstk.getName(), pst.getStop_loss(), pst.getTake_profit())) {
 
-                    pst.setStatus("Dealt");
+                    pst.setStatus(DEALT);
 
                     dv = pst.getAmount() * (mstk.getCfd_Buy());
                     pst.setDeal_value(dv);
@@ -869,7 +872,7 @@ public class App {
         String stockname;
 
         for (Position pst : positionDAO.values()) {
-            if (pst.getType().equals(BUY) && pst.getStatus().equals("Waiting")) {
+            if (pst.getType().equals(BUY) && pst.getStatus().equals(WAITING)) {
                 stockname = stock_name(pst.getMarketstock_id());
                 stockDAO.get(stock_id(stockname)).addBuyPositionObservingStock(pst);
             }
@@ -883,7 +886,7 @@ public class App {
         String stockname;
 
         for (Position pst : positionDAO.values()) {
-            if (pst.getType().equals("Sale") && pst.getStatus().equals("Waiting")) {
+            if (pst.getType().equals("Sale") && pst.getStatus().equals(WAITING)) {
                 stockname = stock_name(pst.getMarketstock_id());
                 stockDAO.get(stock_id(stockname)).addBuyPositionObservingStock(pst);
             }

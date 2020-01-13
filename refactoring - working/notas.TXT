@@ -1,0 +1,5 @@
+App::Contante DEALT
+App::Contante WAITING
+Removi a variavel nao usada "id" App::em prettyPortfolio
+coloquei os metodos canBuyPosition e existsProfitOnBuy no User e MarketStock respetivamente, visto que este métodos dsao da responsabilidade dos objetos e nao da app.
+ainda falta alterar o updateBuyPositionWaiting em App

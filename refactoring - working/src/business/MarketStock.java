@@ -259,5 +259,9 @@ public class MarketStock implements Comparable<MarketStock>, Observable{
         usersForPriceStock.remove(user_obs);
     }
 
+    public boolean existsProfitOnBuy(Position position){
+        return getCfd_Buy() >= position.getTake_profit() || getCfd_Buy() <= position.getStop_loss();
+    }
+
 
 }

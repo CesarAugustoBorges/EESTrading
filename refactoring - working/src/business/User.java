@@ -171,4 +171,8 @@ public class User implements Comparable<User>{
     public int compareTo(User user) {
         return idUser - user.idUser;
     }
+
+    public boolean canBuyPosition(MarketStock marketStock, Position position){
+        return (account_balance > position.getAmount() *  marketStock.getCfd_Buy());
+    }
 }
