@@ -32,24 +32,15 @@ public class UserDAO implements Map<Integer, User> {
 
     @Override
     public boolean containsKey(Object key) {
+
         boolean res = false;
-        try{
+        try {
             connection = Connect.connect();
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE idUser = ?");
             preparedStatement.setString(1, Integer.toString((Integer) key));
-            ResultSet resultSet = preparedStatement.executeQuery();
-            res = resultSet.next();
-        }
-        catch (SQLException e){
+            res = Connect.executeQuery( connection, preparedStatement, ResultSet::next);
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }
-        finally {
-            try{
-                Connect.close(connection);
-            }
-            catch (Exception e){
-                System.out.println(e.getMessage());
-            }
         }
         return res;
     }
@@ -57,7 +48,7 @@ public class UserDAO implements Map<Integer, User> {
     @Override
     public boolean containsValue(Object value) {
         boolean res = false;
-        if(value.getClass().getName().equals("ESS.src.Business.User")){
+        if(value instanceof User){
             User user = (User) value;
             int id = user.getIdUser();
             User thisUser = this.get(id);

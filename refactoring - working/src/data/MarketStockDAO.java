@@ -60,7 +60,9 @@ public class MarketStockDAO implements Map<Integer, MarketStock> {
         MarketStock stock = new MarketStock();
         try {
             connection = Connect.connect();
-            Connect.executeQuery(connection, "SELECT * FROM MarketStock WHERE idStock = ?", (rs) -> {
+            PreparedStatement ppstt = connection.prepareStatement("SELECT * FROM MarketStock WHERE idStock = ?");
+            ppstt.setString(1,Integer.toString((Integer)key));
+            Connect.executeQuery(connection, ppstt, (rs) -> {
                 if(rs.next()){
                     stock.setId_stock(rs.getInt("idStock"));
                     stock.setName(rs.getString("name"));
@@ -79,7 +81,11 @@ public class MarketStockDAO implements Map<Integer, MarketStock> {
 
     @Override
     public MarketStock put(Integer key, MarketStock value) {
-        MarketStock stock = getOrDefault(key, value);
+        MarketStock stock;
+        if (this.containsKey(key)){
+            stock = this.get(key);
+        }
+        else stock = value;
         try {
             connection = Connect.connect();
             PreparedStatement ppstt = connection.prepareStatement("DELETE FROM MarketStock WHERE idStock = ?");

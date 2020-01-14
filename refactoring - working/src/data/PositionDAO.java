@@ -1,6 +1,7 @@
 package data;
 
 import business.Position;
+import javafx.geometry.Pos;
 
 import java.sql.*;
 import java.util.*;
@@ -31,21 +32,13 @@ public class PositionDAO implements Map<Integer, Position> {
     @Override
     public boolean containsKey(Object key) {
         boolean res = false;
-
         try {
             conn = Connect.connect();
             PreparedStatement ppstt = conn.prepareStatement("SELECT * FROM Position WHERE idPosition = ?");
             ppstt.setString(1, Integer.toString((Integer) key));
-            ResultSet rs = ppstt.executeQuery();
-            res = rs.next();
+            res = Connect.executeQuery( conn, ppstt, ResultSet::next);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        } finally {
-            try {
-                Connect.close(conn);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
         }
         return res;
     }
@@ -53,7 +46,7 @@ public class PositionDAO implements Map<Integer, Position> {
     @Override
     public boolean containsValue(Object value) {
         boolean res = false;
-        if (value.getClass().getName().equals("ESS.src.Business.Position")) {
+        if (value instanceof Position) {
             Position p = (Position) value;
             int id = p.getIdPosition();
             Position position = this.get(id);
