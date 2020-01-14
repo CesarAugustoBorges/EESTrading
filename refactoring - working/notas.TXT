@@ -11,3 +11,15 @@ UsernameInvalidException String como contrutor foi adicionada ao super, nao esta
 UserExistsException String como contrutor foi adicionada ao super, nao estava a ser usada
 App::checkAccount removido por nao ser usado apos refactoring
 MarketStockDAO::put getOrDefault
+
+--- GUI
+Separei alguns métodos mas mesmo assim tem ali coisas que não concordo muito
+Ainda se pode separa a definição do stop loss e take profit
+
+--- Business
+Checker já dei refactor penso que pode ficar assim
+API parece-me que podíamos fazer um template method nisto mas não sei se vale a pena
+MarketStock acho que já pode ficar assim
+Notification tem construtor que não é usado, de resto pode ficar assim
+Position já foi alterado parece me bem assim
+App é a pior classe 

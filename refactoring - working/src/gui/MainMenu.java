@@ -20,7 +20,6 @@ public class MainMenu extends GUI{ //extract method, Consolidate Duplicate Condi
     }
 
     public static void showMenu(App app) {
-
         printMenu();
 
         String option = readLine();

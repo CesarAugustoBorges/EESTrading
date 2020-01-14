@@ -2,7 +2,6 @@ package gui;
 
 import business.App;
 import business.Checker;
-import business.MarketStock;
 import exceptions.PasswordInvalidException;
 import exceptions.StockNotExistsException;
 import exceptions.UserExistsException;
@@ -184,29 +183,34 @@ public class GUI {
         }
     }
 
+    public static String buyStock(){
+        String stockname;
+        System.out.println("Name of the Stock you want to buy:");
+        stockname = readLine();
+        return stockname;
+    }
+
+
     /**
      * Método que apresenta o formulário para abertura de uma posição de compra
      */
-    static void openBuyPositionMenu() {
+    static void openBuyPositionMenu() { //EXTRACT METHOD E Consolidate Duplicate Conditional Fragments
         Integer amount, id_stk, units_remaining;
-        float account_balance, stop_loss, take_profit;
-        String close_buy, stockname;
+        float stop_loss, take_profit;
+        String stockname;
 
         System.out.println("---- OPEN BUY POSITION ----");
-        System.out.println("Name of the Stock you want to buy:");
-        stockname = readLine();
+        stockname = buyStock();
         while(ngplt.stocksOnSale().contains(ngplt.Mstock_name(stockname)) || ngplt.stocksOnWaiting().contains(ngplt.Mstock_name(stockname))) {
             id_stk = ngplt.Mstock_name(stockname).getId_stock();
             units_remaining = ngplt.unitsRemaining(id_stk);
             if (units_remaining == -1) {
                 System.out.println("Ups, you have a pending buy position opened for the " + ngplt.Mstock_name(stockname).getName() + " stock! Wait for that position to get concluded before opening a new position\n");
-                System.out.println("Name of the Stock you want to buy:");
-                stockname = readLine();
             }
             else {
                 System.out.println("Ups, you still have " + units_remaining.toString() + " units of this stock! Open sale positions for them first\n");
-                System.out.println("Name of the Stock you want to buy:");
-                stockname = readLine();            }
+            }
+            stockname = buyStock();
         }
 
         System.out.println("How much you want to buy?");
@@ -216,6 +220,11 @@ public class GUI {
         System.out.println("What's the Take Profit You Are Willing To Define?");
         take_profit = readLineFloat();
 
+        checkProfitBuy(stockname,amount,stop_loss,take_profit);
+    }
+
+    public static void checkProfitBuy(String stockname,int amount,float stop_loss,float take_profit){
+        String close_buy;
         if ((ngplt.isAbleToBuy(stockname, amount))) {
             if ((ngplt.existsProfitOnBuy(stockname, stop_loss, take_profit))) {
                 System.out.println("Profitable Purchase");
@@ -225,12 +234,13 @@ public class GUI {
             else {
                 System.out.println("This Buy Is Not Profitable For You At This Moment. You Wish To End It Now Anyway ? (yes|no)\n");
                 close_buy = readLine();
-
-                while ((!close_buy.equals("yes") && !close_buy.equals("YES") && !close_buy.equals("Y") && !close_buy.equals("Yes") && !close_buy.equals("y")) && (!close_buy.equals("no") && !close_buy.equals("NO") && !close_buy.equals("N") && !close_buy.equals("No") && !close_buy.equals("n"))) {
+                close_buy = close_buy.toLowerCase();
+                while ((!close_buy.equals("YES")) && (!close_buy.equals("NO"))) {
                     System.out.println("> Input Value Is Not Valid!\n This Buy Is Not Profitable For You At This Moment. You Wish To End It Now Anyway ? (yes|no)\n");
                     close_buy = readLine();
+                    close_buy = close_buy.toLowerCase();
                 }
-                if(close_buy.equals("yes") || close_buy.equals("YES") || close_buy.equals("Y") || close_buy.equals("Yes") || close_buy.equals("y")) {
+                if(close_buy.equals("YES")) {
                     ngplt.openBuyPositionDealt(stockname, amount, stop_loss, take_profit);
                 }
                 else{
@@ -251,32 +261,25 @@ public class GUI {
         float stop_loss, take_profit;
         Integer amount,id_stk, units_remaining;
 
-        System.out.println("---- OPEN SALE POSITION ----");
-        System.out.println("Name of the Stock you want to sell:");
-        stockname = readLine();
-        while(!ngplt.stocksOnSale().contains(ngplt.Mstock_name(stockname))){
-            System.out.println("> Input Value Is Not Valid!\n");
-            System.out.println("Name of the Stock you want to sell:");
-            stockname = readLine();
-        }
-        System.out.println("> Value Inserted!\n");
+        stockname = insertStockToSell();
 
         id_stk = ngplt.Mstock_name(stockname).getId_stock();
         units_remaining = ngplt.unitsRemaining(id_stk);
+
         System.out.println("You May Sell "+units_remaining.toString()+" Units Of Your "+(ngplt.Mstock_name(stockname)).getName()+" Stock\n");
         System.out.println("How Much You Want To Sell?");
-        amount = readLineInt();
+        amount = checkAmount(units_remaining);
 
-        while(amount<0 || amount==0 || amount>units_remaining ){
-            System.out.println("> Input Value Is Not Valid!\n");
-            System.out.println("How Much You Want To Sell?");
-            amount = readLineInt();
-        }
         System.out.println("What's the Stop Loss You Are Willing To Define?");
         stop_loss = readLineFloat();
         System.out.println("What's the Take Profit You Are Willing To Define?");
         take_profit = readLineFloat();
 
+        checkProfitSale(stockname,stop_loss,take_profit,amount);
+    }
+
+    public static void checkProfitSale(String stockname,float stop_loss,float take_profit,int amount){
+        String close_sale;
         if ((ngplt.existsProfitOnSale(stockname, stop_loss, take_profit))) {
             System.out.println("Profitable Sale");
             ngplt.openSalePositionDealt(stockname, amount, stop_loss, take_profit);
@@ -285,19 +288,44 @@ public class GUI {
         else {
             System.out.println("This Sale Is Not Profitable For You At This Moment. You Wish To End It Now Anyway? (yes|no)\n");
             close_sale = readLine();
-            while ((!close_sale.equals("yes") && !close_sale.equals("YES") && !close_sale.equals("Y") && !close_sale.equals("Yes") && !close_sale.equals("y")) && (!close_sale.equals("no") && !close_sale.equals("NO") && !close_sale.equals("N") && !close_sale.equals("No") && !close_sale.equals("n"))) {
+            close_sale =close_sale.toLowerCase();
+            while (!close_sale.equals("yes") && !close_sale.equals("no")) {
                 System.out.println("> Input Value Is Not Valid!\n This Sale Is Not Profitable For You At This Moment. You Wish To End It Now Anyway ? (yes|no)\n");
                 close_sale = readLine();
+                close_sale =close_sale.toLowerCase();
             }
-            if(close_sale.equals("yes") || close_sale.equals("YES") || close_sale.equals("Y") || close_sale.equals("Yes") || close_sale.equals("y")) {
+            if(close_sale.equals("yes")) {
                 ngplt.openSalePositionDealt(stockname, amount, stop_loss, take_profit);
             }
             else{
                 ngplt.openSalePositionWaiting(stockname, amount, stop_loss, take_profit);
             }
 
-
         }
+    }
+
+    public static String insertStockToSell(){
+        String stockname;
+        System.out.println("Name of the Stock you want to sell:");
+        stockname = readLine();
+        while(!ngplt.stocksOnSale().contains(ngplt.Mstock_name(stockname))){
+            System.out.println("> Input Value Is Not Valid!\n");
+            System.out.println("Name of the Stock you want to sell:");
+            stockname = readLine();
+        }
+        System.out.println("> Value Inserted!\n");
+        return stockname;
+    }
+
+    public static int checkAmount(int units_remaining){
+        int amount=0;
+        amount = readLineInt();
+        while(amount<0 || amount==0 || amount>units_remaining ){
+            System.out.println("> Input Value Is Not Valid!\n");
+            System.out.println("How Much You Want To Sell?");
+            amount = readLineInt();
+        }
+        return amount;
     }
 
     /**
