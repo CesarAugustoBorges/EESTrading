@@ -63,29 +63,22 @@ public class PositionDAO implements Map<Integer, Position> {
             conn = Connect.connect();
             PreparedStatement ppstt = conn.prepareStatement("SELECT * FROM Position WHERE idPosition= ?");
             ppstt.setString(1,Integer.toString((Integer) key));
-            ResultSet rs = ppstt.executeQuery();
-            if(rs.next()){
-                position.setIdPosition(rs.getInt("idPosition"));
-                position.setType(rs.getString("type"));
-                position.setIdUser(rs.getInt("idUser"));
-                position.setMarketstock_id(rs.getInt("idStock"));
-                position.setAmount(rs.getInt("amount"));
-                position.setStop_loss(rs.getFloat("stop_loss"));
-                position.setTake_profit(rs.getFloat("take_profit"));
-                position.setStatus(rs.getString("status"));
-                position.setDeal_value(rs.getFloat("dealValue"));
-            }
+            Connect.executeQuery(conn, ppstt, rs -> {
+                if(rs.next()){
+                    position.setIdPosition(rs.getInt("idPosition"));
+                    position.setType(rs.getString("type"));
+                    position.setIdUser(rs.getInt("idUser"));
+                    position.setMarketstock_id(rs.getInt("idStock"));
+                    position.setAmount(rs.getInt("amount"));
+                    position.setStop_loss(rs.getFloat("stop_loss"));
+                    position.setTake_profit(rs.getFloat("take_profit"));
+                    position.setStatus(rs.getString("status"));
+                    position.setDeal_value(rs.getFloat("dealValue"));
+                }
+                return null;
+            });
         }catch (SQLException e){
             System.out.printf(e.getMessage());
-        }
-        finally{
-            try {
-                Connect.close(conn);
-            }
-            catch (Exception e){
-                System.out.printf(e.getMessage());
-            }
-
         }
         return position;
     }
@@ -102,13 +95,10 @@ public class PositionDAO implements Map<Integer, Position> {
             conn = Connect.connect();
             PreparedStatement preparedStatement= conn.prepareStatement("DELETE FROM Position WHERE idPosition = ?");
             preparedStatement.setString(1,Integer.toString((Integer) key));
-            preparedStatement.executeUpdate();
+            Connect.executeQuery(conn, preparedStatement, rs->null);
         }
         catch (SQLException e) {
             throw new NullPointerException(e.getMessage());
-        }
-        finally {
-            Connect.close(conn);
         }
         return position;
     }
@@ -124,16 +114,11 @@ public class PositionDAO implements Map<Integer, Position> {
     public void clear() {
         try{
             conn = Connect.connect();
-            Statement stt = conn.createStatement();
-            stt.executeUpdate("DELETE FROM Position");
+            Connect.executeQuery(conn, "DELETE FROM Position", rs->null);
         }
         catch (Exception e){
             throw new NullPointerException(e.getMessage());
         }
-        finally{
-            Connect.close(conn);
-        }
-
     }
 
     @Override
@@ -142,22 +127,15 @@ public class PositionDAO implements Map<Integer, Position> {
 
         try {
             conn = Connect.connect();
-            set = new TreeSet<>();
-            PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM Position");
-            ResultSet rs = preparedStatement.executeQuery();
-            while(rs.next()){
-                set.add(rs.getInt("idPosition"));
-            }
+            set = Connect.executeQuery(conn, "SELECT * FROM Position", rs -> {
+                Set<Integer> tempSet = new TreeSet<>();
+                while(rs.next()){
+                    tempSet.add(rs.getInt("idPosition"));
+                }
+                return tempSet;
+            });
         }catch (SQLException e){
             System.out.println(e.getMessage());
-        }
-        finally {
-            try {
-                Connect.close(conn);
-            }
-            catch (Exception e){
-                System.out.println(e.getMessage());
-            }
         }
         return set;
     }
@@ -167,32 +145,25 @@ public class PositionDAO implements Map<Integer, Position> {
         Collection<Position> collect = new TreeSet<>();
         try {
             conn = Connect.connect();
-            PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM Position");
-            ResultSet rs = preparedStatement.executeQuery();
-            while(rs.next()){
-                Position pst = new Position();
-                pst.setIdPosition(rs.getInt("idPosition"));
-                pst.setType(rs.getString("type"));
-                pst.setIdUser(rs.getInt("idUser"));
-                pst.setMarketstock_id(rs.getInt("idStock"));
-                pst.setAmount(rs.getInt("amount"));
-                pst.setStop_loss(rs.getFloat("stop_loss"));
-                pst.setTake_profit(rs.getFloat("take_profit"));
-                pst.setStatus((rs.getString("status")));
-                pst.setDeal_value(rs.getFloat("dealValue"));
+            Connect.executeQuery(conn, "SELECT * FROM Position", rs-> {
+                while(rs.next()){
+                    Position pst = new Position();
+                    pst.setIdPosition(rs.getInt("idPosition"));
+                    pst.setType(rs.getString("type"));
+                    pst.setIdUser(rs.getInt("idUser"));
+                    pst.setMarketstock_id(rs.getInt("idStock"));
+                    pst.setAmount(rs.getInt("amount"));
+                    pst.setStop_loss(rs.getFloat("stop_loss"));
+                    pst.setTake_profit(rs.getFloat("take_profit"));
+                    pst.setStatus((rs.getString("status")));
+                    pst.setDeal_value(rs.getFloat("dealValue"));
 
-                collect.add(pst);
-            }
+                    collect.add(pst);
+                }
+                return null;
+            });
         }catch (SQLException e){
             System.out.println(e.getMessage());
-        }
-        finally {
-            try {
-                Connect.close(conn);
-            }
-            catch (Exception e){
-                System.out.println(e.getMessage());
-            }
         }
         return collect;
     }

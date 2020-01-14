@@ -65,26 +65,19 @@ public class UserDAO implements Map<Integer, User> {
             connection = Connect.connect();
             PreparedStatement ppstt = connection.prepareStatement("SELECT * FROM User WHERE idUser = ?");
             ppstt.setString(1,Integer.toString((Integer) key));
-            ResultSet rs = ppstt.executeQuery();
-            if(rs.next()){
-                usr.setIdUser(rs.getInt("idUser"));
-                usr.setUsername(rs.getString("username"));
-                usr.setName(rs.getString("name"));
-                usr.setEmail(rs.getString("email"));
-                usr.setPassword(rs.getString("password"));
-                usr.setAccount_balance(rs.getFloat("account_balance"));
-
-            }
+            Connect.executeQuery(connection, ppstt, rs ->{
+                if(rs.next()){
+                    usr.setIdUser(rs.getInt("idUser"));
+                    usr.setUsername(rs.getString("username"));
+                    usr.setName(rs.getString("name"));
+                    usr.setEmail(rs.getString("email"));
+                    usr.setPassword(rs.getString("password"));
+                    usr.setAccount_balance(rs.getFloat("account_balance"));
+                }
+                return null;
+            });
         }catch (Exception e){
             System.out.println(e.getMessage());
-        }
-        finally{
-            try {
-                Connect.close(connection);
-            }catch (Exception e){
-                System.out.println(e.getMessage());
-            }
-
         }
         return usr;
     }
@@ -101,8 +94,9 @@ public class UserDAO implements Map<Integer, User> {
             connection = Connect.connect();
             PreparedStatement ppstt = connection.prepareStatement("DELETE FROM User WHERE idUser = ?");
             ppstt.setString(1,Integer.toString((Integer) key));
-            ppstt.executeUpdate();
+            Connect.executeQuery(connection, ppstt, rs->null);
 
+            connection = Connect.connect();
             ppstt = connection.prepareStatement("INSERT INTO User(idUser,username,name,email,password,account_balance) VALUES (?,?,?,?,?,?)");
             ppstt.setString(1,Integer.toString((Integer) key));
             ppstt.setString(2,value.getUsername());
@@ -110,18 +104,9 @@ public class UserDAO implements Map<Integer, User> {
             ppstt.setString(4,value.getEmail());
             ppstt.setString(5,value.getPassword());
             ppstt.setString(6,Float.toString(value.getAccount_balance()));
-            ppstt.executeUpdate();
-
-
+            Connect.executeQuery(connection, ppstt, rs->null);
         }catch (SQLException e){
             System.out.println(e.getMessage());
-        }
-        finally {
-            try {
-                Connect.close(connection);
-            }catch (Exception e){
-                System.out.println(e.getMessage());
-            }
         }
         return usr;
     }
@@ -133,16 +118,9 @@ public class UserDAO implements Map<Integer, User> {
             connection = Connect.connect();
             PreparedStatement ppstt = connection.prepareStatement("DELETE FROM User WHERE idUser = ?");
             ppstt.setString(1,Integer.toString((Integer) key));
-            ppstt.executeUpdate();
+            Connect.executeQuery(connection, ppstt, rs->null);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        } finally {
-            try {
-
-                Connect.close(connection);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
         }
         return usr;
     }
@@ -158,13 +136,9 @@ public class UserDAO implements Map<Integer, User> {
     public void clear() {
         try{
             connection = Connect.connect();
-            Statement stt = connection.createStatement();
-            stt.executeUpdate("DELETE FROM User");
+            Connect.executeQuery(connection, "DELETE FROM User", rs->null);
         }catch (Exception e){
             throw new NullPointerException(e.getMessage());
-        }
-        finally{
-            Connect.close(connection);
         }
     }
 
@@ -174,21 +148,15 @@ public class UserDAO implements Map<Integer, User> {
 
         try {
             connection = Connect.connect();
-            st = new TreeSet<>();
-            PreparedStatement ppstt = connection.prepareStatement("SELECT * FROM User");
-            ResultSet rs = ppstt.executeQuery();
-            while(rs.next()){
-                st.add(rs.getInt("idUser"));
-            }
+            st = Connect.executeQuery(connection, "SELECT * FROM User", rs-> {
+                Set<Integer> tempSet = new TreeSet<>();
+                while(rs.next()){
+                    tempSet.add(rs.getInt("idUser"));
+                }
+                return tempSet;
+            });
         }catch (SQLException e){
             System.out.println(e.getMessage());
-        }
-        finally {
-            try {
-                Connect.close(connection);
-            }catch (Exception e){
-                System.out.println(e.getMessage());
-            }
         }
         return st;
     }
@@ -198,30 +166,22 @@ public class UserDAO implements Map<Integer, User> {
         Collection<User> collect = new TreeSet<>();
         try {
             connection = Connect.connect();
-            PreparedStatement ppstt = connection.prepareStatement("SELECT * FROM User");
-            ResultSet rs = ppstt.executeQuery();
-            while(rs.next()){
-                User usr = new User();
-                usr.setIdUser(rs.getInt("idUser"));
-                usr.setUsername(rs.getString("username"));
-                usr.setName(rs.getString("name"));
-                usr.setEmail(rs.getString("email"));
-                usr.setPassword(rs.getString("password"));
-                usr.setAccount_balance(rs.getFloat("account_balance"));
+            Connect.executeQuery(connection,"SELECT * FROM User", rs-> {
+                while(rs.next()){
+                    User usr = new User();
+                    usr.setIdUser(rs.getInt("idUser"));
+                    usr.setUsername(rs.getString("username"));
+                    usr.setName(rs.getString("name"));
+                    usr.setEmail(rs.getString("email"));
+                    usr.setPassword(rs.getString("password"));
+                    usr.setAccount_balance(rs.getFloat("account_balance"));
 
-
-                collect.add(usr);
-
-            }
+                    collect.add(usr);
+                }
+                return null;
+            });
         }catch (SQLException e){
             System.out.println(e.getMessage());
-        }
-        finally {
-            try {
-                Connect.close(connection);
-            }catch (Exception e){
-                System.out.println(e.getMessage());
-            }
         }
         return collect;
     }
