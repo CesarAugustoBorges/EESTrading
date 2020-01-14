@@ -10,24 +10,17 @@ public class PositionDAO implements Map<Integer, Position> {
 
     @Override
     public int size() {
-        int size = -1;
-        try {
-            conn = Connect.connect();
-            PreparedStatement ppstt = conn.prepareStatement("SELECT COUNT(*) FROM Position");
-            ResultSet rs = ppstt.executeQuery();
-            if (rs.next()) {
-                size = rs.getInt(1);
-            }
-        } catch (SQLException e) {
+        try{
+            return Connect.executeQuery(conn, "SELECT COUNT(*) FROM Position", (rs)-> {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+                return -1;
+            });
+        } catch (Exception e){
             System.out.println(e.getMessage());
-        } finally {
-            try {
-                Connect.close(conn);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+            return -1;
         }
-        return size;
     }
 
     @Override

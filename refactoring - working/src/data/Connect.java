@@ -26,8 +26,12 @@ public class Connect {
     }
 
     public static <T> T executeQuery(Connection connection, String query, DAOFunction<ResultSet, T> function) throws SQLException{
+        PreparedStatement ppstt = connection.prepareStatement(query);
+        return executeQuery(connection, ppstt, function);
+    }
+
+    public static <T> T executeQuery(Connection connection, PreparedStatement ppstt, DAOFunction<ResultSet, T> function) throws SQLException{
         try {
-            PreparedStatement ppstt = connection.prepareStatement(query);
             ResultSet rs = ppstt.executeQuery();
             return function.apply(rs);
         }catch (SQLException e){
@@ -35,9 +39,8 @@ public class Connect {
             throw e;
         }
         finally {
-             close(connection);
+            close(connection);
         }
     }
-
 
 }

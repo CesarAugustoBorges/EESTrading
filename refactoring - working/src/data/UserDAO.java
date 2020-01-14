@@ -10,27 +10,19 @@ public class UserDAO implements Map<Integer, User> {
 
     @Override
     public int size() {
-        int size = -1;
+        connection = Connect.connect();
         try{
-            connection = Connect.connect();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) from USER");
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
-                size = resultSet.getInt(1);
-            }
-        }
-        catch (SQLException e){
+            return Connect.executeQuery(connection, "SELECT COUNT(*) from USER", (rs)-> {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+                return -1;
+            });
+        } catch (Exception e){
             System.out.println(e.getMessage());
+            return -1;
         }
-        finally {
-            try{
-                Connect.close(connection);
-            }
-            catch (Exception e){
-                System.out.println(e.getMessage());
-            }
-        }
-        return size;
+
     }
 
     @Override

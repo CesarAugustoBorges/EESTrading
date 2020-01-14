@@ -33,9 +33,9 @@ public class MarketStockDAO implements Map<Integer, MarketStock> {
     public boolean containsKey(Object key) {
         try{
             connection = Connect.connect();
-            return Connect.executeQuery( connection, "SELECT * FROM MarketStock WHERE idStock = ?", (rs) -> {
-               return rs.next();
-            });
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM MarketStock WHERE idStock = ?");
+            preparedStatement.setString(1, Integer.toString((Integer) key));
+            return Connect.executeQuery( connection, preparedStatement, ResultSet::next);
         }
         catch (SQLException e){
             System.out.println(e.getMessage());
@@ -84,25 +84,19 @@ public class MarketStockDAO implements Map<Integer, MarketStock> {
             connection = Connect.connect();
             PreparedStatement ppstt = connection.prepareStatement("DELETE FROM MarketStock WHERE idStock = ?");
             ppstt.setString(1,Integer.toString((Integer) key));
-            ppstt.executeUpdate();
+            Connect.executeQuery(connection, ppstt, rs->null);
 
+            connection = Connect.connect();
             ppstt = connection.prepareStatement("INSERT INTO MarketStock(idStock, name, owner, cfdBuy, cfdSale, Price) VALUES (?,?,?,?,?,?)");
             ppstt.setString(2,value.getName());
             ppstt.setString(3,value.getOwner());
             ppstt.setString(4,Float.toString(value.getCfd_Buy()));
             ppstt.setString(5,Float.toString(value.getCfd_Sale()));
             ppstt.setString(6,Float.toString(value.getPrice()));
+            Connect.executeQuery(connection, ppstt, rs->null);
 
-            ppstt.executeUpdate();
         }catch (SQLException e){
             System.out.println(e.getMessage());
-        }
-        finally {
-            try {
-                Connect.close(connection);
-            }catch (Exception e){
-                System.out.println(e.getMessage());
-            }
         }
         return stock;
     }
@@ -114,16 +108,9 @@ public class MarketStockDAO implements Map<Integer, MarketStock> {
             connection = Connect.connect();
             PreparedStatement ppstt = connection.prepareStatement("DELETE FROM MarketStock WHERE idStock = ?");
             ppstt.setString(1,Integer.toString((Integer) key));
-
-            ppstt.executeUpdate();
+            Connect.executeQuery(connection, ppstt, rs->null);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        } finally {
-            try {
-                Connect.close(connection);
-            } catch(Exception e) {
-                System.out.println(e.getMessage());
-            }
         }
         return stock;
     }
@@ -139,37 +126,26 @@ public class MarketStockDAO implements Map<Integer, MarketStock> {
     public void clear() {
         try{
             connection = Connect.connect();
-            Statement statement = connection.createStatement();
-            statement.executeUpdate("DELETE FROM MarketStock");
+            Connect.executeQuery(connection,"DELETE FROM MarketStock", rs ->null);
         }catch (Exception e){
             throw new NullPointerException(e.getMessage());
-        }
-        finally{
-            Connect.close(connection);
         }
     }
 
     @Override
     public Set<Integer> keySet() {
         Set<Integer> set = null;
-
         try {
             connection = Connect.connect();
-            set = new TreeSet<>();
-            PreparedStatement ppstt = connection.prepareStatement("SELECT * FROM MarketStock");
-            ResultSet rs = ppstt.executeQuery();
-            while(rs.next()){
-                set.add(rs.getInt("idStock"));
-            }
+            set = Connect.executeQuery(connection, "SELECT * FROM MarketStock", rs -> {
+                Set<Integer> tempSet = new TreeSet<>();
+                while(rs.next()){
+                    tempSet.add(rs.getInt("idStock"));
+                }
+                return tempSet;
+            });
         }catch (SQLException e){
             System.out.println(e.getMessage());
-        }
-        finally {
-            try {
-                Connect.close(connection);
-            }catch (Exception e){
-                System.out.println(e.getMessage());
-            }
         }
         return set;
     }
@@ -179,29 +155,21 @@ public class MarketStockDAO implements Map<Integer, MarketStock> {
         Collection<MarketStock> collection = new TreeSet<>();
         try {
             connection = Connect.connect();
-            PreparedStatement ppstt = connection.prepareStatement("SELECT * FROM MarketStock");
-            ResultSet rs = ppstt.executeQuery();
-            while(rs.next()){
-                MarketStock s = new MarketStock();
-                s.setId_stock(rs.getInt("idStock"));
-                s.setName(rs.getString("name"));
-                s.setOwner(rs.getString("owner"));
-                s.setCfd_buy(rs.getFloat("cfdBuy"));
-                s.setCfd_sale(rs.getFloat("cfdSale"));
-                s.setPrice(rs.getFloat("price"));
-
-                collection.add(s);
-
-            }
+            Connect.executeQuery(connection, "SELECT * FROM MarketStock", rs -> {
+                while(rs.next()){
+                    MarketStock s = new MarketStock();
+                    s.setId_stock(rs.getInt("idStock"));
+                    s.setName(rs.getString("name"));
+                    s.setOwner(rs.getString("owner"));
+                    s.setCfd_buy(rs.getFloat("cfdBuy"));
+                    s.setCfd_sale(rs.getFloat("cfdSale"));
+                    s.setPrice(rs.getFloat("price"));
+                    collection.add(s);
+                }
+                return null;
+            });
         }catch (SQLException e){
             System.out.println(e.getMessage());
-        }
-        finally {
-            try {
-                Connect.close(connection);
-            }catch (Exception e){
-                System.out.println(e.getMessage());
-            }
         }
         return collection;
     }

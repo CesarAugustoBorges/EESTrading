@@ -1,7 +1,8 @@
 package data;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public interface DAOConsumer<T> {
-    void accept(T obj) throws SQLException;
+public interface DAOConsumer {
+    void accept(PreparedStatement preparedStatement) throws SQLException;
 }
