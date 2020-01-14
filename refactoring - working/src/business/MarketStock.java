@@ -107,16 +107,10 @@ public class MarketStock implements Comparable<MarketStock>, Observable{
 
     public ArrayList<ObserverPosition> getBuyPositionsForStock() { return buyPositionsForStock; }
 
-    public void setBuyPositionsForStock(ArrayList<ObserverPosition> buyPositionsForStock) { this.buyPositionsForStock = buyPositionsForStock;}
-
     public ArrayList<ObserverPosition> getSalePositionsForStock() { return salePositionsForStock; }
-
-    public void setSalePositionsForStock(ArrayList<ObserverPosition> salePositionsForStock) { this.salePositionsForStock = salePositionsForStock;}
-
 
     public ArrayList<ObserverUser> getUsersForPriceStock() { return usersForPriceStock; }
 
-    public void setUsersForPriceStock(ArrayList<ObserverUser> usersForPriceStock) { this.usersForPriceStock = usersForPriceStock;}
     //---------------------------------------------------------------------------------------------------------------------------------------------
 
     //CLONE
@@ -259,8 +253,43 @@ public class MarketStock implements Comparable<MarketStock>, Observable{
         usersForPriceStock.remove(user_obs);
     }
 
+    /**
+     * Verifica se existe profit num market buy
+     * @param position
+     * @return
+     */
     public boolean existsProfitOnBuy(Position position){
-        return getCfd_Buy() >= position.getTake_profit() || getCfd_Buy() <= position.getStop_loss();
+        return existsProfitOnBuy(position.getTake_profit(), position.getStop_loss());
+    }
+
+    /**
+     * Verifica se existe profit num market buy
+     * * @param take_profit
+     *      * @param stop_loss
+     * @return
+     */
+    public boolean existsProfitOnBuy(float take_profit, float stop_loss){
+        return getCfd_Buy() >= take_profit || getCfd_Buy() <= stop_loss;
+    }
+
+
+    /**
+     * Verifica se existe profit num market sale
+     * @param position
+     * @return
+     */
+    public boolean existsProfitOnSale(Position position){
+        return existsProfitOnSale(position.getTake_profit(), position.getStop_loss());
+    }
+
+    /**
+     * Verifica se existe profit num market sale
+     * @param take_profit
+     * @param stop_loss
+     * @return
+     */
+    public boolean existsProfitOnSale(float take_profit, float stop_loss){
+        return getCfd_Sale() >= take_profit || getCfd_Sale() <= stop_loss;
     }
 
 

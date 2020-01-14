@@ -1,8 +1,8 @@
 package data;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class Connect {
 
@@ -24,5 +24,20 @@ public class Connect {
             connection.close();
         } catch (Exception e) {}
     }
+
+    public static <T> T executeQuery(Connection connection, String query, DAOFunction<ResultSet, T> function) throws SQLException{
+        try {
+            PreparedStatement ppstt = connection.prepareStatement(query);
+            ResultSet rs = ppstt.executeQuery();
+            return function.apply(rs);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+            throw e;
+        }
+        finally {
+             close(connection);
+        }
+    }
+
 
 }

@@ -3,3 +3,11 @@ App::Contante WAITING
 Removi a variavel nao usada "id" App::em prettyPortfolio
 coloquei os metodos canBuyPosition e existsProfitOnBuy no User e MarketStock respetivamente, visto que este métodos dsao da responsabilidade dos objetos e nao da app.
 ainda falta alterar o updateBuyPositionWaiting em App
+MarketStock::setBuyPositionsForStock removido (dead code)
+MarketStock::setSalePositionsForStock removido (dead code)
+MarketStock::setUsersForPriceStock removido (dead code)
+PasswordInvalidException String como contrutor foi adicionada ao super, nao estava a ser usada
+UsernameInvalidException String como contrutor foi adicionada ao super, nao estava a ser usada
+UserExistsException String como contrutor foi adicionada ao super, nao estava a ser usada
+App::checkAccount removido por nao ser usado apos refactoring
+MarketStockDAO::put getOrDefault

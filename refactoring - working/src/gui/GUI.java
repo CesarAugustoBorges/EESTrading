@@ -2,6 +2,7 @@ package gui;
 
 import business.App;
 import business.Checker;
+import business.MarketStock;
 import exceptions.PasswordInvalidException;
 import exceptions.StockNotExistsException;
 import exceptions.UserExistsException;
@@ -214,15 +215,12 @@ public class GUI {
         stop_loss = readLineFloat();
         System.out.println("What's the Take Profit You Are Willing To Define?");
         take_profit = readLineFloat();
-        account_balance = ngplt.checkAccount();
 
-        if ((ngplt.isAbleToBuy(account_balance, stockname, amount))) {
-
+        if ((ngplt.isAbleToBuy(stockname, amount))) {
             if ((ngplt.existsProfitOnBuy(stockname, stop_loss, take_profit))) {
                 System.out.println("Profitable Purchase");
                 ngplt.openBuyPositionDealt(stockname, amount, stop_loss, take_profit);
                 System.out.println("Purchase Done! Check \"MY DEALS\" On The Menu For More Info");
-
             }
             else {
                 System.out.println("This Buy Is Not Profitable For You At This Moment. You Wish To End It Now Anyway ? (yes|no)\n");

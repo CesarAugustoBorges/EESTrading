@@ -9,7 +9,6 @@ import gui.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class App {
@@ -272,14 +271,6 @@ public class App {
     }
 
     /**
-     * Apresenta a conta de um utilizador
-     * @return
-     */
-    public float checkAccount() {
-        return user.getAccount_balance();
-    }
-
-    /**
      * Indica quantas unidades de um dado ativo ainda há para venda
      * @param id_stock
      * @return
@@ -500,36 +491,16 @@ public class App {
 
     /**
      * Confirma se um utilizador pode comprar um dado ativo
-     * @param account_balance
      * @param stockname
      * @param amount
      * @return
      */
-    public boolean isAbleToBuy(float account_balance, String stockname, int amount) {
-        return (account_balance > amount * stockDAO.get(stock_id(stockname)).getCfd_Buy());
+    public boolean isAbleToBuy(String stockname, int amount) {
+        MarketStock marketStock = stockDAO.get(stock_id(stockname));
+        return user.isAbleToBuy(marketStock,amount);
     }
 
-    /**
-     * Verifica se existe profit num market buy
-     * @param stockname
-     * @param stop_loss
-     * @param take_profit
-     * @return
-     */
-    public boolean existsProfitOnBuy(String stockname, float stop_loss, float take_profit) {
-        return ((stockDAO.get(stock_id(stockname)).getCfd_Buy()) >= take_profit || (stockDAO.get(stock_id(stockname)).getCfd_Buy()) <= stop_loss);
-    }
 
-    /**
-     * Verifica se existe profit num market sale
-     * @param stockname
-     * @param stop_loss
-     * @param take_profit
-     * @return
-     */
-    public boolean existsProfitOnSale(String stockname, float stop_loss, float take_profit) {
-        return ((stockDAO.get(stock_id(stockname)).getCfd_Sale()) >= take_profit || (stockDAO.get(stock_id(stockname)).getCfd_Sale()) <= stop_loss);
-    }
 
     /**
      * Comprar um ativo
@@ -605,32 +576,33 @@ public class App {
 
         for (Position pst : positionDAO.values()) {
             MarketStock marketStock = stockDAO.get(stock_id(mstk.getName()));
-            if ((pst.getMarketstock_id() == mstk.getId_stock() && (pst.getType().equals(BUY) && (pst.getStatus().equals(WAITING))))) {
-                if (user.canBuyPosition(marketStock, pst)) {
-                    if (marketStock.existsProfitOnBuy(pst)) {
-                        pst.setStatus(DEALT);
+            boolean canBuyPosition = user.isAbleToBuy(marketStock, pst);
+            boolean existProfitOnBuy = marketStock.existsProfitOnBuy(pst);
+            boolean sameId = pst.getMarketstock_id() == mstk.getId_stock();
+            boolean isBuy =pst.getType().equals(BUY);
+            boolean isStatusWaiting = pst.getStatus().equals(WAITING);
+            if (canBuyPosition && existProfitOnBuy && sameId && isBuy && isStatusWaiting) {
+                pst.setStatus(DEALT);
 
-                        dv = pst.getAmount() * (mstk.getCfd_Buy());
-                        pst.setDeal_value(dv);
+                dv = pst.getAmount() * (mstk.getCfd_Buy());
+                pst.setDeal_value(dv);
 
-                        day = String.valueOf(LocalDateTime.now().getDayOfMonth());
-                        month = String.valueOf(LocalDateTime.now().getMonthValue());
-                        year = String.valueOf(LocalDateTime.now().getYear());
-                        date = day + "-" + month + "-" + year;
-                        pst.setDeal_date(date);
+                day = String.valueOf(LocalDateTime.now().getDayOfMonth());
+                month = String.valueOf(LocalDateTime.now().getMonthValue());
+                year = String.valueOf(LocalDateTime.now().getYear());
+                date = day + "-" + month + "-" + year;
+                pst.setDeal_date(date);
 
-                        positionDAO.put(pst.getIdPosition(), pst);
-                        debitFund(dv);
+                positionDAO.put(pst.getIdPosition(), pst);
+                debitFund(dv);
 
-                        Notification ntf = new Notification();
-                        ntf.setId_notification(nsz);
-                        ntf.setNotific_user_id(user.getIdUser());
-                        ntf.setInfo(prettyPositionNotification(pst));
-                        notificationDAO.put(ntf.getId_notification(), ntf);
+                Notification ntf = new Notification();
+                ntf.setId_notification(nsz);
+                ntf.setNotific_user_id(user.getIdUser());
+                ntf.setInfo(prettyPositionNotification(pst));
+                notificationDAO.put(ntf.getId_notification(), ntf);
 
-                        marketStock.removeBuyPositionObservingStock(pst);
-                    }
-                }
+                marketStock.removeBuyPositionObservingStock(pst);
             }
         }
     }
@@ -711,31 +683,34 @@ public class App {
         int nsz = notificationDAO.size() + 1;
 
         for (Position pst : positionDAO.values()) {
-            if ((pst.getMarketstock_id() == mstk.getId_stock() && (pst.getType().equals("Sale") && (pst.getStatus().equals(WAITING))))) {
-                if (existsProfitOnSale(mstk.getName(), pst.getStop_loss(), pst.getTake_profit())) {
+            MarketStock marketStock = stockDAO.get(stock_id(mstk.getName()));
+            boolean sameId = pst.getMarketstock_id() == mstk.getId_stock();
+            boolean isTypeSale = pst.getType().equals("Sale");
+            boolean isStatusWaiting = pst.getStatus().equals(WAITING);
+            boolean existsProfitOnSale = marketStock.existsProfitOnSale(pst);
+            if (sameId && isTypeSale && isStatusWaiting && existsProfitOnSale){
 
-                    pst.setStatus(DEALT);
+                pst.setStatus(DEALT);
 
-                    dv = pst.getAmount() * (mstk.getCfd_Buy());
-                    pst.setDeal_value(dv);
+                dv = pst.getAmount() * (mstk.getCfd_Buy());
+                pst.setDeal_value(dv);
 
-                    day = String.valueOf(LocalDateTime.now().getDayOfMonth());
-                    month = String.valueOf(LocalDateTime.now().getMonthValue());
-                    year = String.valueOf(LocalDateTime.now().getYear());
-                    date = day + "-" + month + "-" + year;
-                    pst.setDeal_date(date);
+                day = String.valueOf(LocalDateTime.now().getDayOfMonth());
+                month = String.valueOf(LocalDateTime.now().getMonthValue());
+                year = String.valueOf(LocalDateTime.now().getYear());
+                date = day + "-" + month + "-" + year;
+                pst.setDeal_date(date);
 
-                    positionDAO.put(pst.getIdPosition(), pst);
-                    addFund(dv);
+                positionDAO.put(pst.getIdPosition(), pst);
+                addFund(dv);
 
-                    Notification ntf = new Notification();
-                    ntf.setId_notification(nsz);
-                    ntf.setNotific_user_id(user.getIdUser());
-                    ntf.setInfo(prettyPositionNotification(pst));
-                    notificationDAO.put(ntf.getId_notification(), ntf);
+                Notification ntf = new Notification();
+                ntf.setId_notification(nsz);
+                ntf.setNotific_user_id(user.getIdUser());
+                ntf.setInfo(prettyPositionNotification(pst));
+                notificationDAO.put(ntf.getId_notification(), ntf);
 
-                    stockDAO.get(mstk.getId_stock()).removeSalePositionObservingStock(pst);
-                }
+                stockDAO.get(mstk.getId_stock()).removeSalePositionObservingStock(pst);
             }
         }
     }
@@ -891,5 +866,15 @@ public class App {
                 stockDAO.get(stock_id(stockname)).addBuyPositionObservingStock(pst);
             }
         }
+    }
+
+    public boolean existsProfitOnBuy(String stockname, float stop_loss, float take_profit) {
+        MarketStock marketStock = stockDAO.get(stock_id(stockname));
+        return  marketStock.existsProfitOnBuy(stop_loss, take_profit);
+    }
+
+    public boolean existsProfitOnSale(String stockname, float stop_loss, float take_profit) {
+        MarketStock marketStock = stockDAO.get(stock_id(stockname));
+        return marketStock.existsProfitOnSale(stop_loss, take_profit);
     }
 }

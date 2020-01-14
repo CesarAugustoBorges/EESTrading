@@ -9,25 +9,19 @@ public class MarketStockDAO implements Map<Integer, MarketStock> {
     private Connection connection;
     @Override
     public int size() {
-        int size = -1;
-        try {
-            connection = Connect.connect();
-            PreparedStatement ppstt = connection.prepareStatement("SELECT COUNT(*) FROM MarketStock");
-            ResultSet rs = ppstt.executeQuery();
-            if(rs.next()){
-                size = rs.getInt(1);
-            }
-        }catch (SQLException e){
+        connection = Connect.connect();
+        try{
+            return Connect.executeQuery(connection, "SELECT COUNT(*) FROM MarketStock", (rs)-> {
+                if (rs.next()) {
+                    int size = rs.getInt(1);
+                    return size;
+                }
+                return -1;
+            });
+        } catch (Exception e){
             System.out.println(e.getMessage());
+            return -1;
         }
-        finally {
-            try {
-                Connect.close(connection);
-            }catch (Exception e){
-                System.out.println(e.getMessage());
-            }
-        }
-        return size;
     }
 
     @Override
@@ -37,32 +31,22 @@ public class MarketStockDAO implements Map<Integer, MarketStock> {
 
     @Override
     public boolean containsKey(Object key) {
-        boolean res = false;
         try{
             connection = Connect.connect();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM MarketStock WHERE idStock = ?");
-            preparedStatement.setString(1, Integer.toString((Integer) key));
-            ResultSet resultSet = preparedStatement.executeQuery();
-            res = resultSet.next();
+            return Connect.executeQuery( connection, "SELECT * FROM MarketStock WHERE idStock = ?", (rs) -> {
+               return rs.next();
+            });
         }
         catch (SQLException e){
             System.out.println(e.getMessage());
         }
-        finally {
-            try{
-                Connect.close(connection);
-            }
-            catch (Exception e){
-                System.out.println(e.getMessage());
-            }
-        }
-        return res;
+        return false;
     }
 
     @Override
     public boolean containsValue(Object value) {
         boolean res = false;
-        if(value.getClass().getName().equals("ESS.src.Business.MarketStock")){
+        if(value instanceof MarketStock){
             MarketStock stock = (MarketStock) value;
             int idStock = stock.getId_stock();
             MarketStock thisStock = this.get(idStock);
@@ -74,42 +58,28 @@ public class MarketStockDAO implements Map<Integer, MarketStock> {
     @Override
     public MarketStock get(Object key) {
         MarketStock stock = new MarketStock();
-
         try {
             connection = Connect.connect();
-            PreparedStatement ppstt = connection.prepareStatement("SELECT * FROM MarketStock WHERE idStock = ?");
-            ppstt.setString(1,Integer.toString((Integer)key));
-            ResultSet rs = ppstt.executeQuery();
-            if(rs.next()){
-                stock.setId_stock(rs.getInt("idStock"));
-                stock.setName(rs.getString("name"));
-                stock.setOwner(rs.getString("owner"));
-                stock.setCfd_buy(rs.getFloat("cfdBuy"));
-                stock.setCfd_sale(rs.getFloat("cfdSale"));
-                stock.setPrice(rs.getFloat("price"));
-            }
+            Connect.executeQuery(connection, "SELECT * FROM MarketStock WHERE idStock = ?", (rs) -> {
+                if(rs.next()){
+                    stock.setId_stock(rs.getInt("idStock"));
+                    stock.setName(rs.getString("name"));
+                    stock.setOwner(rs.getString("owner"));
+                    stock.setCfd_buy(rs.getFloat("cfdBuy"));
+                    stock.setCfd_sale(rs.getFloat("cfdSale"));
+                    stock.setPrice(rs.getFloat("price"));
+                }
+                return null;
+            });
         }catch (SQLException e){
             System.out.printf(e.getMessage());
-        }
-        finally{
-            try {
-                Connect.close(connection);
-            }catch (Exception e){
-                System.out.printf(e.getMessage());
-            }
-
         }
         return stock;
     }
 
     @Override
     public MarketStock put(Integer key, MarketStock value) {
-        MarketStock stock;
-
-        if (this.containsKey(key)){
-            stock = this.get(key);
-        }
-        else stock = value;
+        MarketStock stock = getOrDefault(key, value);
         try {
             connection = Connect.connect();
             PreparedStatement ppstt = connection.prepareStatement("DELETE FROM MarketStock WHERE idStock = ?");

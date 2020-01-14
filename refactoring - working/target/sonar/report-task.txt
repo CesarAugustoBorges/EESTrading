@@ -2,5 +2,5 @@ projectKey=com.myapp:ESSTrading
 serverUrl=http://localhost:9000
 serverVersion=7.9.1.27448
 dashboardUrl=http://localhost:9000/dashboard?id=com.myapp%3AESSTrading
-ceTaskId=AW-gHnYi3xkLN91t_QYF
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AW-gHnYi3xkLN91t_QYF
+ceTaskId=AW-iKXZb3xkLN91t_QYJ
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AW-iKXZb3xkLN91t_QYJ
